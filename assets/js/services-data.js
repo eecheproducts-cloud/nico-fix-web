@@ -1,5 +1,5 @@
 // assets/js/services-data.js
-// FINAL list — 30 services Maria/Nico marked "Ofrecemos: si" in the Notion
+// FINAL list, 30 services Maria/Nico marked "Ofrecemos: si" in the Notion
 // "Checklist de Servicios" database, pulled 2026-09-22. Do not edit without
 // updating that Notion database first (https://app.notion.com/p/866d0ff7f2cc4ba79803139d6a5f0024).
 export const servicesData = [

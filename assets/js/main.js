@@ -9,7 +9,7 @@ const CONTACT_WEBHOOK_URL = '';
 // TODO before going live: replace with Nico's real business email.
 const CONTACT_EMAIL = '';
 // NOTE: index.html's #hero-whatsapp and #whatsapp-float hrefs have this same number hardcoded as a
-// no-JS fallback — update it there too when this changes (e.g. once the separate Twilio WhatsApp
+// no-JS fallback, update it there too when this changes (e.g. once the separate Twilio WhatsApp
 // Business number exists, see the Notion "WhatsApp Business separado + Bot" guide).
 const WHATSAPP_NUMBER = '31630758860';
 const KVK_NUMBER = ''; // fill in once "Nico Fix" is registered as an extra handelsnaam
@@ -53,7 +53,7 @@ function setLang(lang) {
   try {
     localStorage.setItem('nicofix-lang', lang);
   } catch {
-    // Persistence unavailable (blocked storage, private/sandboxed context) —
+    // Persistence unavailable (blocked storage, private/sandboxed context).
     // language switching still works for the rest of this page load.
   }
   document.documentElement.lang = lang;
@@ -105,13 +105,13 @@ function renderPortfolio(lang) {
     img.src = item.image;
     img.loading = 'lazy';
     img.alt = item.stateKey
-      ? `${t(lang, item.roomKey)} — ${t(lang, item.stateKey)}`
+      ? `${t(lang, item.roomKey)}, ${t(lang, item.stateKey)}`
       : t(lang, item.roomKey);
     figure.appendChild(img);
 
     const caption = document.createElement('figcaption');
     caption.textContent = item.stateKey
-      ? `${t(lang, item.roomKey)} — ${t(lang, item.stateKey)}`
+      ? `${t(lang, item.roomKey)}, ${t(lang, item.stateKey)}`
       : t(lang, item.roomKey);
     figure.appendChild(caption);
 
@@ -150,7 +150,7 @@ function wireWhatsApp() {
 }
 
 function wireFooter() {
-  document.getElementById('footer-kvk-number').textContent = KVK_NUMBER || '—';
+  document.getElementById('footer-kvk-number').textContent = KVK_NUMBER || '-';
 }
 
 function wireLangToggle() {

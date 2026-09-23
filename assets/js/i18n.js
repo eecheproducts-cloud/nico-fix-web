@@ -1,10 +1,10 @@
 // assets/js/i18n.js
 export const translations = {
   en: {
-    page_title: 'Nico Fix — Handyman Rotterdam, Amsterdam & Haarlem',
+    page_title: 'Nico Fix, Handyman Rotterdam, Amsterdam & Haarlem',
     lang_toggle_label: 'Switch language',
     hero_title: 'Nico Fix',
-    hero_tagline: 'Handyman services in Rotterdam, Amsterdam, Haarlem and everywhere in between — fixed right, the first time.',
+    hero_tagline: 'Handyman services in Rotterdam, Amsterdam, Haarlem and everywhere in between, fixed right the first time.',
     hero_cta_whatsapp: 'Message on WhatsApp',
     hero_cta_work: 'See my work',
     hero_badge_area: 'Rotterdam · Amsterdam · Haarlem',
@@ -70,7 +70,7 @@ export const translations = {
     contact_message: 'Tell me about the job',
     contact_photo_note: 'You can attach a photo when we talk on WhatsApp.',
     contact_submit: 'Send',
-    contact_success: 'Thanks! Your message is on its way — I\'ll get back to you soon.',
+    contact_success: 'Thanks! Your message is on its way. I\'ll get back to you soon.',
     contact_error: 'Something went wrong sending the form. Please message me directly on WhatsApp instead.',
     contact_validation_name: 'Please enter your name.',
     contact_validation_message: 'Please add a short description of the job.',
@@ -79,10 +79,10 @@ export const translations = {
     footer_privacy: 'Privacy policy',
   },
   es: {
-    page_title: 'Nico Fix — Handyman en Rotterdam, Ámsterdam y Haarlem',
+    page_title: 'Nico Fix, Handyman en Rotterdam, Ámsterdam y Haarlem',
     lang_toggle_label: 'Cambiar idioma',
     hero_title: 'Nico Fix',
-    hero_tagline: 'Servicios de handyman en Rotterdam, Ámsterdam, Haarlem y todo lo que está en el medio — bien hecho, a la primera.',
+    hero_tagline: 'Servicios de handyman en Rotterdam, Ámsterdam, Haarlem y todo lo que está en el medio, bien hecho a la primera.',
     hero_cta_whatsapp: 'Escribir por WhatsApp',
     hero_cta_work: 'Ver mis trabajos',
     hero_badge_area: 'Rotterdam · Ámsterdam · Haarlem',
