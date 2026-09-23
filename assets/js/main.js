@@ -143,8 +143,10 @@ function renderWorkTypeOptions(lang) {
 }
 
 function wireWhatsApp() {
-  const link = document.getElementById('hero-whatsapp');
-  link.href = `https://wa.me/${WHATSAPP_NUMBER}`;
+  const href = `https://wa.me/${WHATSAPP_NUMBER}`;
+  document.getElementById('hero-whatsapp').href = href;
+  const floatBtn = document.getElementById('whatsapp-float');
+  if (floatBtn) floatBtn.href = href;
 }
 
 function wireFooter() {
