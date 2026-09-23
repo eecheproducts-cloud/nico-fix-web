@@ -98,10 +98,24 @@ function renderPortfolio(lang) {
   const container = document.getElementById('portfolio-grid');
   container.innerHTML = '';
   portfolioItems.forEach((item) => {
-    const div = document.createElement('div');
-    div.className = 'portfolio-placeholder';
-    div.textContent = `${t(lang, item.labelKey)} — ${t(lang, item.stateKey)}`;
-    container.appendChild(div);
+    const figure = document.createElement('figure');
+    figure.className = 'portfolio-item';
+
+    const img = document.createElement('img');
+    img.src = item.image;
+    img.loading = 'lazy';
+    img.alt = item.stateKey
+      ? `${t(lang, item.roomKey)} — ${t(lang, item.stateKey)}`
+      : t(lang, item.roomKey);
+    figure.appendChild(img);
+
+    const caption = document.createElement('figcaption');
+    caption.textContent = item.stateKey
+      ? `${t(lang, item.roomKey)} — ${t(lang, item.stateKey)}`
+      : t(lang, item.roomKey);
+    figure.appendChild(caption);
+
+    container.appendChild(figure);
   });
 }
 

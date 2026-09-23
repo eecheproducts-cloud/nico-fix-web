@@ -1,10 +1,14 @@
 // assets/js/portfolio-data.js
-// Placeholder entries until Maria brings the real May 2026 Schiedam renovation photos.
-// Replace each with { labelKey: <i18n key for a short caption>, stateKey: 'portfolio_before' | 'portfolio_after' }
-// pointing at real <img> markup once photos exist — see README "Pending" section.
+// Real photos from the Schiedam renovation. "before" = original listing photos
+// (professional, pre-purchase state); "after" = phone photos of Nico's finished work.
+// Images live in assets/img/portfolio/.
 export const portfolioItems = [
-  { labelKey: 'portfolio_title', stateKey: 'portfolio_before' },
-  { labelKey: 'portfolio_title', stateKey: 'portfolio_after' },
-  { labelKey: 'portfolio_title', stateKey: 'portfolio_before' },
-  { labelKey: 'portfolio_title', stateKey: 'portfolio_after' },
+  { image: 'assets/img/portfolio/kitchen-before.webp', roomKey: 'portfolio_room_kitchen', stateKey: 'portfolio_before' },
+  { image: 'assets/img/portfolio/kitchen-after.jpg', roomKey: 'portfolio_room_kitchen', stateKey: 'portfolio_after' },
+  { image: 'assets/img/portfolio/bathroom-before.webp', roomKey: 'portfolio_room_bathroom', stateKey: 'portfolio_before' },
+  { image: 'assets/img/portfolio/bathroom-after.jpg', roomKey: 'portfolio_room_bathroom', stateKey: 'portfolio_after' },
+  { image: 'assets/img/portfolio/boiler-before.webp', roomKey: 'portfolio_room_boiler', stateKey: 'portfolio_before' },
+  { image: 'assets/img/portfolio/boiler-after.jpg', roomKey: 'portfolio_room_boiler', stateKey: 'portfolio_after' },
+  { image: 'assets/img/portfolio/living-before.webp', roomKey: 'portfolio_room_living', stateKey: 'portfolio_before' },
+  { image: 'assets/img/portfolio/plumbing-detail.jpg', roomKey: 'portfolio_room_detail', stateKey: null },
 ];
