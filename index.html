@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Handyman services in Rotterdam and Schiedam — furniture assembly, painting, repairs, renovations and more." />
+  <title>Nico Fix — Handyman Rotterdam &amp; Schiedam</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700&family=Inter:wght@400;600&display=swap">
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <span class="logo">Nico Fix</span>
+      <nav class="main-nav">
+        <a href="#services" data-i18n="nav_services">Services</a>
+        <a href="#portfolio" data-i18n="nav_portfolio">My work</a>
+        <a href="#about" data-i18n="nav_about">About</a>
+        <a href="#contact" data-i18n="nav_contact">Contact</a>
+      </nav>
+      <button id="lang-toggle" class="lang-toggle" type="button" aria-label="Switch language">EN / ES</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-inner">
+        <h1 data-i18n="hero_title">Nico Fix</h1>
+        <p class="tagline" data-i18n="hero_tagline">Handyman services in Rotterdam &amp; Schiedam.</p>
+        <div class="hero-actions">
+          <a id="hero-whatsapp" class="btn btn-primary" href="https://wa.me/31600000000" target="_blank" rel="noopener" data-i18n="hero_cta_whatsapp">Message on WhatsApp</a>
+          <a class="btn btn-secondary" href="#portfolio" data-i18n="hero_cta_work">See my work</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="services" class="services">
+      <div class="container">
+        <h2 data-i18n="services_title">What I do</h2>
+        <div id="services-list" class="services-list"></div>
+      </div>
+    </section>
+    <section id="portfolio" class="portfolio">
+      <div class="container">
+        <h2 data-i18n="portfolio_title">Recent work</h2>
+        <p class="portfolio-note" data-i18n="portfolio_placeholder_note">Photos coming soon.</p>
+        <div id="portfolio-grid" class="portfolio-grid"></div>
+      </div>
+    </section>
+    <section id="about" class="about">
+      <div class="container">
+        <h2 data-i18n="about_title">About Nico</h2>
+        <p data-i18n="about_body">Bio goes here.</p>
+      </div>
+    </section>
+    <section id="contact" class="contact">
+      <div class="container">
+        <h2 data-i18n="contact_title">Get a quote</h2>
+        <form id="contact-form" novalidate>
+          <label>
+            <span data-i18n="contact_name">Your name</span>
+            <input type="text" name="name" required />
+          </label>
+          <label>
+            <span data-i18n="contact_work_type">Type of work</span>
+            <select id="work-type-select" name="workType"></select>
+          </label>
+          <label>
+            <span data-i18n="contact_message">Tell me about the job</span>
+            <textarea name="message" rows="4" required></textarea>
+          </label>
+          <p class="form-note" data-i18n="contact_photo_note">You can attach a photo on WhatsApp.</p>
+          <button type="submit" class="btn btn-primary" data-i18n="contact_submit">Send</button>
+          <p id="contact-feedback" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p data-i18n="footer_coverage">Serving Schiedam, Rotterdam and surrounding areas</p>
+      <p><span data-i18n="footer_kvk">KVK</span>: <span id="footer-kvk-number">—</span></p>
+    </div>
+  </footer>
+
+  <script type="module" src="assets/js/main.js"></script>
+</body>
+</html>
