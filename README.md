@@ -16,7 +16,7 @@ Then open http://localhost:8000
 
 ## Pending before this goes live
 
-- [ ] Replace `WHATSAPP_NUMBER` in `assets/js/main.js` with Nico's real WhatsApp number (also update the hardcoded fallback `href` on `#hero-whatsapp` in `index.html` to match).
+- [x] Replace `WHATSAPP_NUMBER` in `assets/js/main.js` with Nico's real WhatsApp number — done, using his personal number for now (2026-09-23); swap to the dedicated Twilio WhatsApp Business number once that's set up.
 - [ ] Replace `CONTACT_WEBHOOK_URL` in `assets/js/main.js` once the n8n contact-form workflow exists.
 - [ ] Replace `CONTACT_EMAIL` in `assets/js/main.js` with Nico's real business email (currently empty, so the contact-form error fallback only shows the WhatsApp link, no mailto link).
 - [ ] Replace `KVK_NUMBER` in `assets/js/main.js` once "Nico Fix" is registered as an extra handelsnaam on the existing KVK.

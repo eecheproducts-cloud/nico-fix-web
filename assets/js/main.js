@@ -8,10 +8,10 @@ import { validateLead, buildLeadPayload } from './contact-validate.js';
 const CONTACT_WEBHOOK_URL = '';
 // TODO before going live: replace with Nico's real business email.
 const CONTACT_EMAIL = '';
-// TODO before going live: replace with Nico's real WhatsApp number in international format, no leading +.
-// NOTE: index.html's #hero-whatsapp href has this same placeholder number hardcoded as a
-// no-JS fallback — update it there too when this changes.
-const WHATSAPP_NUMBER = '31600000000';
+// NOTE: index.html's #hero-whatsapp and #whatsapp-float hrefs have this same number hardcoded as a
+// no-JS fallback — update it there too when this changes (e.g. once the separate Twilio WhatsApp
+// Business number exists, see the Notion "WhatsApp Business separado + Bot" guide).
+const WHATSAPP_NUMBER = '31630758860';
 const KVK_NUMBER = ''; // fill in once "Nico Fix" is registered as an extra handelsnaam
 
 const CATEGORY_LABELS = {
