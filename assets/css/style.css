@@ -180,6 +180,26 @@ h1, h2, h3 { font-family: var(--font-heading); margin: 0 0 0.5em; }
 
 .how-it-works, .services, .portfolio, .about, .contact { padding: 64px 0; }
 
+.about-inner {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.about-logo {
+  width: 180px;
+  height: 180px;
+  flex-shrink: 0;
+  margin: 0 auto;
+}
+
+.about-inner > div { flex: 1; min-width: 240px; }
+
+@media (max-width: 640px) {
+  .about-inner { text-align: center; justify-content: center; }
+}
+
 .how-it-works h2 { text-align: center; }
 
 .how-steps {
