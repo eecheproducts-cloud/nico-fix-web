@@ -8,7 +8,6 @@ export const portfolioItems = [
   { image: 'assets/img/portfolio/bathroom-before.webp', roomKey: 'portfolio_room_bathroom', stateKey: 'portfolio_before' },
   { image: 'assets/img/portfolio/bathroom-after.jpg', roomKey: 'portfolio_room_bathroom', stateKey: 'portfolio_after' },
   { image: 'assets/img/portfolio/boiler-before.webp', roomKey: 'portfolio_room_boiler', stateKey: 'portfolio_before' },
-  { image: 'assets/img/portfolio/boiler-after.jpg', roomKey: 'portfolio_room_boiler', stateKey: 'portfolio_after' },
   { image: 'assets/img/portfolio/living-before.webp', roomKey: 'portfolio_room_living', stateKey: 'portfolio_before' },
   { image: 'assets/img/portfolio/plumbing-detail.jpg', roomKey: 'portfolio_room_detail', stateKey: null },
 ];
