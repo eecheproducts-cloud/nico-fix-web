@@ -62,7 +62,7 @@ export const translations = {
     portfolio_room_bathroom: 'Bathroom',
     portfolio_room_boiler: 'Boiler & plumbing',
     portfolio_room_living: 'Living room',
-    portfolio_room_detail: 'Plumbing detail',
+    portfolio_room_detail: 'External pipe installation',
     contact_title: 'Get a quote',
     contact_name: 'Your name',
     contact_work_type: 'Type of work',
@@ -76,6 +76,7 @@ export const translations = {
     contact_validation_message: 'Please add a short description of the job.',
     footer_coverage: 'Serving Rotterdam, Amsterdam, Haarlem and everywhere in between (up to about 1h20 by car)',
     footer_kvk: 'KVK',
+    footer_privacy: 'Privacy policy',
   },
   es: {
     page_title: 'Nico Fix — Handyman en Rotterdam, Ámsterdam y Haarlem',
@@ -139,7 +140,7 @@ export const translations = {
     portfolio_room_bathroom: 'Baño',
     portfolio_room_boiler: 'Caldera y plomería',
     portfolio_room_living: 'Living',
-    portfolio_room_detail: 'Detalle de plomería',
+    portfolio_room_detail: 'Colocación de cañería externa',
     contact_title: 'Pedí un presupuesto',
     contact_name: 'Tu nombre',
     contact_work_type: 'Tipo de trabajo',
@@ -152,6 +153,7 @@ export const translations = {
     contact_validation_name: 'Ingresá tu nombre.',
     contact_validation_message: 'Agregá una breve descripción del trabajo.',
     footer_coverage: 'Trabajo en Rotterdam, Ámsterdam, Haarlem y todo lo que está en el medio (hasta aprox. 1h20 en auto)',
+    footer_privacy: 'Política de privacidad',
     footer_kvk: 'KVK',
   },
 };
