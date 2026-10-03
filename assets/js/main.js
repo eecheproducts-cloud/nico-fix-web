@@ -37,11 +37,18 @@ const CATEGORY_LABELS = {
   },
 };
 
+// First visit (no saved choice): Spanish if the visitor's device is in Spanish, otherwise English.
+// Showing Spanish speakers the Spanish copy directly also stops Chrome from machine-translating it.
+function browserLang() {
+  const primary = navigator.languages?.[0] || navigator.language || '';
+  return String(primary).toLowerCase().startsWith('es') ? 'es' : 'en';
+}
+
 function getLang() {
   try {
-    return localStorage.getItem('nicofix-lang') || 'en';
+    return localStorage.getItem('nicofix-lang') || browserLang();
   } catch {
-    return 'en';
+    return browserLang();
   }
 }
 
