@@ -3,6 +3,7 @@ import { t, translations } from './i18n.js';
 import { servicesData, groupByCategory } from './services-data.js';
 import { portfolioItems, sortPortfolio } from './portfolio-data.js';
 import { buildSearchIndex, searchServices } from './services-search.js';
+import { checkPostcode } from './coverage.js';
 
 // Nico Fix's business number (WhatsApp only, not published as a phone line). index.html's
 // WhatsApp links (#hero-whatsapp, #contact-whatsapp, #whatsapp-float) hardcode it too as a
@@ -63,6 +64,7 @@ function setLang(lang) {
   applyTranslations(lang);
   renderServices(lang);
   renderPortfolio(lang);
+  renderCoverage(lang);
 }
 
 function applyTranslations(lang) {
@@ -253,6 +255,43 @@ function wireLangToggle() {
   });
 }
 
+let coverageChecked = false;
+
+function renderCoverage(lang) {
+  const box = document.getElementById('coverage-result');
+  const input = document.getElementById('coverage-input');
+  if (!box || !input || !coverageChecked) return;
+
+  const { status, postcode } = checkPostcode(input.value);
+  box.innerHTML = '';
+  box.className = `coverage-result is-${status}`;
+
+  const message = document.createElement('p');
+  message.textContent = t(lang, `coverage_${status}`).replace('{pc}', postcode);
+  box.appendChild(message);
+
+  if (status !== 'invalid') {
+    const text = t(lang, 'coverage_wa_text').replace('{pc}', postcode);
+    const link = document.createElement('a');
+    link.className = 'btn btn-primary';
+    link.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+    link.target = '_blank';
+    link.rel = 'noopener';
+    link.textContent = t(lang, 'coverage_ask');
+    box.appendChild(link);
+  }
+}
+
+function wireCoverage() {
+  const form = document.getElementById('coverage-form');
+  if (!form) return;
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    coverageChecked = true;
+    renderCoverage(getLang());
+  });
+}
+
 function wireServiceSearch() {
   const input = document.getElementById('service-search');
   if (!input) return;
@@ -269,6 +308,7 @@ function init() {
   wireFooter();
   wireLangToggle();
   wireServiceSearch();
+  wireCoverage();
   wireLightbox();
   wireReveal();
 }

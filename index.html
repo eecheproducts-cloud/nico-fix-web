@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Handyman services in Rotterdam, Amsterdam, Haarlem and everywhere in between: furniture assembly, painting, repairs, renovations and more." />
-  <title>Nico Fix, Handyman Rotterdam, Amsterdam &amp; Haarlem</title>
+  <meta name="description" content="Handyman in Rotterdam, The Hague, Amsterdam, Haarlem and everywhere in between: assembly, painting, plumbing, tiling, repairs and renovations at fair prices." />
+  <title>Nico Fix, Handyman in Rotterdam, The Hague, Amsterdam &amp; Haarlem</title>
   <link rel="icon" type="image/png" href="favicon-32.png" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png" />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Nico Fix, Handyman Rotterdam, Amsterdam &amp; Haarlem" />
-  <meta property="og:description" content="Handyman services in Rotterdam, Amsterdam, Haarlem and everywhere in between: furniture assembly, painting, repairs, renovations and more." />
+  <meta property="og:title" content="Nico Fix, Handyman in Rotterdam, The Hague, Amsterdam &amp; Haarlem" />
+  <meta property="og:description" content="Handyman in Rotterdam, The Hague, Amsterdam, Haarlem and everywhere in between: assembly, painting, plumbing, tiling, repairs and renovations at fair prices." />
   <meta property="og:image" content="https://eecheproducts-cloud.github.io/nico-fix-web/assets/img/portfolio/kitchen-after.jpg" />
   <meta property="og:url" content="https://eecheproducts-cloud.github.io/nico-fix-web/" />
   <meta name="twitter:card" content="summary_large_image" />
@@ -21,12 +21,13 @@
     "@context": "https://schema.org",
     "@type": "HomeAndConstructionBusiness",
     "name": "Nico Fix",
-    "description": "Handyman services in Rotterdam, Amsterdam, Haarlem and everywhere in between: furniture assembly, painting, repairs, bathroom and kitchen renovations.",
+    "description": "Handyman in Rotterdam, The Hague, Amsterdam, Haarlem and everywhere in between: assembly, painting, plumbing, tiling, repairs, bathroom and kitchen renovations.",
     "url": "https://eecheproducts-cloud.github.io/nico-fix-web/",
     "image": "https://eecheproducts-cloud.github.io/nico-fix-web/assets/img/portfolio/kitchen-after.jpg",
     "areaServed": [
       { "@type": "City", "name": "Rotterdam" },
       { "@type": "City", "name": "Schiedam" },
+      { "@type": "City", "name": "The Hague" },
       { "@type": "City", "name": "Amsterdam" },
       { "@type": "City", "name": "Haarlem" }
     ],
@@ -56,7 +57,8 @@
     <section class="hero">
       <div class="container hero-inner">
         <div class="hero-copy">
-          <h1 data-i18n="hero_title">Nico Fix</h1>
+          <p class="hero-eyebrow" data-i18n="hero_title">Nico Fix</p>
+          <h1 data-i18n="hero_headline">Your go-to handyman in the Netherlands</h1>
           <p class="tagline" data-i18n="hero_tagline">Handyman services in Rotterdam &amp; Schiedam.</p>
           <div class="hero-actions">
             <a id="hero-whatsapp" class="btn btn-primary btn-glow" href="https://wa.me/31610049118" target="_blank" rel="noopener" data-i18n="hero_cta_whatsapp">Message on WhatsApp</a>
@@ -107,6 +109,7 @@
     <section id="services" class="services">
       <div class="container reveal">
         <h2 data-i18n="services_title">What I do</h2>
+        <p class="section-intro" data-i18n="services_intro">Not sure if I do what you need? I do almost everything.</p>
         <div class="service-search">
           <svg class="service-search-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M10 2a8 8 0 0 1 6.32 12.9l5.39 5.4-1.41 1.41-5.4-5.39A8 8 0 1 1 10 2zm0 2a6 6 0 1 0 0 12 6 6 0 0 0 0-12z"/></svg>
           <input id="service-search" type="search" autocomplete="off" data-i18n-placeholder="services_search_placeholder" placeholder="Search a service, e.g. pergola" />
@@ -129,6 +132,18 @@
         <figcaption id="lightbox-caption"></figcaption>
       </figure>
     </dialog>
+    <section id="coverage" class="coverage">
+      <div class="container reveal">
+        <h2 data-i18n="coverage_title">Not sure if I cover your area?</h2>
+        <p class="section-intro" data-i18n="coverage_body">Enter your postcode and I'll tell you right away.</p>
+        <form id="coverage-form" class="coverage-form" novalidate>
+          <input id="coverage-input" type="text" inputmode="text" autocomplete="postal-code" maxlength="8" data-i18n-placeholder="coverage_placeholder" placeholder="e.g. 3011 AB" aria-label="Postcode" />
+          <button type="submit" class="btn btn-primary" data-i18n="coverage_button">Check</button>
+        </form>
+        <div id="coverage-result" class="coverage-result" role="status" aria-live="polite"></div>
+      </div>
+    </section>
+
     <section id="contact" class="contact">
       <div class="container">
         <div class="contact-card reveal">
@@ -142,7 +157,6 @@
 
   <footer class="site-footer">
     <div class="container footer-inner">
-      <p data-i18n="footer_coverage">Serving Schiedam, Rotterdam and surrounding areas</p>
       <p><span data-i18n="footer_kvk">KVK</span>: <span id="footer-kvk-number">-</span></p>
       <p><a href="privacy.html" data-i18n="footer_privacy">Privacy policy</a></p>
     </div>
