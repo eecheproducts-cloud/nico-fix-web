@@ -1,8 +1,16 @@
 // assets/js/services-data.js
-// FINAL list, 30 services Maria/Nico marked "Ofrecemos: si" in the Notion
-// "Checklist de Servicios" database, pulled 2026-09-22. Do not edit without
-// updating that Notion database first (https://app.notion.com/p/866d0ff7f2cc4ba79803139d6a5f0024).
+// 30 services Maria/Nico marked "Ofrecemos: si" in the Notion "Checklist de Servicios" database
+// (pulled 2026-09-22), plus 6 added directly by Maria on 2026-10-03 (microcement, tap replacement,
+// simple plumbing, pipe installation, IKEA kitchens, bike assembly) and pergola assembly, not in Notion yet.
+// Keep that database (https://app.notion.com/p/866d0ff7f2cc4ba79803139d6a5f0024) in sync.
 export const servicesData = [
+  { key: 'svc_microcement', category: 'flooring' },
+  { key: 'svc_tap_replacement', category: 'plumbing' },
+  { key: 'svc_simple_plumbing', category: 'plumbing' },
+  { key: 'svc_pipe_install', category: 'plumbing' },
+  { key: 'svc_ikea_kitchen', category: 'bathroom_kitchen' },
+  { key: 'svc_bike_assembly', category: 'assembly' },
+  { key: 'svc_pergola', category: 'outdoor' },
   { key: 'svc_crack_repair', category: 'paint' },
   { key: 'svc_seasonal_maintenance', category: 'maintenance' },
   { key: 'svc_door_adjustment', category: 'maintenance' },
