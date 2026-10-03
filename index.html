@@ -100,6 +100,11 @@
     <section id="services" class="services">
       <div class="container reveal">
         <h2 data-i18n="services_title">What I do</h2>
+        <div class="service-search">
+          <svg class="service-search-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M10 2a8 8 0 0 1 6.32 12.9l5.39 5.4-1.41 1.41-5.4-5.39A8 8 0 1 1 10 2zm0 2a6 6 0 1 0 0 12 6 6 0 0 0 0-12z"/></svg>
+          <input id="service-search" type="search" autocomplete="off" data-i18n-placeholder="services_search_placeholder" placeholder="Search a service, e.g. pergola" />
+        </div>
+        <p id="service-search-status" class="service-search-status" aria-live="polite"></p>
         <div id="services-list" class="services-list"></div>
       </div>
     </section>

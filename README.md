@@ -24,7 +24,7 @@ Then open http://localhost:8000
 - [ ] Replace `CONTACT_WEBHOOK_URL` in `assets/js/main.js` once the contact-form backend exists.
 - [ ] Replace `CONTACT_EMAIL` in `assets/js/main.js` with Nico's real business email (currently empty, so the contact-form error fallback only shows the WhatsApp link, no mailto link).
 
-The services list (`assets/js/services-data.js`) was sourced from the Notion "Checklist de Servicios" database on 2026-09-22, plus 7 services Maria added directly on 2026-10-03 (not yet in Notion). If the offering changes later, update that Notion database first, then mirror the change here (add/remove the `{key, category}` entry and its `svc_*` translation pair in `i18n.js`).
+The services list (`assets/js/services-data.js`) was sourced from the Notion "Checklist de Servicios" database on 2026-09-22, plus 8 services Maria added directly on 2026-10-03 (not yet in Notion). If the offering changes later, update that Notion database first, then mirror the change here (add/remove the `{key, category}` entry and its `svc_*` translation pair in `i18n.js`).
 
 Writing style: no em dash anywhere on this site or in its docs. Use a comma, a period, or a colon instead.
 

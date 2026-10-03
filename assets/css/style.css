@@ -358,6 +358,56 @@ h2::after {
 
 .services { background: var(--beige); }
 
+.service-search {
+  position: relative;
+  max-width: 560px;
+  margin-top: 26px;
+}
+
+.service-search-icon {
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--orange-deep);
+  pointer-events: none;
+}
+
+.service-search input {
+  width: 100%;
+  padding: 15px 18px 15px 50px;
+  font: inherit;
+  font-size: 1.02rem;
+  color: var(--ink);
+  background: var(--white);
+  border: 2px solid var(--orange-soft);
+  border-radius: 999px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.25s ease;
+}
+
+.service-search input:focus {
+  border-color: var(--orange);
+  box-shadow: 0 0 0 4px var(--neon), 0 0 22px 4px rgba(233, 255, 59, 0.45);
+}
+
+.service-search-status {
+  min-height: 1.4em;
+  margin: 12px 4px 0;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.service-search-status a { color: var(--orange-deep); }
+
+.service-tag {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--orange-deep);
+}
+
 .services-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));

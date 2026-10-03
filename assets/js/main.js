@@ -2,6 +2,7 @@
 import { t, translations } from './i18n.js';
 import { servicesData, groupByCategory } from './services-data.js';
 import { portfolioItems } from './portfolio-data.js';
+import { buildSearchIndex, searchServices } from './services-search.js';
 
 // Nico Fix's business number (WhatsApp only, not published as a phone line). index.html's
 // WhatsApp links (#hero-whatsapp, #contact-whatsapp, #whatsapp-float) hardcode it too as a
@@ -69,9 +70,53 @@ function applyTranslations(lang) {
   if (langToggle) langToggle.setAttribute('aria-label', t(lang, 'lang_toggle_label'));
 }
 
+const searchIndex = buildSearchIndex(servicesData, translations, CATEGORY_LABELS);
+const servicesByKey = new Map(servicesData.map((service) => [service.key, service]));
+
+function searchResultItem(key, lang) {
+  const { category } = servicesByKey.get(key);
+  const div = document.createElement('div');
+  div.className = 'service-item';
+  const name = document.createElement('span');
+  name.textContent = t(lang, key);
+  const tag = document.createElement('span');
+  tag.className = 'service-tag';
+  tag.textContent = CATEGORY_LABELS[lang]?.[category] || category;
+  div.append(name, tag);
+  return div;
+}
+
+function whatsAppAskLink(lang) {
+  const link = document.createElement('a');
+  link.href = `https://wa.me/${WHATSAPP_NUMBER}`;
+  link.target = '_blank';
+  link.rel = 'noopener';
+  link.textContent = t(lang, 'services_search_ask');
+  return link;
+}
+
 function renderServices(lang) {
   const container = document.getElementById('services-list');
+  const status = document.getElementById('service-search-status');
+  const input = document.getElementById('service-search');
   container.innerHTML = '';
+  status.innerHTML = '';
+
+  const result = searchServices(input ? input.value : '', searchIndex);
+  if (result.active) {
+    if (result.matches.length > 0) {
+      status.textContent = result.matches.length === 1
+        ? t(lang, 'services_search_count_one')
+        : t(lang, 'services_search_count').replace('{n}', result.matches.length);
+      result.matches.forEach((key) => container.appendChild(searchResultItem(key, lang)));
+    } else {
+      status.textContent = `${t(lang, result.suggestions.length ? 'services_search_suggest' : 'services_search_none')} `;
+      if (!result.suggestions.length) status.appendChild(whatsAppAskLink(lang));
+      result.suggestions.forEach((key) => container.appendChild(searchResultItem(key, lang)));
+    }
+    return;
+  }
+
   const grouped = groupByCategory(servicesData);
   Object.entries(grouped).forEach(([category, items]) => {
     const heading = document.createElement('h3');
@@ -149,6 +194,12 @@ function wireLangToggle() {
   });
 }
 
+function wireServiceSearch() {
+  const input = document.getElementById('service-search');
+  if (!input) return;
+  input.addEventListener('input', () => renderServices(getLang()));
+}
+
 function init() {
   const lang = getLang();
   document.documentElement.lang = lang;
@@ -158,6 +209,7 @@ function init() {
   wireWhatsApp();
   wireFooter();
   wireLangToggle();
+  wireServiceSearch();
   wireReveal();
 }
 
