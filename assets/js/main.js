@@ -137,24 +137,59 @@ function renderPortfolio(lang) {
   const container = document.getElementById('portfolio-grid');
   container.innerHTML = '';
   portfolioItems.forEach((item) => {
+    const label = item.stateKey
+      ? `${t(lang, item.roomKey)}, ${t(lang, item.stateKey)}`
+      : t(lang, item.roomKey);
+
     const figure = document.createElement('figure');
     figure.className = 'portfolio-item';
+    figure.tabIndex = 0;
+    figure.setAttribute('role', 'button');
+    figure.setAttribute('aria-label', label);
 
     const img = document.createElement('img');
     img.src = item.image;
     img.loading = 'lazy';
-    img.alt = item.stateKey
-      ? `${t(lang, item.roomKey)}, ${t(lang, item.stateKey)}`
-      : t(lang, item.roomKey);
+    img.alt = label;
     figure.appendChild(img);
 
     const caption = document.createElement('figcaption');
-    caption.textContent = item.stateKey
-      ? `${t(lang, item.roomKey)}, ${t(lang, item.stateKey)}`
-      : t(lang, item.roomKey);
+    caption.textContent = label;
     figure.appendChild(caption);
 
+    const open = () => openLightbox(item.image, label);
+    figure.addEventListener('click', open);
+    figure.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        open();
+      }
+    });
+
     container.appendChild(figure);
+  });
+}
+
+function openLightbox(src, label) {
+  const dialog = document.getElementById('lightbox');
+  if (!dialog || typeof dialog.showModal !== 'function') {
+    window.open(src, '_blank', 'noopener');
+    return;
+  }
+  const img = document.getElementById('lightbox-img');
+  img.src = src;
+  img.alt = label;
+  document.getElementById('lightbox-caption').textContent = label;
+  dialog.showModal();
+}
+
+function wireLightbox() {
+  const dialog = document.getElementById('lightbox');
+  if (!dialog) return;
+  dialog.querySelector('.lightbox-close').addEventListener('click', () => dialog.close());
+  // A click on the dark backdrop lands on the <dialog> element itself, not on its content.
+  dialog.addEventListener('click', (event) => {
+    if (event.target === dialog) dialog.close();
   });
 }
 
@@ -210,6 +245,7 @@ function init() {
   wireFooter();
   wireLangToggle();
   wireServiceSearch();
+  wireLightbox();
   wireReveal();
 }
 
