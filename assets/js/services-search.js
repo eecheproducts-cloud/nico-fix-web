@@ -38,7 +38,7 @@ const SYNONYMS = {
 export function normalize(text) {
   return String(text ?? '')
     .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
+    .replace(/\p{Diacritic}/gu, '')
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, ' ')
     .trim();

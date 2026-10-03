@@ -1,7 +1,7 @@
 // assets/js/main.js
 import { t, translations } from './i18n.js';
 import { servicesData, groupByCategory } from './services-data.js';
-import { portfolioItems } from './portfolio-data.js';
+import { portfolioItems, sortPortfolio } from './portfolio-data.js';
 import { buildSearchIndex, searchServices } from './services-search.js';
 
 // Nico Fix's business number (WhatsApp only, not published as a phone line). index.html's
@@ -29,7 +29,7 @@ const CATEGORY_LABELS = {
     maintenance: 'Mantenimiento',
     flooring: 'Pisos',
     plumbing: 'Plomería',
-    smart_home: 'Smart home',
+    smart_home: 'Hogar inteligente',
     bathroom_kitchen: 'Baños y cocinas',
     security: 'Cerrajería y seguridad',
     outdoor: 'Exterior',
@@ -111,39 +111,56 @@ function renderServices(lang) {
 
   const result = searchServices(input ? input.value : '', searchIndex);
   if (result.active) {
+    const grid = document.createElement('div');
+    grid.className = 'service-grid';
     if (result.matches.length > 0) {
       status.textContent = result.matches.length === 1
         ? t(lang, 'services_search_count_one')
         : t(lang, 'services_search_count').replace('{n}', result.matches.length);
-      result.matches.forEach((key) => container.appendChild(searchResultItem(key, lang)));
+      result.matches.forEach((key) => grid.appendChild(searchResultItem(key, lang)));
     } else {
       status.textContent = `${t(lang, result.suggestions.length ? 'services_search_suggest' : 'services_search_none')} `;
       if (!result.suggestions.length) status.appendChild(whatsAppAskLink(lang));
-      result.suggestions.forEach((key) => container.appendChild(searchResultItem(key, lang)));
+      result.suggestions.forEach((key) => grid.appendChild(searchResultItem(key, lang)));
     }
+    container.appendChild(grid);
     return;
   }
 
+  // Collapsible groups: open on wide screens, closed on phones so the list isn't four screens long.
+  const startOpen = window.matchMedia('(min-width: 900px)').matches;
   const grouped = groupByCategory(servicesData);
   Object.entries(grouped).forEach(([category, items]) => {
-    const heading = document.createElement('h3');
-    heading.className = 'service-category';
-    heading.textContent = CATEGORY_LABELS[lang]?.[category] || category;
-    container.appendChild(heading);
+    const group = document.createElement('details');
+    group.className = 'service-group';
+    group.open = startOpen;
+
+    const summary = document.createElement('summary');
+    const name = document.createElement('span');
+    name.textContent = CATEGORY_LABELS[lang]?.[category] || category;
+    const count = document.createElement('span');
+    count.className = 'service-count';
+    count.textContent = items.length;
+    summary.append(name, count);
+    group.appendChild(summary);
+
+    const grid = document.createElement('div');
+    grid.className = 'service-grid';
     items.forEach((item) => {
       const div = document.createElement('div');
       div.className = 'service-item';
       div.textContent = t(lang, item.key);
-      div.title = CATEGORY_LABELS[lang]?.[category] || category;
-      container.appendChild(div);
+      grid.appendChild(div);
     });
+    group.appendChild(grid);
+    container.appendChild(group);
   });
 }
 
 function renderPortfolio(lang) {
   const container = document.getElementById('portfolio-grid');
   container.innerHTML = '';
-  portfolioItems.forEach((item) => {
+  sortPortfolio(portfolioItems, (key) => t(lang, key)).forEach((item) => {
     const label = item.stateKey
       ? `${t(lang, item.roomKey)}, ${t(lang, item.stateKey)}`
       : t(lang, item.roomKey);
