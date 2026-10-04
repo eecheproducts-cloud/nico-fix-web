@@ -9,7 +9,7 @@ import { checkPostcode } from './coverage.js';
 // WhatsApp links (#hero-whatsapp, #contact-whatsapp, #whatsapp-float) hardcode it too as a
 // no-JS fallback, keep them in sync.
 const WHATSAPP_NUMBER = '31610049118';
-const KVK_NUMBER = ''; // fill in once "Nico Fix" is registered as an extra handelsnaam
+const KVK_NUMBER = '95562028';
 
 const CATEGORY_LABELS = {
   en: {
