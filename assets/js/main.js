@@ -10,6 +10,7 @@ import { checkPostcode } from './coverage.js';
 // no-JS fallback, keep them in sync.
 const WHATSAPP_NUMBER = '31610049118';
 const KVK_NUMBER = '95562028';
+const BTW_ID = 'NL005161451B23';
 
 const CATEGORY_LABELS = {
   en: {
@@ -247,6 +248,7 @@ function wireReveal() {
 
 function wireFooter() {
   document.getElementById('footer-kvk-number').textContent = KVK_NUMBER || '-';
+  document.getElementById('footer-btw-number').textContent = BTW_ID || '-';
 }
 
 function wireLangToggle() {

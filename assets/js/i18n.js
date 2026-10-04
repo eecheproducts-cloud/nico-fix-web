@@ -95,6 +95,7 @@ export const translations = {
     coverage_ask: 'Message me on WhatsApp',
     coverage_wa_text: 'Hi Nico! I\'m in {pc} and I need help with...',
     footer_kvk: 'KVK',
+    footer_btw: 'VAT',
     footer_privacy: 'Privacy policy',
   },
   es: {
@@ -193,6 +194,7 @@ export const translations = {
     coverage_wa_text: '¡Hola Nico! Estoy en {pc} y necesito ayuda con...',
     footer_privacy: 'Política de privacidad',
     footer_kvk: 'KVK',
+    footer_btw: 'BTW (IVA)',
   },
 };
 
