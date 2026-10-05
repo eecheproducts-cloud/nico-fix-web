@@ -257,23 +257,27 @@ function wireLangToggle() {
   });
 }
 
-let coverageChecked = false;
+// Last answer of the postcode check, kept so a language switch re-renders it without a new lookup.
+let coverageResult = null;
+
+// PDOK uses official municipality-style names; show the names people use.
+const PLACE_NAMES = { "'s-Gravenhage": 'Den Haag' };
 
 function renderCoverage(lang) {
   const box = document.getElementById('coverage-result');
-  const input = document.getElementById('coverage-input');
-  if (!box || !input || !coverageChecked) return;
+  if (!box || !coverageResult) return;
 
-  const { status, postcode } = checkPostcode(input.value);
+  const { status, postcode, place } = coverageResult;
+  const label = place ? `${postcode} (${PLACE_NAMES[place] || place})` : postcode;
   box.innerHTML = '';
   box.className = `coverage-result is-${status}`;
 
   const message = document.createElement('p');
-  message.textContent = t(lang, `coverage_${status}`).replace('{pc}', postcode);
+  message.textContent = t(lang, `coverage_${status}`).replace('{pc}', label);
   box.appendChild(message);
 
-  if (status !== 'invalid') {
-    const text = t(lang, 'coverage_wa_text').replace('{pc}', postcode);
+  if (['yes', 'maybe', 'no', 'error'].includes(status)) {
+    const text = t(lang, 'coverage_wa_text').replace('{pc}', label);
     const link = document.createElement('a');
     link.className = 'btn btn-primary';
     link.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
@@ -286,10 +290,16 @@ function renderCoverage(lang) {
 
 function wireCoverage() {
   const form = document.getElementById('coverage-form');
-  if (!form) return;
-  form.addEventListener('submit', (event) => {
+  const input = document.getElementById('coverage-input');
+  if (!form || !input) return;
+  form.addEventListener('submit', async (event) => {
     event.preventDefault();
-    coverageChecked = true;
+    const button = form.querySelector('button');
+    if (button) button.disabled = true;
+    coverageResult = { status: 'checking', postcode: '', place: null };
+    renderCoverage(getLang());
+    coverageResult = await checkPostcode(input.value);
+    if (button) button.disabled = false;
     renderCoverage(getLang());
   });
 }

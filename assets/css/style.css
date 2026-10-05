@@ -416,8 +416,12 @@ h2::after {
 
 .coverage-result p { margin: 0 0 14px; font-weight: 600; }
 .coverage-result.is-yes { border-left-color: #2f9e44; }
-.coverage-result.is-invalid { border-left-color: var(--muted); }
-.coverage-result.is-invalid p { margin: 0; font-weight: 400; }
+.coverage-result.is-invalid,
+.coverage-result.is-notfound,
+.coverage-result.is-checking { border-left-color: var(--muted); }
+.coverage-result.is-invalid p,
+.coverage-result.is-notfound p,
+.coverage-result.is-checking p { margin: 0; font-weight: 400; }
 
 .service-search {
   position: relative;
