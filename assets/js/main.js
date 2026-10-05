@@ -4,6 +4,7 @@ import { servicesData, groupByCategory } from './services-data.js';
 import { portfolioItems, sortPortfolio } from './portfolio-data.js';
 import { buildSearchIndex, searchServices } from './services-search.js';
 import { checkPostcode } from './coverage.js';
+import { initConsent } from './consent.js';
 
 // Nico Fix's business number (WhatsApp only, not published as a phone line). index.html's
 // WhatsApp links (#hero-whatsapp, #contact-whatsapp, #whatsapp-float) hardcode it too as a
@@ -323,6 +324,7 @@ function init() {
   wireCoverage();
   wireLightbox();
   wireReveal();
+  initConsent();
 }
 
 init();
