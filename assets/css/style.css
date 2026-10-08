@@ -765,6 +765,9 @@ h2::after {
 
 .whatsapp-float:hover { transform: scale(1.08); }
 
+.whatsapp-float-label { display: none; }
+.portfolio-swipe { display: none; }
+
 /* Scroll reveal (main.js adds .is-visible) */
 
 .js .reveal {
@@ -805,3 +808,93 @@ h2::after {
 .cookie-banner a { color: var(--orange-deep); font-weight: 600; font-size: 0.9rem; }
 .cookie-settings { margin-left: 14px; }
 .cookie-settings[hidden] { display: none; }
+
+/* ------------------------------------------------------------------
+   Phones first: almost every visitor arrives from WhatsApp or a group
+   chat on a phone. Shorter scroll, thumb-sized buttons, swipeable gallery.
+   ------------------------------------------------------------------ */
+@media (max-width: 640px) {
+  body { font-size: 16px; }
+
+  /* Less empty space between sections */
+  .how-it-works, .services, .portfolio, .about, .contact, .coverage { padding: 44px 0; }
+  .hero { padding: 40px 0 44px; }
+  .tagline { font-size: 1.08rem; margin-bottom: 24px; }
+  .hero-actions { flex-direction: column; align-items: stretch; gap: 10px; }
+  .hero-actions .btn { width: 100%; text-align: center; }
+  .hero-badges { margin-top: 20px; }
+  h2 { font-size: 1.6rem; }
+  .section-intro, .about-inner p { font-size: 1rem; }
+
+  /* About: small logo, text first in view */
+  .about-inner { gap: 18px; }
+  .about-logo { width: 96px; height: 96px; box-shadow: 0 0 0 5px var(--orange-soft); }
+
+  /* How it works: compact rows (number left, text right) */
+  .how-it-works { text-align: left; }
+  .how-it-works h2::after { left: 0; transform: none; }
+  .how-steps { gap: 10px; margin-top: 22px; }
+  .how-steps li {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    column-gap: 14px;
+    align-items: start;
+    padding: 16px;
+  }
+  .how-step-number { width: 36px; height: 36px; font-size: 1rem; margin: 0; grid-row: span 2; box-shadow: 0 0 0 4px var(--orange-soft); }
+  .how-steps h3 { font-size: 1rem; margin: 2px 0 4px; }
+  .how-steps p { font-size: 0.92rem; }
+
+  /* Gallery: one swipeable row instead of a long masonry wall; photos are never cropped */
+  .portfolio-grid {
+    columns: auto;
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    margin: 20px -20px 0;
+    padding: 0 20px 6px;
+    scroll-padding-left: 20px;
+    scrollbar-width: none;
+  }
+  .portfolio-grid::-webkit-scrollbar { display: none; }
+  /* Every card is as wide as its photo at a fixed height: no cropping and no empty bands */
+  .portfolio-item {
+    flex: 0 0 auto;
+    max-width: 85vw;
+    margin: 0;
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+  }
+  .portfolio-item img { height: 280px; width: auto; max-width: 85vw; object-fit: cover; }
+  .portfolio-item figcaption { padding: 10px 12px; font-size: 0.88rem; flex: 1; }
+  .portfolio-swipe { display: block; margin: 10px 0 0; color: var(--muted); font-size: 0.85rem; text-align: right; }
+
+  /* Postcode check: input and button on one row, 16px text so iPhones do not zoom in */
+  .coverage-form { flex-wrap: nowrap; }
+  .coverage-form input { flex: 1 1 auto; min-width: 0; font-size: 16px; padding: 13px 16px; }
+  .coverage-form button { flex: 0 0 auto; padding-left: 20px; padding-right: 20px; }
+  .service-search input { font-size: 16px; }
+
+  /* Contact card: full-width button */
+  .contact-card .btn { width: 100%; text-align: center; }
+
+  /* Floating WhatsApp: a labelled pill is easier to understand and to hit with a thumb */
+  .whatsapp-float {
+    width: auto;
+    height: 52px;
+    padding: 0 18px 0 14px;
+    gap: 8px;
+    border-radius: 999px;
+    right: 16px;
+    bottom: 16px;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .whatsapp-float::before { border-radius: 999px; }
+  .whatsapp-float-label { display: inline; color: var(--white); font-size: 0.95rem; }
+
+  /* Room at the bottom so the floating button never covers the footer text */
+  .site-footer { padding-bottom: 88px; }
+}
