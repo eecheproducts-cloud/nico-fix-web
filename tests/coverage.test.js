@@ -86,3 +86,7 @@ test('checkPostcode: bad format never calls the lookup', async () => {
   assert.equal(result.status, 'invalid');
   assert.equal(called, false);
 });
+
+test('Dordrecht is regular area (yes)', () => {
+  assert.equal(classifyPoint(4.6900, 51.8133), 'yes');
+});

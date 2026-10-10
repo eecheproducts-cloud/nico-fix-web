@@ -15,9 +15,10 @@ const THE_HAGUE = [4.3007, 52.0705];
 const AMSTERDAM = [4.9041, 52.3676];
 
 // Distance outside the triangle, in km. Calibrated on real town centres from PDOK, e.g.
-// Haarlem 12, Purmerend 16 (yes); Dordrecht 22, Almere 21, Utrecht 27, Alkmaar 31 (maybe);
+// Haarlem 12, Purmerend 16, Almere 21, Dordrecht 22 (yes; Maria 2026-10-10: Dordrecht is regular
+// area); Hilversum 24, Utrecht 27, Alkmaar 31 (maybe);
 // Lelystad 38, Amersfoort 40, Breda 43 (no).
-export const YES_KM = 16;
+export const YES_KM = 23;
 export const MAYBE_KM = 35;
 
 const POSTCODE_RE = /^([1-9][0-9]{3})\s*([A-Z]{2})?$/;
