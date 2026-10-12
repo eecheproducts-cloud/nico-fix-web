@@ -10,8 +10,9 @@ import { initConsent } from './consent.js';
 // WhatsApp links (#hero-whatsapp, #contact-whatsapp, #whatsapp-float) hardcode it too as a
 // no-JS fallback, keep them in sync.
 // TEMPORARY (2026-10-12): Meta disabled the business number's WhatsApp account while the appeal is
-// reviewed, so the site points to Maria's own WhatsApp. Switch back to '31610049118' once reinstated.
-const WHATSAPP_NUMBER = '31630331539';
+// reviewed, so the site points to Nico's personal WhatsApp (Maria's request). Switch back to
+// '31610049118' once reinstated.
+const WHATSAPP_NUMBER = '31630758860';
 const KVK_NUMBER = '95562028';
 const BTW_ID = 'NL005161451B23';
 
