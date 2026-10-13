@@ -9,10 +9,7 @@ import { initConsent } from './consent.js';
 // Nico Fix's business number (WhatsApp only, not published as a phone line). index.html's
 // WhatsApp links (#hero-whatsapp, #contact-whatsapp, #whatsapp-float) hardcode it too as a
 // no-JS fallback, keep them in sync.
-// TEMPORARY (2026-10-12): Meta disabled the business number's WhatsApp account while the appeal is
-// reviewed, so the site points to Nico's personal WhatsApp (Maria's request). Switch back to
-// '31610049118' once reinstated.
-const WHATSAPP_NUMBER = '31630758860';
+const WHATSAPP_NUMBER = '31610049118';
 const KVK_NUMBER = '95562028';
 const BTW_ID = 'NL005161451B23';
 
