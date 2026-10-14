@@ -6,7 +6,7 @@
 // Categories are the cards of the services section, in the order they are shown (CATEGORY_ORDER).
 export const CATEGORY_ORDER = [
   'furniture', 'mounting', 'paint', 'tiling', 'flooring', 'doors_locks',
-  'plumbing', 'electrical', 'bathroom_kitchen', 'outdoor',
+  'plumbing', 'electrical', 'bathroom_kitchen', 'outdoor', 'bikes',
 ];
 
 export const servicesData = [
@@ -15,7 +15,7 @@ export const servicesData = [
   { key: 'svc_simple_plumbing', category: 'plumbing' },
   { key: 'svc_pipe_install', category: 'plumbing' },
   { key: 'svc_ikea_kitchen', category: 'furniture' },
-  { key: 'svc_bike_assembly', category: 'furniture' },
+  { key: 'svc_bike_assembly', category: 'bikes' },
   { key: 'svc_pergola', category: 'outdoor' },
   { key: 'svc_bathtub_removal', category: 'bathroom_kitchen' },
   { key: 'svc_crack_repair', category: 'paint' },

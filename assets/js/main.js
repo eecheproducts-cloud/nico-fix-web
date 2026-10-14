@@ -15,7 +15,7 @@ const BTW_ID = 'NL005161451B23';
 
 const CATEGORY_LABELS = {
   en: {
-    furniture: 'Furniture & IKEA',
+    furniture: 'Furniture assembly',
     mounting: 'Mounting & hanging',
     paint: 'Painting',
     tiling: 'Tiling & microcement',
@@ -25,9 +25,10 @@ const CATEGORY_LABELS = {
     electrical: 'Lights & smart home',
     bathroom_kitchen: 'Bathroom & kitchen',
     outdoor: 'Garden & outdoor',
+    bikes: 'Bikes',
   },
   es: {
-    furniture: 'Muebles e IKEA',
+    furniture: 'Montaje de muebles',
     mounting: 'Colgar e instalar',
     paint: 'Pintura',
     tiling: 'Cerámicos y microcemento',
@@ -37,6 +38,7 @@ const CATEGORY_LABELS = {
     electrical: 'Luces y hogar inteligente',
     bathroom_kitchen: 'Baño y cocina',
     outdoor: 'Jardín y exterior',
+    bikes: 'Bicicletas',
   },
 };
 
@@ -176,7 +178,8 @@ function renderServices(lang) {
     desc.textContent = t(lang, `cat_desc_${category}`);
     const more = document.createElement('span');
     more.className = 'service-card-more';
-    more.textContent = `${t(lang, 'services_count').replace('{n}', grouped[category].length)} →`;
+    const count = grouped[category].length;
+    more.textContent = `${count === 1 ? t(lang, 'services_count_one') : t(lang, 'services_count').replace('{n}', count)} →`;
     card.append(number, title, desc, more);
     cards.appendChild(card);
   });

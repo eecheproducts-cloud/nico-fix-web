@@ -530,9 +530,8 @@ h2::after {
 .service-card-desc { color: var(--muted); font-size: 0.9rem; line-height: 1.45; }
 .service-card-more { margin-top: auto; padding-top: 8px; font-size: 0.82rem; font-weight: 700; color: var(--orange-deep); }
 
-/* "Something else?" card in the brand green, filling the last two slots */
+/* "Something else?" card in the brand green, filling the last slot */
 .service-card-other {
-  grid-column: span 2;
   justify-content: space-between;
   min-height: 150px;
   background: var(--green);
