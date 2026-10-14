@@ -44,7 +44,7 @@
 <body>
   <header class="site-header">
     <div class="container header-inner">
-      <span class="logo"><img src="assets/img/logo/icon-transparent.png" alt="" width="28" height="28" />Nico Fix</span>
+      <a class="logo" href="#top" aria-label="Nico Fix Handyman"><img src="assets/img/logo/logo-horizontal-light.png" alt="Nico Fix Handyman" width="162" height="40" /></a>
       <nav class="main-nav">
         <a href="#about" data-i18n="nav_about">About</a>
         <a href="#services" data-i18n="nav_services">Services</a>
@@ -56,7 +56,7 @@
   </header>
 
   <main>
-    <section class="hero">
+    <section class="hero" id="top">
       <div class="container hero-inner">
         <div class="hero-copy">
           <p class="hero-eyebrow" data-i18n="hero_title">Nico Fix</p>
@@ -72,12 +72,28 @@
             <li data-i18n="hero_badge_kvk">KVK registered</li>
           </ul>
         </div>
+        <div class="hero-photo">
+          <img src="assets/img/hero-handyman.jpg" alt="Handyman arriving at a client's front door with his toolbox" data-i18n-alt="hero_photo_alt" width="900" height="900" fetchpriority="high" />
+        </div>
+      </div>
+    </section>
+
+    <section class="promises" aria-label="Promises">
+      <div class="container promises-inner">
+        <div>
+          <h3 class="promise-title" data-i18n="promise1_title">Clear price upfront</h3>
+          <p data-i18n="promise1_body">You approve the quote before I start.</p>
+        </div>
+        <div>
+          <h3 class="promise-title" data-i18n="promise2_title">I can handle the materials</h3>
+          <p data-i18n="promise2_body">If you want, I choose, buy and bring everything the job needs.</p>
+        </div>
       </div>
     </section>
 
     <section id="about" class="about">
       <div class="container about-inner reveal">
-        <img class="about-logo" src="assets/img/logo/logo-full-light.png" alt="Nico Fix Handyman, always ready to help" width="320" height="320" loading="lazy" />
+        <img class="about-logo" src="assets/img/logo/logo-badge.png" alt="Nico Fix Handyman, always ready to help" width="320" height="320" loading="lazy" />
         <div>
           <h2 data-i18n="about_title">About Nico</h2>
           <p data-i18n="about_body">Bio goes here.</p>
@@ -86,38 +102,49 @@
     </section>
 
     <section class="how-it-works">
-      <div class="container reveal">
-        <h2 data-i18n="how_title">How it works</h2>
-        <ol class="how-steps">
-          <li>
-            <span class="how-step-number">1</span>
-            <h3 data-i18n="how_step1_title">Send your job</h3>
-            <p data-i18n="how_step1_body">Message on WhatsApp or fill the form below.</p>
-          </li>
-          <li>
-            <span class="how-step-number">2</span>
-            <h3 data-i18n="how_step2_title">Get a quote</h3>
-            <p data-i18n="how_step2_body">I send you a price, or we set up a visit first if I need to see the job in person.</p>
-          </li>
-          <li>
-            <span class="how-step-number">3</span>
-            <h3 data-i18n="how_step3_title">It gets fixed</h3>
-            <p data-i18n="how_step3_body">I come over at the time we agreed and get the job done.</p>
-          </li>
-        </ol>
+      <div class="container how-inner reveal">
+        <div>
+          <h2 data-i18n="how_title">How it works</h2>
+          <ol class="how-steps">
+            <li>
+              <span class="how-step-number">1</span>
+              <h3 data-i18n="how_step1_title">Send your job</h3>
+              <p data-i18n="how_step1_body">Message me on WhatsApp, with a photo if you can.</p>
+            </li>
+            <li>
+              <span class="how-step-number">2</span>
+              <h3 data-i18n="how_step2_title">Get a quote</h3>
+              <p data-i18n="how_step2_body">I send you a price, or we set up a visit first if I need to see the job in person.</p>
+            </li>
+            <li>
+              <span class="how-step-number">3</span>
+              <h3 data-i18n="how_step3_title">It gets fixed</h3>
+              <p data-i18n="how_step3_body">I come over at the time we agreed and get the job done.</p>
+            </li>
+          </ol>
+        </div>
+        <div class="how-photo">
+          <img src="assets/img/how-tools.jpg" alt="Tools on a wooden floor" data-i18n-alt="how_photo_alt" width="960" height="640" loading="lazy" />
+        </div>
       </div>
     </section>
 
     <section id="services" class="services">
       <div class="container reveal">
-        <h2 data-i18n="services_title">What I do</h2>
-        <p class="section-intro" data-i18n="services_intro">Not sure if I do what you need? I do almost everything.</p>
+        <div class="services-head">
+          <div>
+            <p class="eyebrow" data-i18n="services_eyebrow">Services</p>
+            <h2 data-i18n="services_title">Do I do this? Probably yes.</h2>
+          </div>
+          <p class="section-intro" data-i18n="services_intro">Not on the list? Ask me. If I can't do it, I'll tell you straight away.</p>
+        </div>
         <div class="service-search">
           <svg class="service-search-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M10 2a8 8 0 0 1 6.32 12.9l5.39 5.4-1.41 1.41-5.4-5.39A8 8 0 1 1 10 2zm0 2a6 6 0 1 0 0 12 6 6 0 0 0 0-12z"/></svg>
           <input id="service-search" type="search" autocomplete="off" data-i18n-placeholder="services_search_placeholder" placeholder="Search a service, e.g. pergola" />
         </div>
         <p id="service-search-status" class="service-search-status" aria-live="polite"></p>
         <div id="services-list" class="services-list"></div>
+        <p class="services-dont"><strong data-i18n="services_dont_title">What I don't do:</strong> <span data-i18n="services_dont_list">gas &amp; boilers · asbestos · airco &amp; heat pumps</span></p>
       </div>
     </section>
     <section id="portfolio" class="portfolio">
@@ -136,14 +163,21 @@
       </figure>
     </dialog>
     <section id="coverage" class="coverage">
-      <div class="container reveal">
-        <h2 data-i18n="coverage_title">Not sure if I cover your area?</h2>
-        <p class="section-intro" data-i18n="coverage_body">Enter your postcode and I'll tell you right away.</p>
-        <form id="coverage-form" class="coverage-form" novalidate>
-          <input id="coverage-input" type="text" inputmode="text" autocomplete="postal-code" maxlength="8" data-i18n-placeholder="coverage_placeholder" placeholder="e.g. 3011 AB" aria-label="Postcode" />
-          <button type="submit" class="btn btn-primary" data-i18n="coverage_button">Check</button>
-        </form>
-        <div id="coverage-result" class="coverage-result" role="status" aria-live="polite"></div>
+      <div class="container coverage-inner reveal">
+        <div>
+          <h2 data-i18n="coverage_title">Do I come to you?</h2>
+          <p class="coverage-cities" data-i18n="coverage_cities">Rotterdam · Schiedam · Dordrecht · The Hague · Haarlem · Amsterdam, and everywhere in between.</p>
+        </div>
+        <div>
+          <form id="coverage-form" class="coverage-form" novalidate>
+            <label for="coverage-input" data-i18n="coverage_label">Your postcode</label>
+            <div class="coverage-row">
+              <input id="coverage-input" type="text" inputmode="text" autocomplete="postal-code" maxlength="8" data-i18n-placeholder="coverage_placeholder" placeholder="e.g. 3011 AB" />
+              <button type="submit" class="btn btn-primary" data-i18n="coverage_button">Check</button>
+            </div>
+          </form>
+          <div id="coverage-result" class="coverage-result" role="status" aria-live="polite"></div>
+        </div>
       </div>
     </section>
 
@@ -160,8 +194,8 @@
 
   <footer class="site-footer">
     <div class="container footer-inner">
-      <p><span data-i18n="footer_kvk">KVK</span>: <span id="footer-kvk-number">95562028</span> · <span data-i18n="footer_btw">VAT</span>: <span id="footer-btw-number">NL005161451B23</span> · <a href="mailto:info@nicofix.nl">info@nicofix.nl</a> · <a href="tel:+31610049118">+31 6 10049118</a></p>
-      <p><a href="privacy.html" data-i18n="footer_privacy">Privacy policy</a> <a href="#" id="cookie-settings" class="cookie-settings" data-i18n="footer_cookies" hidden>Cookie settings</a></p>
+      <p>© 2026 Nico Fix · <span data-i18n="footer_kvk">KVK</span> <span id="footer-kvk-number">95562028</span> · <span data-i18n="footer_btw">VAT</span> <span id="footer-btw-number">NL005161451B23</span> · <a href="mailto:info@nicofix.nl">info@nicofix.nl</a> · <a href="tel:+31610049118">+31 6 10049118</a></p>
+      <p class="footer-links"><a href="privacy.html" data-i18n="footer_privacy">Privacy policy</a><a href="#" id="cookie-settings" class="cookie-settings" data-i18n="footer_cookies" hidden>Cookie settings</a></p>
     </div>
   </footer>
 

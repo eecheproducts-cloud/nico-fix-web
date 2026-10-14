@@ -1,6 +1,6 @@
 // assets/js/main.js
 import { t, translations } from './i18n.js';
-import { servicesData, groupByCategory } from './services-data.js';
+import { servicesData, groupByCategory, CATEGORY_ORDER } from './services-data.js';
 import { portfolioItems, sortPortfolio } from './portfolio-data.js';
 import { buildSearchIndex, searchServices } from './services-search.js';
 import { checkPostcode } from './coverage.js';
@@ -15,28 +15,28 @@ const BTW_ID = 'NL005161451B23';
 
 const CATEGORY_LABELS = {
   en: {
-    assembly: 'Assembly',
+    furniture: 'Furniture & IKEA',
+    mounting: 'Mounting & hanging',
     paint: 'Painting',
-    maintenance: 'Maintenance',
-    flooring: 'Flooring',
+    tiling: 'Tiling & microcement',
+    flooring: 'Floors',
+    doors_locks: 'Doors & locks',
     plumbing: 'Plumbing',
-    smart_home: 'Smart home',
+    electrical: 'Lights & smart home',
     bathroom_kitchen: 'Bathroom & kitchen',
-    security: 'Locks & security',
-    outdoor: 'Outdoor',
-    electrical: 'Electrical',
+    outdoor: 'Garden & outdoor',
   },
   es: {
-    assembly: 'Montaje',
+    furniture: 'Muebles e IKEA',
+    mounting: 'Colgar e instalar',
     paint: 'Pintura',
-    maintenance: 'Mantenimiento',
+    tiling: 'Cerámicos y microcemento',
     flooring: 'Pisos',
+    doors_locks: 'Puertas y cerraduras',
     plumbing: 'Plomería',
-    smart_home: 'Hogar inteligente',
-    bathroom_kitchen: 'Baños y cocinas',
-    security: 'Cerrajería y seguridad',
-    outdoor: 'Exterior',
-    electrical: 'Electricidad',
+    electrical: 'Luces y hogar inteligente',
+    bathroom_kitchen: 'Baño y cocina',
+    outdoor: 'Jardín y exterior',
   },
 };
 
@@ -72,6 +72,9 @@ function setLang(lang) {
 function applyTranslations(lang) {
   document.querySelectorAll('[data-i18n]').forEach((el) => {
     el.textContent = t(lang, el.getAttribute('data-i18n'));
+  });
+  document.querySelectorAll('[data-i18n-alt]').forEach((el) => {
+    el.setAttribute('alt', t(lang, el.getAttribute('data-i18n-alt')));
   });
   document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => {
     el.setAttribute('placeholder', t(lang, el.getAttribute('data-i18n-placeholder')));
@@ -131,34 +134,77 @@ function renderServices(lang) {
     return;
   }
 
-  // Collapsible groups: open on wide screens, closed on phones so the list isn't four screens long.
-  const startOpen = window.matchMedia('(min-width: 900px)').matches;
+  // A card was clicked: show every service in that category, with a way back to the cards.
   const grouped = groupByCategory(servicesData);
-  Object.entries(grouped).forEach(([category, items]) => {
-    const group = document.createElement('details');
-    group.className = 'service-group';
-    group.open = startOpen;
-
-    const summary = document.createElement('summary');
-    const name = document.createElement('span');
-    name.textContent = CATEGORY_LABELS[lang]?.[category] || category;
-    const count = document.createElement('span');
-    count.className = 'service-count';
-    count.textContent = items.length;
-    summary.append(name, count);
-    group.appendChild(summary);
-
+  if (activeCategory) {
+    const back = document.createElement('button');
+    back.type = 'button';
+    back.className = 'services-back';
+    back.textContent = t(lang, 'services_back');
+    back.addEventListener('click', () => showCategory(null));
+    const title = document.createElement('strong');
+    title.textContent = CATEGORY_LABELS[lang]?.[activeCategory] || activeCategory;
+    status.append(back, title);
     const grid = document.createElement('div');
     grid.className = 'service-grid';
-    items.forEach((item) => {
+    grouped[activeCategory].forEach((item) => {
       const div = document.createElement('div');
       div.className = 'service-item';
       div.textContent = t(lang, item.key);
       grid.appendChild(div);
     });
-    group.appendChild(grid);
-    container.appendChild(group);
+    container.appendChild(grid);
+    return;
+  }
+
+  const cards = document.createElement('div');
+  cards.className = 'service-cards';
+  CATEGORY_ORDER.forEach((category, index) => {
+    const card = document.createElement('button');
+    card.type = 'button';
+    card.className = 'service-card';
+    card.addEventListener('click', () => showCategory(category));
+
+    const number = document.createElement('span');
+    number.className = 'service-card-number';
+    number.textContent = String(index + 1).padStart(2, '0');
+    const title = document.createElement('span');
+    title.className = 'service-card-title';
+    title.textContent = CATEGORY_LABELS[lang]?.[category] || category;
+    const desc = document.createElement('span');
+    desc.className = 'service-card-desc';
+    desc.textContent = t(lang, `cat_desc_${category}`);
+    const more = document.createElement('span');
+    more.className = 'service-card-more';
+    more.textContent = `${t(lang, 'services_count').replace('{n}', grouped[category].length)} →`;
+    card.append(number, title, desc, more);
+    cards.appendChild(card);
   });
+
+  const other = document.createElement('a');
+  other.className = 'service-card service-card-other';
+  other.href = `https://wa.me/${WHATSAPP_NUMBER}`;
+  other.target = '_blank';
+  other.rel = 'noopener';
+  const otherTitle = document.createElement('span');
+  otherTitle.className = 'service-card-title';
+  otherTitle.textContent = t(lang, 'services_other_title');
+  const otherCta = document.createElement('span');
+  otherCta.className = 'service-card-more';
+  otherCta.textContent = t(lang, 'services_other_cta');
+  other.append(otherTitle, otherCta);
+  cards.appendChild(other);
+
+  container.appendChild(cards);
+}
+
+// Category whose full list is open (null = the cards). Kept here so a language switch keeps it.
+let activeCategory = null;
+
+function showCategory(category) {
+  activeCategory = category;
+  renderServices(getLang());
+  document.getElementById('services').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function renderPortfolio(lang) {
@@ -308,7 +354,10 @@ function wireCoverage() {
 function wireServiceSearch() {
   const input = document.getElementById('service-search');
   if (!input) return;
-  input.addEventListener('input', () => renderServices(getLang()));
+  input.addEventListener('input', () => {
+    activeCategory = null;
+    renderServices(getLang());
+  });
 }
 
 function init() {
