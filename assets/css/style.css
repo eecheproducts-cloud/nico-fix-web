@@ -342,6 +342,7 @@ h2::after {
   }
   .main-nav::-webkit-scrollbar { display: none; }
   .main-nav a { white-space: nowrap; }
+  .main-nav .nav-book { order: -1; }
 }
 
 /* Sections */
