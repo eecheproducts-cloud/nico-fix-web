@@ -13,6 +13,9 @@
     .legal hr { border: none; border-top: 1px solid var(--color-border); margin: 3em 0; }
     .legal .lang-label { color: var(--color-muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; }
     .legal a { color: var(--color-primary); }
+    .legal table { width: 100%; border-collapse: collapse; margin: 1em 0; font-size: 0.92rem; }
+    .legal th, .legal td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--color-border); vertical-align: top; }
+    .legal ul { padding-left: 1.2em; }
     .back-link { display: inline-block; margin-bottom: 24px; }
   </style>
 </head>
@@ -24,30 +27,68 @@
     <h1>Privacy Policy</h1>
     <p>Last updated: October 2026.</p>
 
-    <h2>Who we are</h2>
-    <p>Nico Fix is an independent handyman business (KVK-registered) operating in Rotterdam, The Hague, Amsterdam and the area in between, Netherlands. KVK: 95562028 · VAT: NL005161451B23 · Email: <a href="mailto:info@nicofix.nl">info@nicofix.nl</a></p>
+    <h2>1. Who is responsible</h2>
+    <p>Nico Fix, a sole proprietorship (eenmanszaak) of Nicolás Echechurre, handyman in Rotterdam, The Hague, Amsterdam and the area in between, Netherlands. KVK: 95562028 · VAT: NL005161451B23 · Email: <a href="mailto:info@nicofix.nl">info@nicofix.nl</a> · Phone: +31 6 10049118 · Postal address: on request by email.</p>
 
-    <h2>What we collect</h2>
-    <p>This website has no contact form and collects no personal data. When you message us on WhatsApp, we receive your phone number, your name as shown in WhatsApp, and the messages and photos you send. WhatsApp/Meta also processes that conversation under their own privacy policy.</p>
+    <h2>2. What data we use and why</h2>
+    <ul>
+      <li><strong>WhatsApp chat:</strong> your number, your WhatsApp name, and the messages and photos you send. The first replies come from an automated assistant (AI, provided by Anthropic) that asks about the job so Nico can prepare a quote. WhatsApp/Meta also processes the conversation under their own privacy policy.</li>
+      <li><strong>Bookings on this site:</strong> name, WhatsApp number, address, postcode, type and time of the booking, and optionally a description and photos of the job.</li>
+      <li><strong>Abuse protection:</strong> a one-way hash (HMAC) of your IP address, only to limit repeated requests. We never store the IP itself in this record.</li>
+      <li><strong>Analytics:</strong> Google Analytics, only if you accept it in the cookie banner.</li>
+    </ul>
+    <p>We use the data only to manage your request or booking and to write to you on WhatsApp about it. No marketing, no selling.</p>
 
-    <h2>Postcode check</h2>
-    <p>When you use "Not sure if I cover your area?", the postcode you type is sent to PDOK, the Dutch government's free address service, to check that it exists and where it is. We don't store it, and it isn't linked to you.</p>
+    <h2>3. Legal basis</h2>
+    <ul>
+      <li>Name, phone, address, booking details, description and photos: steps taken at your request before a contract (art. 6(1)(b) GDPR).</li>
+      <li>Hash of the IP address: our legitimate interest in security and preventing abuse (art. 6(1)(f)).</li>
+      <li>Invoice data: legal tax obligation (art. 6(1)(c)).</li>
+      <li>Google Analytics: your consent only (art. 6(1)(a)). You can withdraw it at any time with "Cookie settings".</li>
+    </ul>
+    <p>Your phone number and address are required to book, because we need them to reach you and to come to you. The description and photos are optional. Photos showing people, faces or documents are not stored: each photo goes through an automatic check and is rejected if it shows them.</p>
 
-    <h2>Automated assistant</h2>
-    <p>Your first messages on WhatsApp are answered by an automated assistant, which asks about the job so Nico can prepare a quote. Nico reads the conversation and takes it over personally.</p>
+    <h2>4. Who receives the data</h2>
+    <p>Service providers that process data on our behalf:</p>
+    <ul>
+      <li>Google Cloud (database and server functions, region europe-west4, Netherlands) and Google Calendar (agenda; the event title has no personal name).</li>
+      <li>Google Routes API: only postcodes, to calculate travel time.</li>
+      <li>Notion (USA): our job records. Transfer under the EU-US Data Privacy Framework and standard contractual clauses (SCC).</li>
+      <li>Anthropic (USA): the AI behind the WhatsApp assistant and the photo check. Transfer under SCC.</li>
+      <li>Meta (WhatsApp) and Dualhook: delivery of WhatsApp messages.</li>
+      <li>GitHub Pages: hosts this site and sees the IP address of visitors when the site loads.</li>
+      <li>PDOK (Dutch government): receives only the postcode you type, to check it exists.</li>
+    </ul>
+    <p>We don't sell your data and don't share it for anyone's advertising.</p>
 
-    <h2>Why we collect it</h2>
-    <p>Only to respond to your request for a quote or repair job. We don't use it for marketing, and we don't sell it. We share it only with technical service providers (cloud hosting and the automated assistant service) that process it on our behalf and don't use it for anything else.</p>
+    <h2>5. How long we keep it</h2>
+    <table>
+      <thead><tr><th>Data</th><th>Retention</th></tr></thead>
+      <tbody>
+        <tr><td>Booking links</td><td>72 hours</td></tr>
+        <tr><td>Slot locks (no personal data)</td><td>1 day</td></tr>
+        <tr><td>Travel cache (pairs of postcodes, never with name or phone)</td><td>30 days</td></tr>
+        <tr><td>IP hash for abuse limits</td><td>2 hours</td></tr>
+        <tr><td>Bookings and job records without completed work</td><td>6 months from the last contact, then deleted or anonymised</td></tr>
+        <tr><td>Photos</td><td>3 months after the job, 6 months if the quote was not accepted</td></tr>
+        <tr><td>Calendar events</td><td>12 months (the title is already anonymous)</td></tr>
+        <tr><td>Invoice data</td><td>7 years (Dutch tax authority)</td></tr>
+        <tr><td>Server logs</td><td>30 days</td></tr>
+      </tbody>
+    </table>
 
-    <h2>How long we keep it</h2>
-    <p>As long as needed to handle your request and, if you become a client, for standard Dutch bookkeeping retention periods. You can ask us to delete it sooner (see below).</p>
+    <h2>6. Your rights</h2>
+    <p>Under the GDPR you can ask to access, correct, erase or restrict the use of your data, to receive it in a portable format, and to object to its use. Write to <a href="mailto:info@nicofix.nl">info@nicofix.nl</a> or on WhatsApp. We answer within 1 month. If you think we are handling your data wrongly, you can complain to the Dutch Data Protection Authority (Autoriteit Persoonsgegevens): <a href="https://autoriteitpersoonsgegevens.nl" rel="noopener">autoriteitpersoonsgegevens.nl</a>.</p>
 
-    <h2>Your rights</h2>
-    <p>Under GDPR you can ask to see, correct, or delete the data we hold about you. Message us on WhatsApp or email info@nicofix.nl to make that request.</p>
+    <h2>7. Automated decisions</h2>
+    <p>There are no automated decisions with legal effect. The WhatsApp assistant is an AI system, and a person (Nico) confirms every job and every price.</p>
 
-    <h2 id="cookies">Cookies</h2>
-    <p>This site stores your language choice (English/Spanish) and your cookie choice locally in your browser (localStorage) so it remembers them on your next visit. This is purely functional and not shared with anyone.</p>
-    <p>Only if you click "Accept" in the cookie banner, the site uses Google Analytics to count visits and clicks on the WhatsApp buttons. Google Analytics sets the cookies _ga and _ga_&lt;id&gt; (kept up to 2 years) and Google processes this data for us. We don't use it for advertising and don't share it with anyone else. If you click "Decline", no analytics is loaded. You can change your choice at any time with "Cookie settings" at the bottom of the home page.</p>
+    <h2>8. Postcode check</h2>
+    <p>When you use "Not sure if I cover your area?", the postcode you type is sent to PDOK to check that it exists and where it is. We don't store it and it isn't linked to you.</p>
+
+    <h2 id="cookies">9. Cookies and local storage</h2>
+    <p>This site stores in your browser (localStorage) only your language choice and your cookie choice, so it remembers them on your next visit. While you book, a private link token is kept in the tab session (sessionStorage) and disappears when you close the tab. This is purely functional and not shared with anyone.</p>
+    <p>Only if you click "Accept" in the cookie banner, the site uses Google Analytics to count visits and clicks on the WhatsApp buttons. Google Analytics sets the cookies _ga and _ga_&lt;id&gt; (kept up to 2 years) and Google processes this data for us. We never send your name, phone, address or postcode to it. If you click "Decline", no analytics is loaded. You can change your choice at any time with "Cookie settings" at the bottom of the home page.</p>
 
     <hr />
 
@@ -55,30 +96,68 @@
     <h1>Política de Privacidad</h1>
     <p>Última actualización: octubre 2026.</p>
 
-    <h2>Quiénes somos</h2>
-    <p>Nico Fix es un negocio independiente de handyman (registrado en KVK) que trabaja en Rotterdam, La Haya, Ámsterdam y la zona en el medio, Países Bajos. KVK: 95562028 · BTW: NL005161451B23 · Email: <a href="mailto:info@nicofix.nl">info@nicofix.nl</a></p>
+    <h2>1. Quién es el responsable</h2>
+    <p>Nico Fix, eenmanszaak (empresa unipersonal) de Nicolás Echechurre, handyman en Rotterdam, La Haya, Ámsterdam y la zona en el medio, Países Bajos. KVK: 95562028 · BTW: NL005161451B23 · Email: <a href="mailto:info@nicofix.nl">info@nicofix.nl</a> · Teléfono: +31 6 10049118 · Dirección postal: a pedido por email.</p>
 
-    <h2>Qué datos recolectamos</h2>
-    <p>Este sitio no tiene formulario de contacto y no recolecta datos personales. Cuando nos escribís por WhatsApp, recibimos tu número de teléfono, tu nombre tal como aparece en WhatsApp, y los mensajes y fotos que mandás. WhatsApp/Meta también procesa esa conversación bajo su propia política de privacidad.</p>
+    <h2>2. Qué datos usamos y para qué</h2>
+    <ul>
+      <li><strong>Chat de WhatsApp:</strong> tu número, tu nombre de WhatsApp y los mensajes y fotos que mandás. Las primeras respuestas las da un asistente automático (IA, de Anthropic) que te pregunta sobre el trabajo para que Nico pueda armar un presupuesto. WhatsApp/Meta también procesa la conversación bajo su propia política.</li>
+      <li><strong>Reservas en este sitio:</strong> nombre, WhatsApp, dirección, código postal, tipo y horario de la reserva y, si querés, descripción y fotos del trabajo.</li>
+      <li><strong>Protección contra abusos:</strong> un hash irreversible (HMAC) de tu dirección IP, solo para limitar pedidos repetidos. No guardamos la IP en sí en ese registro.</li>
+      <li><strong>Estadísticas:</strong> Google Analytics, solo si lo aceptás en el aviso de cookies.</li>
+    </ul>
+    <p>Usamos los datos solo para gestionar tu pedido o reserva y escribirte por WhatsApp sobre eso. Sin marketing, sin venderlos.</p>
 
-    <h2>Verificador de código postal</h2>
-    <p>Cuando usás "¿Tenés dudas de si llego hasta tu casa?", el código postal que escribís se envía a PDOK, el servicio gratuito de direcciones del gobierno holandés, para verificar que exista y dónde queda. No lo guardamos y no queda asociado a vos.</p>
+    <h2>3. Base legal</h2>
+    <ul>
+      <li>Nombre, teléfono, dirección, datos de la reserva, descripción y fotos: medidas precontractuales a pedido tuyo (art. 6(1)(b) AVG/GDPR).</li>
+      <li>Hash de la IP: interés legítimo en seguridad y prevención de abusos (art. 6(1)(f)).</li>
+      <li>Datos de factura: obligación fiscal (art. 6(1)(c)).</li>
+      <li>Google Analytics: solo tu consentimiento (art. 6(1)(a)). Lo podés retirar cuando quieras desde "Configurar cookies".</li>
+    </ul>
+    <p>El teléfono y la dirección son necesarios para reservar, porque los usamos para contactarte e ir a tu casa. La descripción y las fotos son opcionales. Las fotos con personas, caras o documentos no se guardan: cada foto pasa por un control automático y se rechaza si las muestra.</p>
 
-    <h2>Asistente automático</h2>
-    <p>Tus primeros mensajes por WhatsApp los responde un asistente automático, que te pregunta sobre el trabajo para que Nico pueda armar un presupuesto. Nico lee la conversación y la sigue personalmente.</p>
+    <h2>4. Quién recibe los datos</h2>
+    <p>Proveedores que procesan datos en nuestro nombre:</p>
+    <ul>
+      <li>Google Cloud (base de datos y funciones, región europe-west4, Países Bajos) y Google Calendar (agenda; el título del evento no lleva el nombre).</li>
+      <li>Google Routes API: solo códigos postales, para calcular el tiempo de viaje.</li>
+      <li>Notion (EE.UU.): nuestros registros de trabajos. Transferencia bajo el EU-US Data Privacy Framework y cláusulas contractuales tipo (SCC).</li>
+      <li>Anthropic (EE.UU.): la IA del asistente de WhatsApp y del control de fotos. Transferencia bajo SCC.</li>
+      <li>Meta (WhatsApp) y Dualhook: entrega de los mensajes de WhatsApp.</li>
+      <li>GitHub Pages: aloja este sitio y ve la IP de quien visita cuando carga la página.</li>
+      <li>PDOK (gobierno holandés): recibe solo el código postal que escribís, para verificar que exista.</li>
+    </ul>
+    <p>No vendemos tus datos ni los compartimos para la publicidad de nadie.</p>
 
-    <h2>Para qué los usamos</h2>
-    <p>Solo para responder tu pedido de presupuesto o trabajo. No los usamos para marketing y no los vendemos. Solo los compartimos con proveedores técnicos (hosting en la nube y el servicio del asistente automático) que los procesan en nuestro nombre y no los usan para nada más.</p>
+    <h2>5. Cuánto tiempo los guardamos</h2>
+    <table>
+      <thead><tr><th>Dato</th><th>Plazo</th></tr></thead>
+      <tbody>
+        <tr><td>Links de reserva</td><td>72 horas</td></tr>
+        <tr><td>Bloqueos de horario (sin datos personales)</td><td>1 día</td></tr>
+        <tr><td>Caché de viajes (pares de códigos postales, nunca junto a nombre o teléfono)</td><td>30 días</td></tr>
+        <tr><td>Hash de IP para límites de abuso</td><td>2 horas</td></tr>
+        <tr><td>Reservas y registros de trabajos sin trabajo hecho</td><td>6 meses desde el último contacto, luego se borran o anonimizan</td></tr>
+        <tr><td>Fotos</td><td>3 meses tras el trabajo, 6 meses si no se aceptó el presupuesto</td></tr>
+        <tr><td>Eventos del calendario</td><td>12 meses (el título ya es anónimo)</td></tr>
+        <tr><td>Datos de factura</td><td>7 años (Belastingdienst)</td></tr>
+        <tr><td>Logs del servidor</td><td>30 días</td></tr>
+      </tbody>
+    </table>
 
-    <h2>Cuánto tiempo los guardamos</h2>
-    <p>El tiempo necesario para atender tu pedido y, si te convertís en cliente, los plazos estándar de contabilidad en Países Bajos. Podés pedirnos que lo borremos antes (ver abajo).</p>
+    <h2>6. Tus derechos</h2>
+    <p>Bajo el GDPR podés pedir acceso, rectificación, borrado o limitación del uso de tus datos, recibirlos en formato portable y oponerte a su uso. Escribinos a <a href="mailto:info@nicofix.nl">info@nicofix.nl</a> o por WhatsApp. Respondemos en 1 mes. Si creés que tratamos mal tus datos, podés presentar una queja ante la Autoriteit Persoonsgegevens (autoridad de protección de datos de Países Bajos): <a href="https://autoriteitpersoonsgegevens.nl" rel="noopener">autoriteitpersoonsgegevens.nl</a>.</p>
 
-    <h2>Tus derechos</h2>
-    <p>Bajo el GDPR podés pedirnos ver, corregir o borrar los datos que tenemos sobre vos. Escribinos por WhatsApp o a info@nicofix.nl para hacer ese pedido.</p>
+    <h2>7. Decisiones automatizadas</h2>
+    <p>No hay decisiones automatizadas con efectos legales. El asistente de WhatsApp es un sistema de IA, y una persona (Nico) confirma cada trabajo y cada precio.</p>
 
-    <h2 id="cookies-es">Cookies</h2>
-    <p>Este sitio guarda tu elección de idioma (inglés/español) y tu elección sobre cookies localmente en tu navegador (localStorage) para recordarlas en tu próxima visita. Esto es puramente funcional y no se comparte con nadie.</p>
-    <p>Solo si tocás "Aceptar" en el aviso de cookies, el sitio usa Google Analytics para contar las visitas y los clics en los botones de WhatsApp. Google Analytics guarda las cookies _ga y _ga_&lt;id&gt; (hasta 2 años) y Google procesa esos datos por nosotros. No los usamos para publicidad ni los compartimos con nadie más. Si tocás "Rechazar", no se carga ninguna medición. Podés cambiar tu elección cuando quieras desde "Configurar cookies", abajo de todo en la página principal.</p>
+    <h2>8. Verificador de código postal</h2>
+    <p>Cuando usás "¿Tenés dudas de si llego hasta tu casa?", el código postal que escribís se envía a PDOK para verificar que exista y dónde queda. No lo guardamos y no queda asociado a vos.</p>
+
+    <h2 id="cookies-es">9. Cookies y almacenamiento local</h2>
+    <p>Este sitio guarda en tu navegador (localStorage) solo tu elección de idioma y tu elección sobre cookies, para recordarlas en tu próxima visita. Mientras reservás, un token privado del link se guarda en la sesión de la pestaña (sessionStorage) y desaparece al cerrarla. Es puramente funcional y no se comparte con nadie.</p>
+    <p>Solo si tocás "Aceptar" en el aviso de cookies, el sitio usa Google Analytics para contar las visitas y los clics en los botones de WhatsApp. Google Analytics guarda las cookies _ga y _ga_&lt;id&gt; (hasta 2 años) y Google procesa esos datos por nosotros. Nunca le mandamos tu nombre, teléfono, dirección ni código postal. Si tocás "Rechazar", no se carga ninguna medición. Podés cambiar tu elección cuando quieras desde "Configurar cookies", abajo de todo en la página principal.</p>
   </div>
 </body>
 </html>
