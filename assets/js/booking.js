@@ -10,11 +10,13 @@ const getLang = () => ((document.documentElement.lang || 'es').startsWith('es') 
 const $ = (id) => document.getElementById(id);
 const state = { kind: 'visit', start: null, token: '', days: [], doneData: null };
 
-// The chat link carries only a random code: read it, then drop it from the address bar before
-// anything else (analytics included) can see it.
-const params = new URLSearchParams(location.search);
-state.token = params.get('r') || '';
-if (state.token) history.replaceState(null, '', location.pathname);
+// The chat link carries only a random code.
+// An inline script in reservar.html already moved it to window.__bookingToken and cleaned the URL.
+function readToken() {
+  if (window.__bookingToken) return window.__bookingToken;
+  try { return sessionStorage.getItem('nicofix_booking_token') || ''; } catch (err) { return ''; }
+}
+state.token = readToken();
 
 function kindInputs() { return document.querySelectorAll('input[name="kind"]'); }
 function setKind(kind) {

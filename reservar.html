@@ -1,6 +1,17 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
 <head>
+  <script>
+    // Booking link token: take it out of the address bar before any module (analytics included) can read the URL.
+    (function () {
+      var token = new URLSearchParams(location.search).get("r") || "";
+      if (token) {
+        window.__bookingToken = token;
+        try { sessionStorage.setItem("nicofix_booking_token", token); } catch (e) { /* storage blocked */ }
+        history.replaceState(null, "", location.pathname);
+      }
+    })();
+  </script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="referrer" content="no-referrer" />
