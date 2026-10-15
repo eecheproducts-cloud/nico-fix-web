@@ -18,3 +18,11 @@ test('t falls back to English when the key is missing in the requested language'
 test('t falls back to the key itself when missing everywhere', () => {
   assert.equal(t('en', 'totally_unknown_key'), 'totally_unknown_key');
 });
+
+test('every booking_* and promo_* key exists in both languages', () => {
+  const wanted = (dict) => Object.keys(dict).filter((k) => /^(booking_|promo_|nav_book$)/.test(k)).sort();
+  const en = wanted(translations.en);
+  const es = wanted(translations.es);
+  assert.ok(en.length > 30);
+  assert.deepEqual(en, es);
+});

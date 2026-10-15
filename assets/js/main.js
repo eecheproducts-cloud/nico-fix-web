@@ -5,6 +5,8 @@ import { portfolioItems, sortPortfolio } from './portfolio-data.js';
 import { buildSearchIndex, searchServices } from './services-search.js';
 import { checkPostcode } from './coverage.js';
 import { initConsent } from './consent.js';
+import { promoActive } from './booking-logic.js';
+import { PROMO_WEEKEND_UNTIL } from './config.js';
 
 // Nico Fix's business number (WhatsApp only, not published as a phone line). index.html's
 // WhatsApp links (#hero-whatsapp, #contact-whatsapp, #whatsapp-float) hardcode it too as a
@@ -69,6 +71,7 @@ function setLang(lang) {
   renderServices(lang);
   renderPortfolio(lang);
   renderCoverage(lang);
+  document.dispatchEvent(new CustomEvent('nicofix-langchange', { detail: { lang } }));
 }
 
 function applyTranslations(lang) {
@@ -81,7 +84,8 @@ function applyTranslations(lang) {
   document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => {
     el.setAttribute('placeholder', t(lang, el.getAttribute('data-i18n-placeholder')));
   });
-  document.title = t(lang, 'page_title');
+  // Pages other than the home page name their title key on <body data-title-key>.
+  document.title = t(lang, document.body.dataset.titleKey || 'page_title');
   const langToggle = document.getElementById('lang-toggle');
   if (langToggle) langToggle.setAttribute('aria-label', t(lang, 'lang_toggle_label'));
 }
@@ -113,6 +117,7 @@ function whatsAppAskLink(lang) {
 
 function renderServices(lang) {
   const container = document.getElementById('services-list');
+  if (!container) return;
   const status = document.getElementById('service-search-status');
   const input = document.getElementById('service-search');
   container.innerHTML = '';
@@ -212,6 +217,7 @@ function showCategory(category) {
 
 function renderPortfolio(lang) {
   const container = document.getElementById('portfolio-grid');
+  if (!container) return;
   container.innerHTML = '';
   sortPortfolio(portfolioItems, (key) => t(lang, key)).forEach((item) => {
     const label = item.stateKey
@@ -297,8 +303,16 @@ function wireReveal() {
 }
 
 function wireFooter() {
-  document.getElementById('footer-kvk-number').textContent = KVK_NUMBER || '-';
-  document.getElementById('footer-btw-number').textContent = BTW_ID || '-';
+  const kvk = document.getElementById('footer-kvk-number');
+  const btw = document.getElementById('footer-btw-number');
+  if (kvk) kvk.textContent = KVK_NUMBER || '-';
+  if (btw) btw.textContent = BTW_ID || '-';
+}
+
+// Weekend promo banner (home page and booking page), shown until the date in config.js.
+function wirePromo() {
+  const banner = document.getElementById('promo');
+  if (banner) banner.hidden = !promoActive(new Date(), PROMO_WEEKEND_UNTIL);
 }
 
 function wireLangToggle() {
@@ -371,6 +385,7 @@ function init() {
   renderPortfolio(lang);
   wireWhatsApp();
   wireFooter();
+  wirePromo();
   wireLangToggle();
   wireServiceSearch();
   wireCoverage();

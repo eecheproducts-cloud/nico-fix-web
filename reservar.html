@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="referrer" content="no-referrer" />
+  <meta name="description" content="Book a quote visit or a work day with Nico Fix, handyman in Rotterdam, The Hague and Amsterdam." />
+  <title>Reservar · Nico Fix</title>
+  <link rel="icon" type="image/png" href="favicon-32.png" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <script>document.documentElement.classList.add('js');</script>
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="canonical" href="https://nicofix.nl/reservar.html" />
+</head>
+<body data-title-key="booking_page_title">
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="logo" href="index.html" aria-label="Nico Fix Handyman"><img src="assets/img/logo/logo-horizontal-light.png" alt="Nico Fix Handyman" width="162" height="40" /></a>
+      <nav class="main-nav">
+        <a href="index.html#about" data-i18n="nav_about">About</a>
+        <a href="index.html#services" data-i18n="nav_services">Services</a>
+        <a href="index.html#portfolio" data-i18n="nav_portfolio">My work</a>
+        <a href="index.html#contact" data-i18n="nav_contact">Contact</a>
+        <a href="reservar.html" class="nav-book" aria-current="page" data-i18n="nav_book">Book</a>
+      </nav>
+      <button id="lang-toggle" class="lang-toggle" type="button" aria-label="Switch language">EN / ES</button>
+    </div>
+  </header>
+
+  <main class="booking container" id="booking">
+    <section class="promo-banner" id="promo" hidden>
+      <strong data-i18n="promo_title"></strong><small data-i18n="promo_small"></small>
+    </section>
+    <h1 data-i18n="booking_title"></h1>
+    <div class="booking-kinds" role="radiogroup">
+      <label class="booking-kind"><input type="radio" name="kind" value="visit" checked>
+        <span class="booking-kind-title" data-i18n="booking_kind_visit"></span>
+        <span class="booking-kind-body" data-i18n="booking_kind_visit_body"></span></label>
+      <label class="booking-kind"><input type="radio" name="kind" value="work">
+        <span class="booking-kind-title" data-i18n="booking_kind_work"></span>
+        <span class="booking-kind-body" data-i18n="booking_kind_work_body"></span></label>
+    </div>
+    <form id="postcode-form" class="booking-postcode">
+      <label for="postcode" data-i18n="booking_postcode_label"></label>
+      <div class="booking-postcode-row">
+        <input id="postcode" name="postcode" autocomplete="postal-code" maxlength="8" required>
+        <button class="btn btn-primary" type="submit" data-i18n="booking_postcode_button"></button>
+      </div>
+      <p class="booking-message" id="postcode-message" role="status"></p>
+    </form>
+    <div id="days" class="booking-days"></div>
+    <form id="details" class="booking-details" hidden novalidate>
+      <input type="text" name="website" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <label><span data-i18n="booking_name"></span><input name="name" autocomplete="name" required></label>
+      <label><span data-i18n="booking_phone"></span><input name="phone" type="tel" autocomplete="tel" required>
+        <small data-i18n="booking_phone_note"></small></label>
+      <label><span data-i18n="booking_address"></span><input name="address" autocomplete="street-address" required></label>
+      <label class="booking-check only-visit"><input type="checkbox" name="manyThings"> <span><span data-i18n="booking_many"></span>
+        <small data-i18n="booking_many_note"></small></span></label>
+      <label><span data-i18n="booking_description"></span><textarea name="description" rows="3"></textarea></label>
+      <label><span data-i18n="booking_photos"></span><input name="photos" type="file" accept="image/jpeg,image/png,image/webp" multiple></label>
+      <label class="booking-check booking-early"><input type="checkbox" name="earlyStart"> <span data-i18n="booking_early"></span></label>
+      <p class="booking-privacy"><span data-i18n="booking_privacy"></span> <a href="privacy.html" data-i18n="booking_privacy_link"></a></p>
+      <button class="btn btn-primary btn-glow" type="submit" id="submit"></button>
+      <p class="booking-message" id="details-message" role="alert"></p>
+    </form>
+    <section id="done" class="booking-done" hidden></section>
+    <section class="booking-info">
+      <h2 data-i18n="booking_cancel_title"></h2><p data-i18n="booking_cancel_body"></p>
+      <h2 data-i18n="booking_withdraw_title"></h2><p data-i18n="booking_withdraw_body"></p>
+      <p class="booking-business" data-i18n="booking_business"></p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© 2026 Nico Fix · <span data-i18n="footer_kvk">KVK</span> <span id="footer-kvk-number">95562028</span> · <span data-i18n="footer_btw">VAT</span> <span id="footer-btw-number">NL005161451B23</span> · <a href="mailto:info@nicofix.nl">info@nicofix.nl</a> · <a href="tel:+31610049118">+31 6 10049118</a></p>
+      <p class="footer-links"><a href="privacy.html" data-i18n="footer_privacy">Privacy policy</a><a href="#" id="cookie-settings" class="cookie-settings" data-i18n="footer_cookies" hidden>Cookie settings</a></p>
+    </div>
+  </footer>
+
+  <div id="cookie-banner" class="cookie-banner" role="region" aria-label="Cookies" hidden>
+    <p data-i18n="cookie_text">I use Google Analytics cookies to see how many people visit this site and improve it. They are only switched on if you accept.</p>
+    <div class="cookie-actions">
+      <button type="button" id="cookie-decline" class="btn btn-secondary" data-i18n="cookie_decline">Decline</button>
+      <button type="button" id="cookie-accept" class="btn btn-secondary" data-i18n="cookie_accept">Accept</button>
+    </div>
+    <a href="privacy.html#cookies" data-i18n="cookie_more">More info</a>
+  </div>
+
+  <script type="module" src="assets/js/main.js"></script>
+  <script type="module" src="assets/js/booking.js"></script>
+</body>
+</html>
