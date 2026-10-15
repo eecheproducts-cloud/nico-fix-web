@@ -46,6 +46,20 @@ export function scaledSize(width, height, max = 1600) {
   return { width: Math.round(width * ratio), height: Math.round(height * ratio) };
 }
 
+// A visit with "more than one thing to look at" is a request: Nico agrees the price on WhatsApp before confirming.
+export function isRequest(kind, manyThings) {
+  return kind === 'work' || (kind === 'visit' && Boolean(manyThings));
+}
+export function submitLabelKey(kind, manyThings) {
+  return isRequest(kind, manyThings) ? 'booking_submit_work' : 'booking_submit_visit';
+}
+export function doneKey(kind, manyThings) {
+  if (kind === 'work') return 'booking_done_work';
+  return manyThings ? 'booking_done_visit_request' : 'booking_done_visit';
+}
+
+// The promo ends on 31/12/2026 by the Amsterdam calendar date, not UTC.
+const AMS_DATE = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Amsterdam', year: 'numeric', month: '2-digit', day: '2-digit' });
 export function promoActive(today = new Date(), until = '2026-12-31') {
-  return today.toISOString().slice(0, 10) <= until;
+  return AMS_DATE.format(today) <= until;
 }

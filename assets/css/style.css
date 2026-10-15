@@ -1133,6 +1133,10 @@ h2::after {
 
 .booking-info { margin-top: 34px; padding-top: 6px; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.92rem; }
 .booking-business { font-size: 0.85rem; }
+.booking-withdrawal { margin: 12px 0; }
+.booking-withdrawal summary { cursor: pointer; color: var(--text); font-weight: 600; }
+.booking-wd-form { margin-top: 10px; padding: 14px 16px; border: 1px solid var(--border); border-radius: 10px; }
+.booking-wd-form p { margin: 0 0 10px; overflow-wrap: anywhere; }
 
 @media (max-width: 640px) {
   .booking-kinds { grid-template-columns: 1fr; }

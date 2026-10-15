@@ -46,16 +46,16 @@
       <li>Invoice data: legal tax obligation (art. 6(1)(c)).</li>
       <li>Google Analytics: your consent only (art. 6(1)(a)). You can withdraw it at any time with "Cookie settings".</li>
     </ul>
-    <p>Your phone number and address are required to book, because we need them to reach you and to come to you. The description and photos are optional. Photos showing people, faces or documents are not stored: each photo goes through an automatic check and is rejected if it shows them.</p>
+    <p>Your phone number and address are required to book, because we need them to reach you and to come to you. The description and photos are optional. Photos showing people, faces or documents are not stored: each photo goes through an automatic check, and photos with people or documents are rejected when the check detects them.</p>
 
     <h2>4. Who receives the data</h2>
     <p>Service providers that process data on our behalf:</p>
     <ul>
-      <li>Google Cloud (database and server functions, region europe-west4, Netherlands) and Google Calendar (agenda; the event title has no personal name).</li>
+      <li>Google Cloud (database and server functions, region europe-west4, Netherlands) and Google Calendar (agenda; the event title has no personal name, and the event location holds the job address, which is needed for navigation, but no name, phone or description). Google Cloud processes the data in the EU; Google may transfer data outside the EU under standard contractual clauses (SCC) or the EU-US Data Privacy Framework.</li>
       <li>Google Routes API: only postcodes, to calculate travel time.</li>
       <li>Notion (USA): our job records. Transfer under the EU-US Data Privacy Framework and standard contractual clauses (SCC).</li>
       <li>Anthropic (USA): the AI behind the WhatsApp assistant and the photo check. Transfer under SCC.</li>
-      <li>Meta (WhatsApp) and Dualhook: delivery of WhatsApp messages.</li>
+      <li>Meta (WhatsApp) and Dualhook: delivery of WhatsApp messages. Both may process data outside the EU, under their own terms and standard contractual clauses (SCC).</li>
       <li>GitHub Pages: hosts this site and sees the IP address of visitors when the site loads.</li>
       <li>PDOK (Dutch government): receives only the postcode you type, to check it exists.</li>
     </ul>
@@ -70,6 +70,8 @@
         <tr><td>Travel cache (pairs of postcodes, never with name or phone)</td><td>30 days</td></tr>
         <tr><td>IP hash for abuse limits</td><td>2 hours</td></tr>
         <tr><td>Bookings and job records without completed work</td><td>6 months from the last contact, then deleted or anonymised</td></tr>
+        <tr><td>WhatsApp chat: conversation data (Firestore)</td><td>Reset after 14 days of inactivity</td></tr>
+        <tr><td>Leads sheet and Notion job records (NF), if no job was done</td><td>6 months after the last contact</td></tr>
         <tr><td>Photos</td><td>3 months after the job, 6 months if the quote was not accepted</td></tr>
         <tr><td>Calendar events</td><td>12 months (the title is already anonymous)</td></tr>
         <tr><td>Invoice data</td><td>7 years (Dutch tax authority)</td></tr>
@@ -115,16 +117,16 @@
       <li>Datos de factura: obligación fiscal (art. 6(1)(c)).</li>
       <li>Google Analytics: solo tu consentimiento (art. 6(1)(a)). Lo podés retirar cuando quieras desde "Configurar cookies".</li>
     </ul>
-    <p>El teléfono y la dirección son necesarios para reservar, porque los usamos para contactarte e ir a tu casa. La descripción y las fotos son opcionales. Las fotos con personas, caras o documentos no se guardan: cada foto pasa por un control automático y se rechaza si las muestra.</p>
+    <p>El teléfono y la dirección son necesarios para reservar, porque los usamos para contactarte e ir a tu casa. La descripción y las fotos son opcionales. Las fotos con personas, caras o documentos no se guardan: cada foto pasa por un control automático, y las fotos con personas o documentos se rechazan cuando el control las detecta.</p>
 
     <h2>4. Quién recibe los datos</h2>
     <p>Proveedores que procesan datos en nuestro nombre:</p>
     <ul>
-      <li>Google Cloud (base de datos y funciones, región europe-west4, Países Bajos) y Google Calendar (agenda; el título del evento no lleva el nombre).</li>
+      <li>Google Cloud (base de datos y funciones, región europe-west4, Países Bajos) y Google Calendar (agenda; el título del evento no lleva el nombre, y la ubicación del evento tiene la dirección del trabajo, necesaria para navegar, pero ningún nombre, teléfono ni descripción). Google Cloud procesa los datos en la UE; Google puede transferir datos fuera de la UE bajo cláusulas contractuales tipo (SCC) o el EU-US Data Privacy Framework.</li>
       <li>Google Routes API: solo códigos postales, para calcular el tiempo de viaje.</li>
       <li>Notion (EE.UU.): nuestros registros de trabajos. Transferencia bajo el EU-US Data Privacy Framework y cláusulas contractuales tipo (SCC).</li>
       <li>Anthropic (EE.UU.): la IA del asistente de WhatsApp y del control de fotos. Transferencia bajo SCC.</li>
-      <li>Meta (WhatsApp) y Dualhook: entrega de los mensajes de WhatsApp.</li>
+      <li>Meta (WhatsApp) y Dualhook: entrega de los mensajes de WhatsApp. Ambos pueden procesar datos fuera de la UE, bajo sus propios términos y cláusulas contractuales tipo (SCC).</li>
       <li>GitHub Pages: aloja este sitio y ve la IP de quien visita cuando carga la página.</li>
       <li>PDOK (gobierno holandés): recibe solo el código postal que escribís, para verificar que exista.</li>
     </ul>
@@ -139,6 +141,8 @@
         <tr><td>Caché de viajes (pares de códigos postales, nunca junto a nombre o teléfono)</td><td>30 días</td></tr>
         <tr><td>Hash de IP para límites de abuso</td><td>2 horas</td></tr>
         <tr><td>Reservas y registros de trabajos sin trabajo hecho</td><td>6 meses desde el último contacto, luego se borran o anonimizan</td></tr>
+        <tr><td>Chat de WhatsApp: datos de la conversación (Firestore)</td><td>Se reinician tras 14 días sin actividad</td></tr>
+        <tr><td>Planilla de leads y registros de trabajo en Notion (NF), si no hubo trabajo</td><td>6 meses desde el último contacto</td></tr>
         <tr><td>Fotos</td><td>3 meses tras el trabajo, 6 meses si no se aceptó el presupuesto</td></tr>
         <tr><td>Eventos del calendario</td><td>12 meses (el título ya es anónimo)</td></tr>
         <tr><td>Datos de factura</td><td>7 años (Belastingdienst)</td></tr>

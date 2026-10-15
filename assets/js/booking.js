@@ -3,12 +3,12 @@
 // This file never calls gtag: no personal data goes to analytics.
 import { BOOKING_API } from './config.js';
 import { t } from './i18n.js';
-import { buildPayload, validateForm, groupDays, waLink, scaledSize } from './booking-logic.js';
+import { buildPayload, validateForm, groupDays, waLink, scaledSize, submitLabelKey, doneKey } from './booking-logic.js';
 import { checkPostcode } from './coverage.js';
 
 const getLang = () => ((document.documentElement.lang || 'es').startsWith('es') ? 'es' : 'en');
 const $ = (id) => document.getElementById(id);
-const state = { kind: 'visit', start: null, token: '', days: [], doneData: null };
+const state = { kind: 'visit', start: null, token: '', days: [], doneData: null, doneManyThings: false };
 
 // The chat link carries only a random code.
 // An inline script in reservar.html already moved it to window.__bookingToken and cleaned the URL.
@@ -23,8 +23,13 @@ function setKind(kind) {
   state.kind = kind;
   kindInputs().forEach((i) => { i.checked = i.value === kind; });
   document.querySelectorAll('.only-visit').forEach((el) => { el.hidden = kind !== 'visit'; });
-  $('submit').textContent = t(getLang(), kind === 'work' ? 'booking_submit_work' : 'booking_submit_visit');
+  updateSubmitLabel();
 }
+function updateSubmitLabel() {
+  const many = $('details').elements.manyThings.checked;
+  $('submit').textContent = t(getLang(), submitLabelKey(state.kind, many));
+}
+$('details').elements.manyThings.addEventListener('change', updateSubmitLabel);
 kindInputs().forEach((i) => i.addEventListener('change', () => {
   setKind(i.value);
   state.start = null;
@@ -146,6 +151,7 @@ $('details').addEventListener('submit', async (e) => {
     try { data = await res.json(); } catch (err) { data = null; }
     if (res.status === 409) { msg.textContent = t(lang, 'booking_taken'); loadSlots(); return; }
     if (!data || !data.ok) { msg.textContent = t(lang, 'booking_error'); return; }
+    state.doneManyThings = form.manyThings;
     showDone(data);
   } catch (err) {
     msg.textContent = t(lang, 'booking_error');
@@ -168,7 +174,7 @@ function renderDone() {
   if (!data) return;
   const lang = getLang();
   const when = groupDays([{ date: '', slots: [{ start: data.start }] }], lang)[0];
-  const text = t(lang, state.kind === 'work' ? 'booking_done_work' : 'booking_done_visit')
+  const text = t(lang, doneKey(state.kind, state.doneManyThings))
     .replace('{when}', `${when.label}, ${when.slots[0].time}`).replace('{code}', data.code);
   const done = $('done');
   done.innerHTML = '';
