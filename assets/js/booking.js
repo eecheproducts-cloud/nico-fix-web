@@ -3,13 +3,13 @@
 // This file never calls gtag: no personal data goes to analytics.
 import { BOOKING_API } from './config.js';
 import { t } from './i18n.js';
-import { buildPayload, validateForm, groupDays, dayChips, groupByPeriod, formatSummary, waLink, scaledSize, submitLabelKey, doneKey, showsEarlyStart, missingMessage, knownFields } from './booking-logic.js';
+import { buildPayload, validateForm, groupDays, dayChips, groupByPeriod, formatSummary, waLink, scaledSize, submitLabelKey, doneKey, showsEarlyStart, missingMessage, knownFields, BASE_PRICE, anyNearby, slotPrice, fillText } from './booking-logic.js';
 import { checkPostcode } from './coverage.js';
 import { suggestUrl, shouldSuggest, parseSuggestions, postcodeDiffers, extractPostcode } from './address-suggest.js';
 
 const getLang = () => ((document.documentElement.lang || 'es').startsWith('es') ? 'es' : 'en');
 const $ = (id) => document.getElementById(id);
-const state = { kind: 'visit', start: null, token: '', days: [], chips: [], date: null, doneData: null, doneManyThings: false };
+const state = { kind: 'visit', start: null, token: '', days: [], chips: [], date: null, doneData: null, doneManyThings: false, basePrice: BASE_PRICE, nearbyPrice: null };
 
 // The chat link carries only a random code.
 // An inline script in reservar.html already moved it to window.__bookingToken and cleaned the URL.
@@ -25,16 +25,26 @@ function setKind(kind) {
   kindInputs().forEach((i) => { i.checked = i.value === kind; });
   updateSubmitLabel();
 }
+// Price of the chosen visit slot (the base price until a time is chosen, or when the server sends none).
+function selectedPrice() {
+  for (const d of state.days) {
+    const slot = d.slots.find((x) => x.start === state.start);
+    if (slot) return slotPrice(slot, state.basePrice);
+  }
+  return state.basePrice;
+}
 function updateSubmitLabel() {
-  $('submit').textContent = t(getLang(), submitLabelKey(state.kind, false));
+  const price = selectedPrice();
+  const lang = getLang();
+  $('submit').textContent = fillText(t(lang, submitLabelKey(state.kind, false)), { price });
   // The early-start tick box exists only for the work day.
   const early = showsEarlyStart(state.kind);
   $('early-text').closest('label').hidden = !early;
   if (!early) $('details').elements.earlyStart.checked = false;
   $('early-text').textContent = early ? t(getLang(), 'booking_early_work') : '';
-  $('submit-note').textContent = state.kind === 'visit' ? t(getLang(), 'booking_submit_note_visit') : '';
+  $('submit-note').textContent = state.kind === 'visit' ? fillText(t(lang, 'booking_submit_note_visit'), { price }) : '';
   // The price box sits in the form, so it is always visible before the binding button.
-  $('price-box').textContent = t(getLang(), state.kind === 'visit' ? 'booking_price_visit' : 'booking_price_work');
+  $('price-box').textContent = fillText(t(lang, state.kind === 'visit' ? 'booking_price_visit' : 'booking_price_work'), { price });
 }
 kindInputs().forEach((i) => i.addEventListener('change', () => {
   setKind(i.value);
@@ -77,6 +87,11 @@ function renderChips() {
     b.setAttribute('aria-pressed', chip.date === state.date ? 'true' : 'false');
     b.setAttribute('aria-label', chip.label);
     b.innerHTML = '<span class="dc-week"></span><span class="dc-day"></span><span class="dc-month"></span>';
+    if (state.kind === 'visit' && chip.nearby) {
+      const van = document.createElement('span');
+      van.className = 'dc-van'; van.setAttribute('aria-hidden', 'true'); van.textContent = '🚐';
+      b.append(van);
+    }
     b.children[0].textContent = chip.weekday;
     b.children[1].textContent = chip.day;
     b.children[2].textContent = chip.month;
@@ -104,7 +119,9 @@ function renderTimes() {
       const b = document.createElement('button');
       b.type = 'button';
       b.className = 'slot';
-      b.textContent = slot.time;
+      const near = state.kind === 'visit' && slot.nearby === true;
+      b.textContent = near ? `${slot.time} 🚐` : slot.time;
+      if (near) b.setAttribute('aria-label', `${slot.time}, ${fillText(t(getLang(), 'booking_price_visit_short'), { price: slotPrice(slot, state.basePrice) })}`);
       b.setAttribute('aria-pressed', slot.start === state.start ? 'true' : 'false');
       b.addEventListener('click', () => chooseTime(slot.start));
       grid.append(b);
@@ -121,6 +138,7 @@ function summaryText() {
 
 function chooseTime(start) {
   state.start = start;
+  updateSubmitLabel();
   $('summary-text').textContent = summaryText();
   $('slots-pick').hidden = true;
   $('summary').hidden = false;
@@ -130,6 +148,7 @@ function chooseTime(start) {
 
 function changeTime() {
   state.start = null;
+  updateSubmitLabel();
   $('summary').hidden = true;
   $('details').hidden = true;
   $('slots-pick').hidden = false;
@@ -162,8 +181,16 @@ function showSlotsState(name) {
   $('summary').hidden = true;
 }
 
+function renderNearbyHint() {
+  const hint = $('nearby-hint');
+  const show = state.kind === 'visit' && anyNearby(state.days) && typeof state.nearbyPrice === 'number';
+  hint.hidden = !show;
+  hint.textContent = show ? fillText(t(getLang(), 'booking_nearby_hint'), { nearby: state.nearbyPrice, base: state.basePrice }) : '';
+}
+
 function renderSlots() {
   updateArrowLabels();
+  renderNearbyHint();
   if (!state.days.length) return;
   state.chips = dayChips(state.days, getLang());
   if (!state.date || !state.chips.some((c) => c.date === state.date)) state.date = state.chips[0].date;
@@ -199,6 +226,9 @@ async function loadSlots() {
   const days = (data.days || []).filter((d) => d.slots && d.slots.length);
   if (!days.length) { $('empty-wa').href = waLink(''); showSlotsState('empty'); return; }
   state.days = days;
+  state.basePrice = typeof data.basePrice === 'number' ? data.basePrice : BASE_PRICE;
+  state.nearbyPrice = typeof data.nearbyPrice === 'number' ? data.nearbyPrice : null;
+  updateSubmitLabel();
   showSlotsState('pick');
   renderSlots();
 }
@@ -321,6 +351,7 @@ $('details').addEventListener('submit', async (e) => {
   const form = { kind: state.kind, start: state.start, postcode: $('postcode').value, name: el.name.value, address: el.address.value,
     phone: el.phone.value, description: el.description.value, manyThings: false, earlyStart: el.earlyStart.checked,
     photos: [], lang, website: el.website.value, token: state.token };
+  if (state.kind === 'visit') form.price = selectedPrice();
   const msg = $('details-message');
   msg.textContent = '';
   const invalid = validateForm(form, state.kind);
@@ -340,6 +371,7 @@ $('details').addEventListener('submit', async (e) => {
     if (res.status === 400 && data && Array.isArray(data.fields) && showMissing(data.fields, lang)) return;
     if (!data || !data.ok) { msg.textContent = t(lang, 'booking_error'); return; }
     state.doneManyThings = form.manyThings;
+    state.donePrice = form.price;
     showDone(data);
   } catch (err) {
     msg.textContent = t(lang, 'booking_error');
@@ -369,6 +401,10 @@ function renderDone() {
   const h = document.createElement('h2'); h.textContent = t(lang, 'booking_done_title');
   const p = document.createElement('p'); p.textContent = text;
   done.append(h, p);
+  // The server's price wins when it differs from what the page showed.
+  if (state.kind === 'visit' && typeof data.price === 'number' && data.price !== state.donePrice) {
+    const pp = document.createElement('p'); pp.textContent = fillText(t(lang, 'booking_done_price'), { price: data.price }); done.append(pp);
+  }
   if (data.photosRejected) { const r = document.createElement('p'); r.textContent = t(lang, 'booking_photo_rejected'); done.append(r); }
   // confirmSent comes from the server; undefined counts as false.
   if (!data.chatNotified && !data.confirmSent) {

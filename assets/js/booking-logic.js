@@ -9,6 +9,7 @@ export function buildPayload(f) {
     photos: f.photos || [], lang: f.lang, website: f.website || '',
   };
   if (f.token) payload.token = f.token;
+  if (typeof f.price === 'number') payload.price = f.price;
   return payload;
 }
 
@@ -47,11 +48,29 @@ export function dateParts(iso, lang) {
   return { weekday: out.weekday, day: out.day, month: out.month };
 }
 
+// Nearby-zone discount: the server marks slots with nearby:true and a price. Missing fields mean no discount.
+export const BASE_PRICE = 65;
+export function dayHasNearby(day) {
+  return Boolean(day && Array.isArray(day.slots) && day.slots.some((s) => s && s.nearby === true));
+}
+export function anyNearby(days) {
+  return Array.isArray(days) && days.some(dayHasNearby);
+}
+// Price of a slot for a visit: its own price, or the base price when the server sent none.
+export function slotPrice(slot, basePrice = BASE_PRICE) {
+  if (slot && typeof slot.price === 'number') return slot.price;
+  return basePrice;
+}
+// Replaces {name} placeholders with values.
+export function fillText(text, values) {
+  return String(text).replace(/\{(\w+)\}/g, (m, k) => (k in values ? String(values[k]) : m));
+}
+
 // Day chips for the strip: only days with slots, each with weekday, day number and month ("sáb 24 oct").
 export function dayChips(days, lang) {
   return days.filter((d) => d.slots && d.slots.length).map((d) => {
     const parts = dateParts(d.slots[0].start, lang);
-    return { date: d.date, ...parts, label: `${parts.weekday} ${parts.day} ${parts.month}` };
+    return { date: d.date, ...parts, label: `${parts.weekday} ${parts.day} ${parts.month}`, nearby: dayHasNearby(d) };
   });
 }
 

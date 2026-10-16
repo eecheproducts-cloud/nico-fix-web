@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { buildPayload, validateForm, groupDays, waLink, scaledSize, promoActive, submitLabelKey, doneKey, showsEarlyStart, missingMessage, knownFields, dayChips, groupByPeriod, formatSummary } from '../assets/js/booking-logic.js';
+import { buildPayload, validateForm, groupDays, waLink, scaledSize, promoActive, submitLabelKey, doneKey, showsEarlyStart, missingMessage, knownFields, dayChips, groupByPeriod, formatSummary, dayHasNearby, anyNearby, slotPrice, fillText } from '../assets/js/booking-logic.js';
 
 const form = { kind: 'visit', start: '2026-10-24T08:00:00.000Z', postcode: '3117 re', name: 'Ana', address: 'Calle 1', phone: '0612345678',
   description: '', manyThings: false, earlyStart: true, photos: [], lang: 'es', website: '', token: '' };
@@ -98,4 +98,29 @@ test('groupByPeriod splits morning and afternoon by Amsterdam time and omits emp
 test('formatSummary builds "Sáb 24 oct · 09:30 · Visita"', () => {
   assert.equal(formatSummary('2026-10-24T07:30:00.000Z', 'es', 'Visita'), 'Sáb 24 oct · 09:30 · Visita');
   assert.equal(formatSummary('2026-10-24T07:30:00.000Z', 'en', 'Visit'), 'Sat 24 Oct · 09:30 · Visit');
+});
+
+test('BUG: a visit with the early-start box unticked or missing is valid and sends earlyStart false', () => {
+  const visit = { ...form, kind: 'visit' };
+  for (const earlyStart of [false, undefined]) {
+    assert.deepEqual(validateForm({ ...visit, earlyStart }, 'visit'), []);
+    assert.equal(buildPayload({ ...visit, earlyStart }).earlyStart, false);
+    assert.equal(missingMessage(validateForm({ ...visit, earlyStart }, 'visit'), (k) => k), '');
+  }
+});
+
+test('nearby helpers: day has nearby, price for slot, text interpolation', () => {
+  const near = { slots: [{ start: 'a', nearby: false, price: 65 }, { start: 'b', nearby: true, price: 60 }] };
+  const far = { slots: [{ start: 'c' }, { start: 'd', nearby: false, price: null }] };
+  assert.equal(dayHasNearby(near), true);
+  assert.equal(dayHasNearby(far), false);
+  assert.equal(anyNearby([far, near]), true);
+  assert.equal(anyNearby([far]), false);
+  assert.equal(slotPrice(near.slots[1]), 60);
+  assert.equal(slotPrice(far.slots[0]), 65);
+  assert.equal(slotPrice(far.slots[1]), 65);
+  assert.equal(slotPrice({ start: 'x' }, 70), 70);
+  assert.equal(fillText('vale {nearby} en vez de {base} {x}', { nearby: 60, base: 65 }), 'vale 60 en vez de 65 {x}');
+  assert.equal(buildPayload({ ...form, price: 60 }).price, 60);
+  assert.equal('price' in buildPayload(form), false);
 });
