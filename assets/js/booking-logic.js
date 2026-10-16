@@ -62,6 +62,16 @@ export function slotPrice(slot, basePrice = BASE_PRICE) {
   return basePrice;
 }
 // Replaces {name} placeholders with values.
+// Euro amount for display: "61,75 €" in Spanish, "€61.75" in English; whole numbers without decimals.
+export function formatEuro(amount, lang) {
+  const n = Number(amount);
+  const body = Number.isInteger(n) ? String(n) : n.toFixed(2);
+  return lang === 'es' ? `${body.replace('.', ',')} €` : `€${body}`;
+}
+// Whole-number percentage a nearby price saves against the base price.
+export function discountPercent(base, price) {
+  return base > 0 ? Math.round(((base - price) / base) * 100) : 0;
+}
 export function fillText(text, values) {
   return String(text).replace(/\{(\w+)\}/g, (m, k) => (k in values ? String(values[k]) : m));
 }

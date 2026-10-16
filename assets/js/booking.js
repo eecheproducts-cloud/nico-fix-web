@@ -3,7 +3,7 @@
 // This file never calls gtag: no personal data goes to analytics.
 import { BOOKING_API } from './config.js';
 import { t } from './i18n.js';
-import { buildPayload, normalizePhone, validateForm, groupDays, dayChips, groupByPeriod, formatSummary, waLink, scaledSize, submitLabelKey, doneKey, showsEarlyStart, missingMessage, knownFields, BASE_PRICE, anyNearby, slotPrice, fillText } from './booking-logic.js';
+import { buildPayload, normalizePhone, validateForm, groupDays, dayChips, groupByPeriod, formatSummary, waLink, scaledSize, submitLabelKey, doneKey, showsEarlyStart, missingMessage, knownFields, BASE_PRICE, anyNearby, slotPrice, fillText, formatEuro, discountPercent } from './booking-logic.js';
 import { checkPostcode } from './coverage.js';
 import { suggestUrl, shouldSuggest, parseSuggestions, postcodeDiffers, extractPostcode } from './address-suggest.js';
 
@@ -36,15 +36,15 @@ function selectedPrice() {
 function updateSubmitLabel() {
   const price = selectedPrice();
   const lang = getLang();
-  $('submit').textContent = fillText(t(lang, submitLabelKey(state.kind, false)), { price });
+  $('submit').textContent = fillText(t(lang, submitLabelKey(state.kind, false)), { price: formatEuro(price, lang) });
   // The early-start tick box exists only for the work day.
   const early = showsEarlyStart(state.kind);
   $('early-text').closest('label').hidden = !early;
   if (!early) $('details').elements.earlyStart.checked = false;
   $('early-text').textContent = early ? t(getLang(), 'booking_early_work') : '';
-  $('submit-note').textContent = state.kind === 'visit' ? fillText(t(lang, 'booking_submit_note_visit'), { price }) : '';
+  $('submit-note').textContent = state.kind === 'visit' ? fillText(t(lang, 'booking_submit_note_visit'), { price: formatEuro(price, lang) }) : '';
   // The price box sits in the form, so it is always visible before the binding button.
-  $('price-box').textContent = fillText(t(lang, state.kind === 'visit' ? 'booking_price_visit' : 'booking_price_work'), { price });
+  $('price-box').textContent = fillText(t(lang, state.kind === 'visit' ? 'booking_price_visit' : 'booking_price_work'), { price: formatEuro(price, lang) });
 }
 kindInputs().forEach((i) => i.addEventListener('change', () => {
   setKind(i.value);
@@ -126,9 +126,9 @@ function renderTimes() {
         const lf = document.createElement('span'); lf.className = 'slot-leaf'; lf.setAttribute('aria-hidden', 'true'); lf.textContent = '⚡';
         const tm = document.createElement('span'); tm.textContent = slot.time;
         const bd = document.createElement('span'); bd.className = 'slot-badge'; bd.setAttribute('aria-hidden', 'true');
-        bd.textContent = fillText(t(getLang(), 'booking_nearby_badge'), { off: state.basePrice - price });
+        bd.textContent = fillText(t(getLang(), 'booking_nearby_badge'), { pct: discountPercent(state.basePrice, price) });
         b.append(lf, tm, bd);
-        b.setAttribute('aria-label', fillText(t(getLang(), 'booking_nearby_aria'), { time: slot.time, price, base: state.basePrice }));
+        b.setAttribute('aria-label', fillText(t(getLang(), 'booking_nearby_aria'), { time: slot.time, price: formatEuro(price, getLang()), base: formatEuro(state.basePrice, getLang()), pct: discountPercent(state.basePrice, price) }));
       } else b.textContent = slot.time;
       b.setAttribute('aria-pressed', slot.start === state.start ? 'true' : 'false');
       b.addEventListener('click', () => chooseTime(slot.start));
@@ -193,7 +193,7 @@ function renderNearbyHint() {
   const hint = $('nearby-hint');
   const show = state.kind === 'visit' && anyNearby(state.days) && typeof state.nearbyPrice === 'number';
   hint.hidden = !show;
-  hint.textContent = show ? fillText(t(getLang(), 'booking_nearby_hint'), { nearby: state.nearbyPrice, base: state.basePrice }) : '';
+  hint.textContent = show ? fillText(t(getLang(), 'booking_nearby_hint'), { pct: discountPercent(state.basePrice, state.nearbyPrice) }) : '';
 }
 
 function renderSlots() {
@@ -412,7 +412,7 @@ function renderDone() {
   done.append(h, p);
   // The server's price wins when it differs from what the page showed.
   if (state.kind === 'visit' && typeof data.price === 'number' && data.price !== state.donePrice) {
-    const pp = document.createElement('p'); pp.textContent = fillText(t(lang, 'booking_done_price'), { price: data.price }); done.append(pp);
+    const pp = document.createElement('p'); pp.textContent = fillText(t(lang, 'booking_done_price'), { price: formatEuro(data.price, lang) }); done.append(pp);
   }
   if (data.photosRejected) { const r = document.createElement('p'); r.textContent = t(lang, 'booking_photo_rejected'); done.append(r); }
   // confirmSent comes from the server; undefined counts as false.

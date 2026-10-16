@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { buildPayload, validateForm, groupDays, waLink, scaledSize, promoActive, submitLabelKey, doneKey, showsEarlyStart, missingMessage, knownFields, dayChips, groupByPeriod, formatSummary, dayHasNearby, anyNearby, slotPrice, fillText } from '../assets/js/booking-logic.js';
+import { buildPayload, validateForm, groupDays, waLink, scaledSize, promoActive, submitLabelKey, doneKey, showsEarlyStart, missingMessage, knownFields, dayChips, groupByPeriod, formatSummary, dayHasNearby, anyNearby, slotPrice, fillText, formatEuro, discountPercent } from '../assets/js/booking-logic.js';
 
 const form = { kind: 'visit', start: '2026-10-24T08:00:00.000Z', postcode: '3117 re', name: 'Ana', address: 'Calle 1', phone: '0612345678',
   description: '', manyThings: false, earlyStart: true, photos: [], lang: 'es', website: '', token: '' };
@@ -132,4 +132,14 @@ test('normalizePhone turns +31 / 0031 into 06... and keeps foreign numbers as di
   assert.equal(normalizePhone('06-1234 5678'), '0612345678');
   assert.equal(normalizePhone('+34 600 123 456'), '34600123456');
   assert.equal(normalizePhone(''), '');
+});
+
+test('formatEuro: comma decimals in ES, dot in EN, whole numbers without decimals', () => {
+  assert.equal(formatEuro(61.75, 'es'), '61,75 €');
+  assert.equal(formatEuro(61.75, 'en'), '€61.75');
+  assert.equal(formatEuro(65, 'es'), '65 €');
+  assert.equal(formatEuro(65, 'en'), '€65');
+  assert.equal(formatEuro(60.5, 'es'), '60,50 €');
+  assert.equal(discountPercent(65, 61.75), 5);
+  assert.equal(discountPercent(65, 65), 0);
 });
