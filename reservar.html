@@ -43,6 +43,7 @@
       <strong data-i18n="promo_title"></strong><small data-i18n="promo_small"></small>
     </section>
     <h1 data-i18n="booking_title"></h1>
+    <h2 class="step-title"><span class="step-num" aria-hidden="true">1</span><span data-i18n="booking_step_kind"></span></h2>
     <div class="booking-kinds" role="radiogroup">
       <label class="booking-kind"><input type="radio" name="kind" value="visit" checked>
         <span class="booking-kind-title" data-i18n="booking_kind_visit"></span>
@@ -52,6 +53,7 @@
         <span class="booking-kind-body" data-i18n="booking_kind_work_body"></span></label>
     </div>
     <form id="postcode-form" class="booking-postcode">
+      <h2 class="step-title"><span class="step-num" aria-hidden="true">2</span><span data-i18n="booking_step_postcode"></span></h2>
       <label for="postcode" data-i18n="booking_postcode_label"></label>
       <div class="booking-postcode-row">
         <input id="postcode" name="postcode" autocomplete="postal-code" maxlength="8" required>
@@ -59,8 +61,33 @@
       </div>
       <p class="booking-message" id="postcode-message" role="status"></p>
     </form>
-    <div id="days" class="booking-days"></div>
+    <section id="slots" class="booking-slots-section" hidden>
+      <div id="slots-loading" class="skeleton" role="status" hidden>
+        <span class="visually-hidden" data-i18n="booking_loading"></span>
+        <div class="skeleton-strip" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="skeleton-grid" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      </div>
+      <div id="slots-empty" class="booking-empty" hidden>
+        <p data-i18n="booking_no_slots"></p>
+        <a id="empty-wa" class="btn btn-primary" target="_blank" rel="noopener" data-i18n="booking_empty_button"></a>
+      </div>
+      <div id="slots-pick" hidden>
+        <h2 class="step-title" id="day-title"><span class="step-num" aria-hidden="true">3</span><span data-i18n="booking_step_day"></span></h2>
+        <div class="day-picker">
+          <button type="button" class="day-arrow" id="day-prev">&#8249;</button>
+          <div id="day-strip" class="day-strip" role="group" aria-labelledby="day-title"></div>
+          <button type="button" class="day-arrow" id="day-next">&#8250;</button>
+        </div>
+        <h2 class="step-title" id="time-title"><span class="step-num" aria-hidden="true">4</span><span data-i18n="booking_step_time"></span></h2>
+        <div id="time-groups" class="time-groups" role="group" aria-labelledby="time-title"></div>
+      </div>
+      <div id="summary" class="booking-summary" hidden>
+        <p id="summary-text" class="booking-summary-text"></p>
+        <button type="button" id="summary-change" class="booking-summary-change" data-i18n="booking_summary_change"></button>
+      </div>
+    </section>
     <form id="details" class="booking-details" hidden novalidate>
+      <h2 class="step-title"><span class="step-num" aria-hidden="true">5</span><span data-i18n="booking_step_details"></span></h2>
       <input type="text" name="website" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
       <p class="booking-price" id="price-box" role="note"></p>
       <label><span data-i18n="booking_name"></span><input name="name" autocomplete="name" required></label>

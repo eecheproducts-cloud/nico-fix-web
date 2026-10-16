@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { buildPayload, validateForm, groupDays, waLink, scaledSize, promoActive, submitLabelKey, doneKey, showsEarlyStart, missingMessage, knownFields } from '../assets/js/booking-logic.js';
+import { buildPayload, validateForm, groupDays, waLink, scaledSize, promoActive, submitLabelKey, doneKey, showsEarlyStart, missingMessage, knownFields, dayChips, groupByPeriod, formatSummary } from '../assets/js/booking-logic.js';
 
 const form = { kind: 'visit', start: '2026-10-24T08:00:00.000Z', postcode: '3117 re', name: 'Ana', address: 'Calle 1', phone: '0612345678',
   description: '', manyThings: false, earlyStart: true, photos: [], lang: 'es', website: '', token: '' };
@@ -70,4 +70,32 @@ test('missingMessage names the fields in page order and ignores unknown ones', (
   assert.equal(missingMessage(['bogus'], tr), '');
   assert.equal(missingMessage(undefined, tr), '');
   assert.deepEqual(knownFields(['address', 'x', 'name', 'name']), ['name', 'address']);
+});
+
+test('dayChips gives weekday, day number and month, and skips days without slots', () => {
+  const days = [
+    { date: '2026-10-24', slots: [{ start: '2026-10-24T07:30:00.000Z' }] },
+    { date: '2026-10-25', slots: [] },
+  ];
+  const chips = dayChips(days, 'es');
+  assert.equal(chips.length, 1);
+  assert.equal(chips[0].label, 'sáb 24 oct');
+  assert.equal(chips[0].day, '24');
+  assert.equal(dayChips(days, 'en')[0].label, 'Sat 24 Oct');
+});
+
+test('groupByPeriod splits morning and afternoon by Amsterdam time and omits empty groups', () => {
+  const slots = ['2026-10-16T06:00:00.000Z', '2026-10-16T09:30:00.000Z', '2026-10-16T11:00:00.000Z', '2026-10-16T13:00:00.000Z'].map((start) => ({ start }));
+  const groups = groupByPeriod(slots);
+  assert.deepEqual(groups.map((g) => g.period), ['morning', 'afternoon']);
+  assert.deepEqual(groups[0].slots.map((s) => s.time), ['08:00', '11:30']);
+  assert.deepEqual(groups[1].slots.map((s) => s.time), ['13:00', '15:00']);
+  assert.deepEqual(groupByPeriod(slots.slice(0, 1)).map((g) => g.period), ['morning']);
+  assert.deepEqual(groupByPeriod(slots.slice(3)).map((g) => g.period), ['afternoon']);
+  assert.deepEqual(groupByPeriod([]), []);
+});
+
+test('formatSummary builds "Sáb 24 oct · 09:30 · Visita"', () => {
+  assert.equal(formatSummary('2026-10-24T07:30:00.000Z', 'es', 'Visita'), 'Sáb 24 oct · 09:30 · Visita');
+  assert.equal(formatSummary('2026-10-24T07:30:00.000Z', 'en', 'Visit'), 'Sat 24 Oct · 09:30 · Visit');
 });

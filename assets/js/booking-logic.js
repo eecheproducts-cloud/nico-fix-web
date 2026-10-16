@@ -37,6 +37,46 @@ export function groupDays(days, lang) {
   }));
 }
 
+const timeFmt24 = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Amsterdam', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
+
+// Short date parts in Amsterdam time: { weekday: 'sáb', day: '24', month: 'oct' }. Trailing dots are removed.
+export function dateParts(iso, lang) {
+  const fmt = new Intl.DateTimeFormat(LOCALES[lang] || LOCALES.en, { timeZone: 'Europe/Amsterdam', weekday: 'short', day: 'numeric', month: 'short' });
+  const out = {};
+  for (const p of fmt.formatToParts(new Date(iso))) if (p.type !== 'literal') out[p.type] = p.value.replace(/\./g, '');
+  return { weekday: out.weekday, day: out.day, month: out.month };
+}
+
+// Day chips for the strip: only days with slots, each with weekday, day number and month ("sáb 24 oct").
+export function dayChips(days, lang) {
+  return days.filter((d) => d.slots && d.slots.length).map((d) => {
+    const parts = dateParts(d.slots[0].start, lang);
+    return { date: d.date, ...parts, label: `${parts.weekday} ${parts.day} ${parts.month}` };
+  });
+}
+
+// Splits slots into morning (before 13:00 Amsterdam) and afternoon. Returns only the groups that have slots, in order.
+// Each slot keeps its fields and gets a "time" (HH:MM, Amsterdam).
+export function groupByPeriod(slots) {
+  const morning = [];
+  const afternoon = [];
+  for (const s of slots) {
+    const time = timeFmt24.format(new Date(s.start));
+    (Number(time.slice(0, 2)) < 13 ? morning : afternoon).push({ ...s, time });
+  }
+  const groups = [];
+  if (morning.length) groups.push({ period: 'morning', slots: morning });
+  if (afternoon.length) groups.push({ period: 'afternoon', slots: afternoon });
+  return groups;
+}
+
+// "Sáb 24 oct · 09:30 · Visita" (kindLabel is already translated).
+export function formatSummary(iso, lang, kindLabel) {
+  const p = dateParts(iso, lang);
+  const date = `${p.weekday} ${p.day} ${p.month}`;
+  return `${date.charAt(0).toUpperCase()}${date.slice(1)} · ${timeFmt24.format(new Date(iso))} · ${kindLabel}`;
+}
+
 export function waLink(text) {
   return `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(text)}`;
 }

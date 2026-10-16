@@ -3,13 +3,13 @@
 // This file never calls gtag: no personal data goes to analytics.
 import { BOOKING_API } from './config.js';
 import { t } from './i18n.js';
-import { buildPayload, validateForm, groupDays, waLink, scaledSize, submitLabelKey, doneKey, showsEarlyStart, missingMessage, knownFields } from './booking-logic.js';
+import { buildPayload, validateForm, groupDays, dayChips, groupByPeriod, formatSummary, waLink, scaledSize, submitLabelKey, doneKey, showsEarlyStart, missingMessage, knownFields } from './booking-logic.js';
 import { checkPostcode } from './coverage.js';
 import { suggestUrl, shouldSuggest, parseSuggestions, postcodeDiffers, extractPostcode } from './address-suggest.js';
 
 const getLang = () => ((document.documentElement.lang || 'es').startsWith('es') ? 'es' : 'en');
 const $ = (id) => document.getElementById(id);
-const state = { kind: 'visit', start: null, token: '', days: [], doneData: null, doneManyThings: false };
+const state = { kind: 'visit', start: null, token: '', days: [], chips: [], date: null, doneData: null, doneManyThings: false };
 
 // The chat link carries only a random code.
 // An inline script in reservar.html already moved it to window.__bookingToken and cleaned the URL.
@@ -40,7 +40,7 @@ kindInputs().forEach((i) => i.addEventListener('change', () => {
   setKind(i.value);
   state.start = null;
   $('details').hidden = true;
-  if ($('postcode').value) loadSlots();
+  if ($('postcode').value) loadSlots(); else { state.days = []; showSlotsState('none'); }
 }));
 setKind('visit');
 
@@ -62,46 +62,130 @@ async function prefillFromLink() {
   if (data.postcode) { $('postcode').value = data.postcode; loadSlots(); }
 }
 
-function renderDays() {
-  const box = $('days');
+// Steps 3 and 4: a swipeable strip of day chips, then a grid of times for the chosen day.
+function stripEl() { return $('day-strip'); }
+function chosenChip() { return state.chips.find((c) => c.date === state.date) || state.chips[0]; }
+
+function renderChips() {
+  const strip = stripEl();
+  strip.innerHTML = '';
+  for (const chip of state.chips) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'day-chip';
+    b.dataset.date = chip.date;
+    b.setAttribute('aria-pressed', chip.date === state.date ? 'true' : 'false');
+    b.setAttribute('aria-label', chip.label);
+    b.innerHTML = '<span class="dc-week"></span><span class="dc-day"></span><span class="dc-month"></span>';
+    b.children[0].textContent = chip.weekday;
+    b.children[1].textContent = chip.day;
+    b.children[2].textContent = chip.month;
+    b.addEventListener('click', () => { state.date = chip.date; state.start = null; renderChips(); renderTimes(); });
+    strip.append(b);
+  }
+  const sel = strip.querySelector('[aria-pressed="true"]');
+  if (sel) strip.scrollTo({ left: sel.offsetLeft - strip.offsetLeft - 8, behavior: 'auto' });
+}
+
+function renderTimes() {
+  const box = $('time-groups');
   box.innerHTML = '';
-  for (const day of groupDays(state.days, getLang())) {
-    const block = document.createElement('div');
-    block.className = 'booking-day';
+  const day = state.days.find((d) => d.date === state.date);
+  if (!day) return;
+  for (const group of groupByPeriod(day.slots)) {
+    const wrap = document.createElement('div');
+    wrap.className = 'time-group';
     const h = document.createElement('h3');
-    h.textContent = day.label;
-    const row = document.createElement('div');
-    row.className = 'booking-slots';
-    for (const slot of day.slots) {
+    h.textContent = t(getLang(), group.period === 'morning' ? 'booking_morning' : 'booking_afternoon');
+    h.dataset.period = group.period;
+    const grid = document.createElement('div');
+    grid.className = 'time-grid';
+    for (const slot of group.slots) {
       const b = document.createElement('button');
       b.type = 'button';
       b.className = 'slot';
       b.textContent = slot.time;
-      if (slot.start === state.start) b.classList.add('selected');
-      b.addEventListener('click', () => {
-        state.start = slot.start;
-        box.querySelectorAll('.slot').forEach((x) => x.classList.toggle('selected', x === b));
-        $('details').hidden = false;
-        $('details').scrollIntoView({ behavior: 'smooth' });
-      });
-      row.append(b);
+      b.setAttribute('aria-pressed', slot.start === state.start ? 'true' : 'false');
+      b.addEventListener('click', () => chooseTime(slot.start));
+      grid.append(b);
     }
-    block.append(h, row);
-    box.append(block);
+    wrap.append(h, grid);
+    box.append(wrap);
   }
+}
+
+function summaryText() {
+  const kind = t(getLang(), state.kind === 'work' ? 'booking_summary_work' : 'booking_summary_visit');
+  return formatSummary(state.start, getLang(), kind);
+}
+
+function chooseTime(start) {
+  state.start = start;
+  $('summary-text').textContent = summaryText();
+  $('slots-pick').hidden = true;
+  $('summary').hidden = false;
+  $('details').hidden = false;
+  $('details').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function changeTime() {
+  state.start = null;
+  $('summary').hidden = true;
+  $('details').hidden = true;
+  $('slots-pick').hidden = false;
+  renderChips();
+  renderTimes();
+  $('slots').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const sel = stripEl().querySelector('[aria-pressed="true"]');
+  if (sel) sel.focus({ preventScroll: true });
+}
+$('summary-change').addEventListener('click', changeTime);
+
+function scrollStrip(dir) {
+  const strip = stripEl();
+  strip.scrollBy({ left: dir * strip.clientWidth * 0.8, behavior: 'smooth' });
+}
+$('day-prev').addEventListener('click', () => scrollStrip(-1));
+$('day-next').addEventListener('click', () => scrollStrip(1));
+
+function updateArrowLabels() {
+  $('day-prev').setAttribute('aria-label', t(getLang(), 'booking_days_prev'));
+  $('day-next').setAttribute('aria-label', t(getLang(), 'booking_days_next'));
+}
+
+// The three states of the slots area: loading skeleton, empty (with WhatsApp), or the pickers.
+function showSlotsState(name) {
+  $('slots').hidden = name === 'none';
+  $('slots-loading').hidden = name !== 'loading';
+  $('slots-empty').hidden = name !== 'empty';
+  $('slots-pick').hidden = name !== 'pick';
+  $('summary').hidden = true;
+}
+
+function renderSlots() {
+  updateArrowLabels();
+  if (!state.days.length) return;
+  state.chips = dayChips(state.days, getLang());
+  if (!state.date || !state.chips.some((c) => c.date === state.date)) state.date = state.chips[0].date;
+  renderChips();
+  renderTimes();
+  if (state.start) $('summary-text').textContent = summaryText();
 }
 
 async function loadSlots() {
   const msg = $('postcode-message');
   msg.textContent = '';
   state.days = [];
+  state.chips = [];
+  state.date = null;
   state.start = null;
-  $('days').innerHTML = '';
+  showSlotsState('none');
   $('details').hidden = true;
   const postcode = $('postcode').value;
   const area = await checkPostcode(postcode);
   if (area.status === 'invalid' || area.status === 'notfound') { msg.textContent = t(getLang(), 'booking_postcode_invalid'); return; }
   if (area.status === 'no') { msg.textContent = t(getLang(), 'booking_postcode_out'); return; }
+  showSlotsState('loading');
   // 'error' (PDOK unreachable) is let through: the booking server checks the postcode itself.
   let data = null;
   try {
@@ -110,11 +194,13 @@ async function loadSlots() {
   } catch (err) {
     data = null;
   }
-  if (!data) { msg.textContent = t(getLang(), 'booking_error'); return; }
-  if (data.status === 'invalid_postcode') { msg.textContent = t(getLang(), 'booking_postcode_invalid'); return; }
-  if (!data.days || !data.days.length) { msg.textContent = t(getLang(), 'booking_no_slots'); return; }
-  state.days = data.days;
-  renderDays();
+  if (!data) { showSlotsState('none'); msg.textContent = t(getLang(), 'booking_error'); return; }
+  if (data.status === 'invalid_postcode') { showSlotsState('none'); msg.textContent = t(getLang(), 'booking_postcode_invalid'); return; }
+  const days = (data.days || []).filter((d) => d.slots && d.slots.length);
+  if (!days.length) { $('empty-wa').href = waLink(''); showSlotsState('empty'); return; }
+  state.days = days;
+  showSlotsState('pick');
+  renderSlots();
 }
 $('postcode-form').addEventListener('submit', (e) => { e.preventDefault(); loadSlots(); });
 
@@ -142,7 +228,7 @@ function showMissing(fields, lang) {
   known.forEach((name) => el[name]?.setAttribute('aria-invalid', 'true'));
   $('details-message').textContent = text;
   const first = known[0];
-  const target = first === 'postcode' ? $('postcode') : first === 'start' ? $('days') : el[first];
+  const target = first === 'postcode' ? $('postcode') : first === 'start' ? $('slots') : el[first];
   if (target) {
     target.scrollIntoView({ behavior: 'smooth', block: 'center' });
     if (typeof target.focus === 'function' && first !== 'start') target.focus({ preventScroll: true });
@@ -266,7 +352,7 @@ function showDone(data) {
   state.doneData = data;
   renderDone();
   $('details').hidden = true;
-  $('days').innerHTML = '';
+  $('slots').hidden = true;
   $('done').hidden = false;
   $('done').scrollIntoView({ behavior: 'smooth' });
 }
@@ -296,7 +382,7 @@ function renderDone() {
 // Language switch: texts with data-i18n are refreshed by main.js; redo the ones built here.
 document.addEventListener('nicofix-langchange', () => {
   setKind(state.kind);
-  renderDays();
+  renderSlots();
   renderDone();
 });
 

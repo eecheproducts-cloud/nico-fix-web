@@ -1096,25 +1096,70 @@ h2::after {
 
 .booking-message { min-height: 1.4em; margin: 8px 0 0; color: #c0392b; font-weight: 600; }
 
-.booking-day { margin: 14px 0; }
-.booking-day h3 { margin: 0 0 8px; font-size: 1rem; text-transform: capitalize; }
-.booking-slots { display: flex; flex-wrap: wrap; gap: 8px; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-.slot {
-  min-width: 72px;
-  padding: 10px 14px;
-  font: inherit;
-  font-weight: 600;
-  color: var(--ink);
-  background: var(--white);
-  border: 1.5px solid var(--green);
-  border-radius: 999px;
-  cursor: pointer;
+/* Steps */
+.booking .step-title { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; margin: 22px 0 10px; }
+.step-num { display: inline-grid; place-items: center; flex: none; width: 26px; height: 26px; border-radius: 50%; background: var(--green); color: var(--white); font-size: 0.85rem; font-weight: 700; }
+.booking-postcode .step-title { margin-top: 0; }
+
+/* Day strip: swipeable, scroll-snap, arrows only on wide screens */
+.booking-slots-section { margin-top: 6px; }
+.day-picker { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.day-strip { display: flex; gap: 8px; flex: 1 1 auto; min-width: 0; overflow-x: auto; scroll-snap-type: x proximity; scroll-padding-left: 4px; padding: 4px 4px 8px; -webkit-overflow-scrolling: touch; scrollbar-width: thin; }
+.day-chip {
+  flex: none; scroll-snap-align: start;
+  display: grid; justify-items: center; gap: 1px;
+  min-width: 68px; min-height: 76px; padding: 8px 10px;
+  font: inherit; color: var(--ink); background: var(--white);
+  border: 1.5px solid var(--green); border-radius: 14px; cursor: pointer;
   transition: background 0.15s ease, color 0.15s ease;
 }
+.day-chip:hover { background: var(--beige-deep); }
+.dc-week, .dc-month { font-size: 0.85rem; text-transform: capitalize; }
+.dc-day { font-family: var(--font-heading); font-size: 1.4rem; font-weight: 800; line-height: 1.1; }
+.day-chip[aria-pressed="true"] { background: var(--orange); border-color: var(--orange); color: var(--white); box-shadow: var(--shadow-soft); }
+.day-arrow { display: none; flex: none; width: 44px; height: 44px; font-size: 1.6rem; line-height: 1; color: var(--green); background: var(--white); border: 1.5px solid var(--green); border-radius: 50%; cursor: pointer; }
+.day-arrow:hover { background: var(--peach); }
 
+/* Time grid */
+.time-group { margin: 0 0 14px; }
+.time-group h3 { margin: 0 0 8px; font-size: 0.95rem; color: var(--muted); font-weight: 700; }
+.time-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.slot {
+  min-height: 48px; padding: 10px 8px;
+  font: inherit; font-weight: 700; color: var(--ink);
+  background: var(--white); border: 1.5px solid var(--green); border-radius: 12px;
+  cursor: pointer; transition: background 0.15s ease, color 0.15s ease;
+}
 .slot:hover { background: var(--beige-deep); }
-.slot.selected { background: var(--orange); border-color: var(--orange); color: var(--white); }
+.slot[aria-pressed="true"] { background: var(--orange); border-color: var(--orange); color: var(--white); }
+.day-chip:focus-visible, .slot:focus-visible, .day-arrow:focus-visible, .booking-summary-change:focus-visible { outline: 3px solid var(--orange-light); outline-offset: 2px; }
+
+/* Summary card after picking a time */
+.booking-summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 16px; padding: 14px 16px; background: var(--peach); border: 2px solid var(--orange); border-radius: var(--radius); }
+.booking-summary[hidden] { display: none; }
+.booking-summary-text { margin: 0; font-weight: 700; color: var(--green); }
+.booking-summary-change { flex: none; min-height: 44px; padding: 0 8px; font: inherit; font-weight: 700; color: var(--orange-deep); background: none; border: 0; text-decoration: underline; cursor: pointer; }
+
+/* Empty state and loading skeleton */
+.booking-empty { margin-top: 16px; padding: 18px; background: var(--beige); border-radius: var(--radius); }
+.booking-empty p { margin: 0 0 12px; font-weight: 600; }
+.booking-empty .btn { display: inline-block; text-align: center; }
+.skeleton[hidden], .booking-empty[hidden], #slots-pick[hidden], .booking-slots-section[hidden] { display: none; }
+.skeleton i { display: block; background: linear-gradient(90deg, var(--beige-deep) 25%, var(--beige) 50%, var(--beige-deep) 75%); background-size: 200% 100%; animation: sk 1.2s linear infinite; border-radius: 12px; }
+.skeleton-strip { display: flex; gap: 8px; overflow: hidden; margin: 16px 0; }
+.skeleton-strip i { flex: none; width: 68px; height: 76px; border-radius: 14px; }
+.skeleton-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.skeleton-grid i { height: 48px; }
+@keyframes sk { to { background-position: -200% 0; } }
+@media (prefers-reduced-motion: reduce) { .skeleton i { animation: none; } .day-chip, .slot { transition: none; } }
+
+@media (min-width: 700px) {
+  .day-arrow { display: grid; place-items: center; }
+  .day-strip { scroll-snap-type: x mandatory; }
+  .time-grid, .skeleton-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
 
 .booking-details { display: grid; gap: 14px; margin-top: 22px; padding: 20px; background: var(--beige); border-radius: var(--radius); }
 .booking-details[hidden], .booking-done[hidden], .only-visit[hidden] { display: none; }
@@ -1157,3 +1202,5 @@ h2::after {
   .booking-details .btn { justify-self: stretch; text-align: center; }
   .contact-card .btn + .btn { margin: 12px 0 0; }
 }
+
+#slots, #details { scroll-margin-top: 84px; }
