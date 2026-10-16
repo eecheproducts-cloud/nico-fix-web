@@ -53,6 +53,9 @@ export function isRequest(kind, manyThings) {
 export function submitLabelKey(kind, manyThings) {
   return isRequest(kind, manyThings) ? 'booking_submit_work' : 'booking_submit_visit';
 }
+export function earlyKey(kind) {
+  return kind === 'work' ? 'booking_early_work' : 'booking_early_visit';
+}
 export function doneKey(kind, manyThings) {
   if (kind === 'work') return 'booking_done_work';
   return manyThings ? 'booking_done_visit_request' : 'booking_done_visit';

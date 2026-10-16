@@ -67,22 +67,20 @@
       <label><span data-i18n="booking_phone"></span><input name="phone" type="tel" autocomplete="tel" required>
         <small data-i18n="booking_phone_note"></small></label>
       <label><span data-i18n="booking_address"></span><input name="address" autocomplete="street-address" required></label>
-      <label class="booking-check only-visit"><input type="checkbox" name="manyThings"> <span><span data-i18n="booking_many"></span>
-        <small data-i18n="booking_many_note"></small></span></label>
       <label><span data-i18n="booking_description"></span><textarea name="description" rows="3"></textarea></label>
       <label><span data-i18n="booking_photos"></span><input name="photos" type="file" accept="image/jpeg,image/png,image/webp" multiple></label>
-      <label class="booking-check booking-early"><input type="checkbox" name="earlyStart"> <span data-i18n="booking_early"></span></label>
+      <label class="booking-check booking-early"><input type="checkbox" name="earlyStart"> <span id="early-text"></span></label>
       <p class="booking-privacy"><span data-i18n="booking_privacy"></span> <a href="privacy.html" data-i18n="booking_privacy_link"></a></p>
       <button class="btn btn-primary btn-glow" type="submit" id="submit"></button>
       <p class="booking-message" id="details-message" role="alert"></p>
     </form>
     <section id="done" class="booking-done" hidden></section>
     <section class="booking-info">
-      <h2 data-i18n="booking_cancel_title"></h2><p data-i18n="booking_cancel_body"></p>
+      <h2 data-i18n="booking_cancel_title"></h2>
+      <p data-i18n="booking_cancel_visit"></p>
+      <p data-i18n="booking_cancel_work"></p>
+      <p data-i18n="booking_cancel_material"></p>
       <h2 data-i18n="booking_withdraw_title"></h2><p data-i18n="booking_withdraw_body"></p>
-      <p data-i18n="booking_withdraw_start"></p>
-      <p data-i18n="booking_withdraw_how"></p>
-      <p data-i18n="booking_withdraw_lost"></p>
       <details class="booking-withdrawal">
         <summary data-i18n="booking_wd_summary"></summary>
         <div class="booking-wd-form">

@@ -3,7 +3,7 @@
 // This file never calls gtag: no personal data goes to analytics.
 import { BOOKING_API } from './config.js';
 import { t } from './i18n.js';
-import { buildPayload, validateForm, groupDays, waLink, scaledSize, submitLabelKey, doneKey } from './booking-logic.js';
+import { buildPayload, validateForm, groupDays, waLink, scaledSize, submitLabelKey, doneKey, earlyKey } from './booking-logic.js';
 import { checkPostcode } from './coverage.js';
 
 const getLang = () => ((document.documentElement.lang || 'es').startsWith('es') ? 'es' : 'en');
@@ -22,16 +22,14 @@ function kindInputs() { return document.querySelectorAll('input[name="kind"]'); 
 function setKind(kind) {
   state.kind = kind;
   kindInputs().forEach((i) => { i.checked = i.value === kind; });
-  document.querySelectorAll('.only-visit').forEach((el) => { el.hidden = kind !== 'visit'; });
   updateSubmitLabel();
 }
 function updateSubmitLabel() {
-  const many = $('details').elements.manyThings.checked;
-  $('submit').textContent = t(getLang(), submitLabelKey(state.kind, many));
+  $('submit').textContent = t(getLang(), submitLabelKey(state.kind, false));
+  $('early-text').textContent = t(getLang(), earlyKey(state.kind));
   // The price box sits in the form, so it is always visible before the binding button.
   $('price-box').textContent = t(getLang(), state.kind === 'visit' ? 'booking_price_visit' : 'booking_price_work');
 }
-$('details').elements.manyThings.addEventListener('change', updateSubmitLabel);
 kindInputs().forEach((i) => i.addEventListener('change', () => {
   setKind(i.value);
   state.start = null;
@@ -134,7 +132,7 @@ $('details').addEventListener('submit', async (e) => {
   const el = f.elements;
   const lang = getLang();
   const form = { kind: state.kind, start: state.start, postcode: $('postcode').value, name: el.name.value, address: el.address.value,
-    phone: el.phone.value, description: el.description.value, manyThings: el.manyThings.checked, earlyStart: el.earlyStart.checked,
+    phone: el.phone.value, description: el.description.value, manyThings: false, earlyStart: el.earlyStart.checked,
     photos: [], lang, website: el.website.value, token: state.token };
   const msg = $('details-message');
   msg.textContent = '';

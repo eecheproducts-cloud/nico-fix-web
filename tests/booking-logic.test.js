@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { buildPayload, validateForm, groupDays, waLink, scaledSize, promoActive, submitLabelKey, doneKey } from '../assets/js/booking-logic.js';
+import { buildPayload, validateForm, groupDays, waLink, scaledSize, promoActive, submitLabelKey, doneKey, earlyKey } from '../assets/js/booking-logic.js';
 
 const form = { kind: 'visit', start: '2026-10-24T08:00:00.000Z', postcode: '3117 re', name: 'Ana', address: 'Calle 1', phone: '0612345678',
   description: '', manyThings: false, earlyStart: true, photos: [], lang: 'es', website: '', token: '' };
@@ -54,4 +54,9 @@ test('submit label and done text follow kind and manyThings', () => {
   assert.equal(doneKey('visit', false), 'booking_done_visit');
   assert.equal(doneKey('visit', true), 'booking_done_visit_request');
   assert.equal(doneKey('work', true), 'booking_done_work');
+});
+
+test('early-start text follows the chosen kind', () => {
+  assert.equal(earlyKey('visit'), 'booking_early_visit');
+  assert.equal(earlyKey('work'), 'booking_early_work');
 });
