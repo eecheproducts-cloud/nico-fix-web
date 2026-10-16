@@ -1,5 +1,5 @@
 // Pure helpers for reservar.html (tested with node:test). The DOM wiring lives in booking.js.
-export const PRICES = { visit: 100 };
+export const PRICES = { visit: 65 };
 const WHATSAPP = '31610049118';
 
 export function buildPayload(f) {
