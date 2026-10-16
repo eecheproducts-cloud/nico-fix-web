@@ -143,3 +143,14 @@ const AMS_DATE = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Amsterdam'
 export function promoActive(today = new Date(), until = '2026-12-31') {
   return AMS_DATE.format(today) <= until;
 }
+
+// Phone as typed -> digits only; a Dutch +31 / 0031 number becomes its national 0... form, foreign numbers stay as digits.
+export function normalizePhone(raw) {
+  const s = String(raw || '').trim();
+  let digits = s.replace(/\D/g, '');
+  if (/^(\+|00)/.test(s) && digits.startsWith(s.startsWith('+') ? '31' : '0031')) {
+    const rest = digits.slice(s.startsWith('+') ? 2 : 4).replace(/^0/, '');
+    if (rest) digits = '0' + rest;
+  }
+  return digits;
+}

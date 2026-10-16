@@ -3,7 +3,7 @@
 // This file never calls gtag: no personal data goes to analytics.
 import { BOOKING_API } from './config.js';
 import { t } from './i18n.js';
-import { buildPayload, validateForm, groupDays, dayChips, groupByPeriod, formatSummary, waLink, scaledSize, submitLabelKey, doneKey, showsEarlyStart, missingMessage, knownFields, BASE_PRICE, anyNearby, slotPrice, fillText } from './booking-logic.js';
+import { buildPayload, normalizePhone, validateForm, groupDays, dayChips, groupByPeriod, formatSummary, waLink, scaledSize, submitLabelKey, doneKey, showsEarlyStart, missingMessage, knownFields, BASE_PRICE, anyNearby, slotPrice, fillText } from './booking-logic.js';
 import { checkPostcode } from './coverage.js';
 import { suggestUrl, shouldSuggest, parseSuggestions, postcodeDiffers, extractPostcode } from './address-suggest.js';
 
@@ -68,7 +68,7 @@ async function prefillFromLink() {
   const f = $('details');
   f.elements.name.value = data.name || '';
   f.elements.address.value = data.address || '';
-  f.elements.phone.placeholder = data.phoneMasked || '';
+  f.elements.phone.placeholder = data.phoneMasked || '0612345678';
   if (data.postcode) { $('postcode').value = data.postcode; loadSlots(); }
 }
 
@@ -341,6 +341,7 @@ $('address').addEventListener('keydown', (ev) => {
 $('address').addEventListener('blur', () => { clearTimeout(addr.timer); closeSuggestions(); });
 $('postcode').addEventListener('input', updateAddressWarning);
 $('details').addEventListener('input', (ev) => ev.target.removeAttribute?.('aria-invalid'));
+$('details').elements.phone.addEventListener('blur', (ev) => { ev.target.value = normalizePhone(ev.target.value); });
 $('postcode-form').addEventListener('submit', updateAddressWarning);
 
 $('details').addEventListener('submit', async (e) => {

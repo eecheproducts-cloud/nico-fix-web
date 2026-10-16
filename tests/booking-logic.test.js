@@ -124,3 +124,12 @@ test('nearby helpers: day has nearby, price for slot, text interpolation', () =>
   assert.equal(buildPayload({ ...form, price: 60 }).price, 60);
   assert.equal('price' in buildPayload(form), false);
 });
+
+test('normalizePhone turns +31 / 0031 into 06... and keeps foreign numbers as digits', async () => {
+  const { normalizePhone } = await import('../assets/js/booking-logic.js');
+  assert.equal(normalizePhone('+31 6 1234 5678'), '0612345678');
+  assert.equal(normalizePhone('0031 6 12345678'), '0612345678');
+  assert.equal(normalizePhone('06-1234 5678'), '0612345678');
+  assert.equal(normalizePhone('+34 600 123 456'), '34600123456');
+  assert.equal(normalizePhone(''), '');
+});

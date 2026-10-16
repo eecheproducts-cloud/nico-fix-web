@@ -1167,6 +1167,7 @@ h2::after {
 .booking-details[hidden], .booking-done[hidden], .only-visit[hidden] { display: none; }
 .booking-details label { display: grid; gap: 6px; font-weight: 600; }
 .booking-details small { font-weight: 400; color: var(--muted); }
+.booking-details .field-hint { display: block; margin: 2px 0 6px; }
 .booking-check { grid-template-columns: auto 1fr; align-items: start; gap: 10px !important; font-weight: 400 !important; }
 .booking-check input { margin-top: 4px; accent-color: var(--orange); width: 18px; height: 18px; }
 .booking-check span > small { display: block; }
