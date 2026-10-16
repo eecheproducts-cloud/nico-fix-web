@@ -88,9 +88,9 @@ function renderChips() {
     b.setAttribute('aria-label', chip.label);
     b.innerHTML = '<span class="dc-week"></span><span class="dc-day"></span><span class="dc-month"></span>';
     if (state.kind === 'visit' && chip.nearby) {
-      const van = document.createElement('span');
-      van.className = 'dc-van'; van.setAttribute('aria-hidden', 'true'); van.textContent = '🚐';
-      b.append(van);
+      const leaf = document.createElement('span');
+      leaf.className = 'dc-leaf'; leaf.setAttribute('aria-hidden', 'true'); leaf.textContent = '🌿';
+      b.append(leaf);
     }
     b.children[0].textContent = chip.weekday;
     b.children[1].textContent = chip.day;
@@ -120,8 +120,16 @@ function renderTimes() {
       b.type = 'button';
       b.className = 'slot';
       const near = state.kind === 'visit' && slot.nearby === true;
-      b.textContent = near ? `${slot.time} 🚐` : slot.time;
-      if (near) b.setAttribute('aria-label', `${slot.time}, ${fillText(t(getLang(), 'booking_price_visit_short'), { price: slotPrice(slot, state.basePrice) })}`);
+      if (near) {
+        const price = slotPrice(slot, state.basePrice);
+        b.classList.add('slot-near');
+        const lf = document.createElement('span'); lf.className = 'slot-leaf'; lf.setAttribute('aria-hidden', 'true'); lf.textContent = '🌿';
+        const tm = document.createElement('span'); tm.textContent = slot.time;
+        const bd = document.createElement('span'); bd.className = 'slot-badge'; bd.setAttribute('aria-hidden', 'true');
+        bd.textContent = fillText(t(getLang(), 'booking_nearby_badge'), { off: state.basePrice - price });
+        b.append(lf, tm, bd);
+        b.setAttribute('aria-label', fillText(t(getLang(), 'booking_nearby_aria'), { time: slot.time, price, base: state.basePrice }));
+      } else b.textContent = slot.time;
       b.setAttribute('aria-pressed', slot.start === state.start ? 'true' : 'false');
       b.addEventListener('click', () => chooseTime(slot.start));
       grid.append(b);

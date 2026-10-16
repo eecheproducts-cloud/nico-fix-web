@@ -1119,7 +1119,8 @@ h2::after {
 .dc-week, .dc-month { font-size: 0.85rem; text-transform: capitalize; }
 .dc-day { font-family: var(--font-heading); font-size: 1.4rem; font-weight: 800; line-height: 1.1; }
 .day-chip[aria-pressed="true"] { background: var(--orange); border-color: var(--orange); color: var(--white); box-shadow: var(--shadow-soft); }
-.dc-van { font-size: 0.95rem; line-height: 1; }
+.day-chip { position: relative; }
+.dc-leaf { position: absolute; top: 3px; right: 5px; font-size: 0.9rem; line-height: 1; }
 .nearby-hint { margin: 0 0 8px; padding: 8px 12px; font-size: 0.92rem; background: var(--peach); border-radius: 10px; }
 .day-arrow { display: none; flex: none; width: 44px; height: 44px; font-size: 1.6rem; line-height: 1; color: var(--green); background: var(--white); border: 1.5px solid var(--green); border-radius: 50%; cursor: pointer; }
 .day-arrow:hover { background: var(--peach); }
@@ -1134,6 +1135,9 @@ h2::after {
   background: var(--white); border: 1.5px solid var(--green); border-radius: 12px;
   cursor: pointer; transition: background 0.15s ease, color 0.15s ease;
 }
+.slot-near { display: inline-flex; align-items: center; justify-content: center; gap: 4px; flex-wrap: wrap; border-color: var(--orange); }
+.slot-badge { font-size: 0.7rem; font-weight: 700; padding: 1px 5px; border-radius: 999px; background: var(--peach); color: var(--ink); }
+.slot[aria-pressed="true"] .slot-badge { background: var(--white); }
 .slot:hover { background: var(--beige-deep); }
 .slot[aria-pressed="true"] { background: var(--orange); border-color: var(--orange); color: var(--white); }
 .day-chip:focus-visible, .slot:focus-visible, .day-arrow:focus-visible, .booking-summary-change:focus-visible { outline: 3px solid var(--orange-light); outline-offset: 2px; }
