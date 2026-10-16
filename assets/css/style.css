@@ -1124,6 +1124,7 @@ h2::after {
 .booking-check input { margin-top: 4px; accent-color: var(--orange); width: 18px; height: 18px; }
 .booking-check span > small { display: block; }
 .booking-privacy { margin: 0; font-size: 0.9rem; color: var(--muted); }
+.booking-price { margin: 0; padding: 12px 14px; border-left: 4px solid var(--orange); background: var(--white); border-radius: 8px; font-weight: 700; overflow-wrap: anywhere; }
 .booking-details .btn { justify-self: start; border: 0; cursor: pointer; font: inherit; font-weight: 700; }
 .booking-details .btn:disabled { opacity: 0.6; cursor: wait; }
 
