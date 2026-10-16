@@ -61,7 +61,6 @@ export function slotPrice(slot, basePrice = BASE_PRICE) {
   if (slot && typeof slot.price === 'number') return slot.price;
   return basePrice;
 }
-// Replaces {name} placeholders with values.
 // Euro amount for display: "61,75 €" in Spanish, "€61.75" in English; whole numbers without decimals.
 export function formatEuro(amount, lang) {
   const n = Number(amount);
@@ -72,6 +71,22 @@ export function formatEuro(amount, lang) {
 export function discountPercent(base, price) {
   return base > 0 ? Math.round(((base - price) / base) * 100) : 0;
 }
+// Percentage shown for a nearby slot: visit = saving of its price vs base; work = the server's top-level discountPercent (price is null).
+export function nearbyPct(kind, slot, basePrice, topPct) {
+  if (!slot || slot.nearby !== true) return 0;
+  if (kind === 'work') return typeof topPct === 'number' && topPct > 0 ? topPct : 0;
+  return discountPercent(basePrice, slotPrice(slot, basePrice));
+}
+// Does the hint line show? Visit needs a nearby price; work needs the top-level percentage.
+export function showsNearbyHint(kind, days, nearbyPrice, topPct) {
+  if (!anyNearby(days)) return false;
+  return kind === 'work' ? typeof topPct === 'number' && topPct > 0 : typeof nearbyPrice === 'number';
+}
+// Is the slot with this start (in any day) marked nearby?
+export function isStartNearby(days, start) {
+  return Array.isArray(days) && days.some((d) => (d.slots || []).some((s) => s.start === start && s.nearby === true));
+}
+// Replaces {name} placeholders with values.
 export function fillText(text, values) {
   return String(text).replace(/\{(\w+)\}/g, (m, k) => (k in values ? String(values[k]) : m));
 }

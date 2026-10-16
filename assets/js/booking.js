@@ -3,13 +3,13 @@
 // This file never calls gtag: no personal data goes to analytics.
 import { BOOKING_API } from './config.js';
 import { t } from './i18n.js';
-import { buildPayload, normalizePhone, validateForm, groupDays, dayChips, groupByPeriod, formatSummary, waLink, scaledSize, submitLabelKey, doneKey, showsEarlyStart, missingMessage, knownFields, BASE_PRICE, anyNearby, slotPrice, fillText, formatEuro, discountPercent } from './booking-logic.js';
+import { buildPayload, normalizePhone, validateForm, groupDays, dayChips, groupByPeriod, formatSummary, waLink, scaledSize, submitLabelKey, doneKey, showsEarlyStart, missingMessage, knownFields, BASE_PRICE, anyNearby, slotPrice, fillText, formatEuro, discountPercent, nearbyPct, showsNearbyHint, isStartNearby } from './booking-logic.js';
 import { checkPostcode } from './coverage.js';
 import { suggestUrl, shouldSuggest, parseSuggestions, postcodeDiffers, extractPostcode } from './address-suggest.js';
 
 const getLang = () => ((document.documentElement.lang || 'es').startsWith('es') ? 'es' : 'en');
 const $ = (id) => document.getElementById(id);
-const state = { kind: 'visit', start: null, token: '', days: [], chips: [], date: null, doneData: null, doneManyThings: false, basePrice: BASE_PRICE, nearbyPrice: null };
+const state = { kind: 'visit', start: null, token: '', days: [], chips: [], date: null, doneData: null, doneManyThings: false, basePrice: BASE_PRICE, nearbyPrice: null, topPct: null };
 
 // The chat link carries only a random code.
 // An inline script in reservar.html already moved it to window.__bookingToken and cleaned the URL.
@@ -42,7 +42,8 @@ function updateSubmitLabel() {
   $('early-text').closest('label').hidden = !early;
   if (!early) $('details').elements.earlyStart.checked = false;
   $('early-text').textContent = early ? t(getLang(), 'booking_early_work') : '';
-  $('submit-note').textContent = state.kind === 'visit' ? fillText(t(lang, 'booking_submit_note_visit'), { price: formatEuro(price, lang) }) : '';
+  $('submit-note').textContent = state.kind === 'visit' ? fillText(t(lang, 'booking_submit_note_visit'), { price: formatEuro(price, lang) })
+    : (state.start && isStartNearby(state.days, state.start) && state.topPct > 0 ? fillText(t(lang, 'booking_submit_note_work_near'), { pct: state.topPct }) : '');
   // The price box sits in the form, so it is always visible before the binding button.
   $('price-box').textContent = fillText(t(lang, state.kind === 'visit' ? 'booking_price_visit' : 'booking_price_work'), { price: formatEuro(price, lang) });
 }
@@ -87,7 +88,7 @@ function renderChips() {
     b.setAttribute('aria-pressed', chip.date === state.date ? 'true' : 'false');
     b.setAttribute('aria-label', chip.label);
     b.innerHTML = '<span class="dc-week"></span><span class="dc-day"></span><span class="dc-month"></span>';
-    if (state.kind === 'visit' && chip.nearby) {
+    if (chip.nearby) {
       const leaf = document.createElement('span');
       leaf.className = 'dc-leaf'; leaf.setAttribute('aria-hidden', 'true'); leaf.textContent = '⚡';
       b.append(leaf);
@@ -119,16 +120,16 @@ function renderTimes() {
       const b = document.createElement('button');
       b.type = 'button';
       b.className = 'slot';
-      const near = state.kind === 'visit' && slot.nearby === true;
-      if (near) {
+      const pct = nearbyPct(state.kind, slot, state.basePrice, state.topPct);
+      if (pct > 0) {
         const price = slotPrice(slot, state.basePrice);
         b.classList.add('slot-near');
         const lf = document.createElement('span'); lf.className = 'slot-leaf'; lf.setAttribute('aria-hidden', 'true'); lf.textContent = '⚡';
         const tm = document.createElement('span'); tm.textContent = slot.time;
         const bd = document.createElement('span'); bd.className = 'slot-badge'; bd.setAttribute('aria-hidden', 'true');
-        bd.textContent = fillText(t(getLang(), 'booking_nearby_badge'), { pct: discountPercent(state.basePrice, price) });
+        bd.textContent = fillText(t(getLang(), 'booking_nearby_badge'), { pct });
         b.append(lf, tm, bd);
-        b.setAttribute('aria-label', fillText(t(getLang(), 'booking_nearby_aria'), { time: slot.time, price: formatEuro(price, getLang()), base: formatEuro(state.basePrice, getLang()), pct: discountPercent(state.basePrice, price) }));
+        b.setAttribute('aria-label', fillText(t(getLang(), state.kind === 'work' ? 'booking_nearby_aria_work' : 'booking_nearby_aria'), { time: slot.time, price: formatEuro(price, getLang()), base: formatEuro(state.basePrice, getLang()), pct }));
       } else b.textContent = slot.time;
       b.setAttribute('aria-pressed', slot.start === state.start ? 'true' : 'false');
       b.addEventListener('click', () => chooseTime(slot.start));
@@ -191,9 +192,10 @@ function showSlotsState(name) {
 
 function renderNearbyHint() {
   const hint = $('nearby-hint');
-  const show = state.kind === 'visit' && anyNearby(state.days) && typeof state.nearbyPrice === 'number';
+  const show = showsNearbyHint(state.kind, state.days, state.nearbyPrice, state.topPct);
   hint.hidden = !show;
-  hint.textContent = show ? fillText(t(getLang(), 'booking_nearby_hint'), { pct: discountPercent(state.basePrice, state.nearbyPrice) }) : '';
+  const pct = state.kind === 'work' ? state.topPct : (show ? discountPercent(state.basePrice, state.nearbyPrice) : 0);
+  hint.textContent = show ? fillText(t(getLang(), state.kind === 'work' ? 'booking_nearby_hint_work' : 'booking_nearby_hint'), { pct }) : '';
 }
 
 function renderSlots() {
@@ -236,6 +238,7 @@ async function loadSlots() {
   state.days = days;
   state.basePrice = typeof data.basePrice === 'number' ? data.basePrice : BASE_PRICE;
   state.nearbyPrice = typeof data.nearbyPrice === 'number' ? data.nearbyPrice : null;
+  state.topPct = typeof data.discountPercent === 'number' ? data.discountPercent : null;
   updateSubmitLabel();
   showSlotsState('pick');
   renderSlots();

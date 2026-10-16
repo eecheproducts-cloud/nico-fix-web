@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { buildPayload, validateForm, groupDays, waLink, scaledSize, promoActive, submitLabelKey, doneKey, showsEarlyStart, missingMessage, knownFields, dayChips, groupByPeriod, formatSummary, dayHasNearby, anyNearby, slotPrice, fillText, formatEuro, discountPercent } from '../assets/js/booking-logic.js';
+import { buildPayload, validateForm, groupDays, waLink, scaledSize, promoActive, submitLabelKey, doneKey, showsEarlyStart, missingMessage, knownFields, dayChips, groupByPeriod, formatSummary, dayHasNearby, anyNearby, slotPrice, fillText, formatEuro, discountPercent, nearbyPct, showsNearbyHint, isStartNearby } from '../assets/js/booking-logic.js';
 
 const form = { kind: 'visit', start: '2026-10-24T08:00:00.000Z', postcode: '3117 re', name: 'Ana', address: 'Calle 1', phone: '0612345678',
   description: '', manyThings: false, earlyStart: true, photos: [], lang: 'es', website: '', token: '' };
@@ -142,4 +142,22 @@ test('formatEuro: comma decimals in ES, dot in EN, whole numbers without decimal
   assert.equal(formatEuro(60.5, 'es'), '60,50 €');
   assert.equal(discountPercent(65, 61.75), 5);
   assert.equal(discountPercent(65, 65), 0);
+});
+
+test('work nearby: percentage comes from the top-level discountPercent, price null', () => {
+  const near = { start: 'a', nearby: true, price: null };
+  const far = { start: 'b', nearby: false, price: null };
+  assert.equal(nearbyPct('work', near, 65, 5), 5);
+  assert.equal(nearbyPct('work', far, 65, 5), 0);
+  assert.equal(nearbyPct('work', near, 65, null), 0);
+  assert.equal(nearbyPct('visit', { start: 'c', nearby: true, price: 61.75 }, 65, null), 5);
+  const days = [{ slots: [far, near] }];
+  assert.equal(showsNearbyHint('work', days, null, 5), true);
+  assert.equal(showsNearbyHint('work', days, null, null), false);
+  assert.equal(showsNearbyHint('work', [{ slots: [far] }], null, 5), false);
+  assert.equal(showsNearbyHint('visit', days, null, 5), false);
+  assert.equal(showsNearbyHint('visit', days, 61.75, null), true);
+  assert.equal(isStartNearby(days, 'a'), true);
+  assert.equal(isStartNearby(days, 'b'), false);
+  assert.equal(isStartNearby(days, null), false);
 });
