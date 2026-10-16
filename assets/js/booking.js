@@ -98,6 +98,7 @@ function renderChips() {
     b.children[2].textContent = chip.month;
     b.addEventListener('click', () => { state.date = chip.date; state.start = null; renderChips(); renderTimes(); });
     strip.append(b);
+    if (chip.date === state.date) requestAnimationFrame(() => b.scrollIntoView({ block: 'nearest', inline: 'center' }));
   }
   const sel = strip.querySelector('[aria-pressed="true"]');
   if (sel) strip.scrollTo({ left: sel.offsetLeft - strip.offsetLeft - 8, behavior: 'auto' });
@@ -203,7 +204,11 @@ function renderSlots() {
   renderNearbyHint();
   if (!state.days.length) return;
   state.chips = dayChips(state.days, getLang());
-  if (!state.date || !state.chips.some((c) => c.date === state.date)) state.date = state.chips[0].date;
+  if (!state.date || !state.chips.some((c) => c.date === state.date)) {
+    // Start on the first ⚡ day when there is one, so the discount is seen right away.
+    const firstNearby = state.chips.find((c) => c.nearby);
+    state.date = (firstNearby || state.chips[0]).date;
+  }
   renderChips();
   renderTimes();
   if (state.start) $('summary-text').textContent = summaryText();
