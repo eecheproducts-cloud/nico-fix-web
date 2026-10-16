@@ -1123,6 +1123,16 @@ h2::after {
 .booking-check { grid-template-columns: auto 1fr; align-items: start; gap: 10px !important; font-weight: 400 !important; }
 .booking-check input { margin-top: 4px; accent-color: var(--orange); width: 18px; height: 18px; }
 .booking-check span > small { display: block; }
+.booking-early[hidden], .booking-note:empty, .booking-warning:empty { display: none; }
+.booking-note { margin: -6px 0 0; font-size: 0.9rem; color: var(--muted); }
+.booking-warning { margin: 6px 0 0; font-size: 0.9rem; font-weight: 600; color: #8a5200; }
+.addr-field { position: relative; }
+.addr-list { position: absolute; left: 0; right: 0; top: calc(100% - 6px); z-index: 20; margin: 0; padding: 4px; list-style: none; max-height: 260px; overflow-y: auto;
+  background: var(--white); border: 1px solid var(--border); border-radius: 10px; box-shadow: var(--shadow-soft); }
+.addr-list[hidden] { display: none; }
+.addr-list li { padding: 12px; border-radius: 8px; cursor: pointer; font-weight: 400; overflow-wrap: anywhere; }
+.addr-list li[aria-selected="true"], .addr-list li:hover { background: var(--beige); }
+.booking-details [aria-invalid="true"] { border-color: #c0392b; }
 .booking-privacy { margin: 0; font-size: 0.9rem; color: var(--muted); }
 .booking-price { margin: 0; padding: 12px 14px; border-left: 4px solid var(--orange); background: var(--white); border-radius: 8px; font-weight: 700; overflow-wrap: anywhere; }
 .booking-details .btn { justify-self: start; border: 0; cursor: pointer; font: inherit; font-weight: 700; }

@@ -66,12 +66,17 @@
       <label><span data-i18n="booking_name"></span><input name="name" autocomplete="name" required></label>
       <label><span data-i18n="booking_phone"></span><input name="phone" type="tel" autocomplete="tel" required>
         <small data-i18n="booking_phone_note"></small></label>
-      <label><span data-i18n="booking_address"></span><input name="address" autocomplete="street-address" required></label>
+      <div class="addr-field" id="addr-field">
+        <label><span data-i18n="booking_address"></span><input name="address" id="address" autocomplete="off" autocapitalize="words" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="address-list" required></label>
+        <ul id="address-list" class="addr-list" role="listbox" hidden></ul>
+        <p class="booking-warning" id="address-warning" role="status"></p>
+      </div>
       <label><span data-i18n="booking_description"></span><textarea name="description" rows="3"></textarea></label>
       <label><span data-i18n="booking_photos"></span><input name="photos" type="file" accept="image/jpeg,image/png,image/webp" multiple></label>
       <label class="booking-check booking-early"><input type="checkbox" name="earlyStart"> <span id="early-text"></span></label>
       <p class="booking-privacy"><span data-i18n="booking_privacy"></span> <a href="privacy.html" data-i18n="booking_privacy_link"></a></p>
       <button class="btn btn-primary btn-glow" type="submit" id="submit"></button>
+      <p class="booking-note" id="submit-note"></p>
       <p class="booking-message" id="details-message" role="alert"></p>
     </form>
     <section id="done" class="booking-done" hidden></section>

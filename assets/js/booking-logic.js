@@ -5,7 +5,7 @@ const WHATSAPP = '31610049118';
 export function buildPayload(f) {
   const payload = {
     kind: f.kind, start: f.start, postcode: f.postcode, name: f.name.trim(), address: f.address.trim(), phone: f.phone,
-    description: (f.description || '').trim(), manyThings: Boolean(f.manyThings), earlyStart: f.earlyStart === true,
+    description: (f.description || '').trim(), manyThings: Boolean(f.manyThings), earlyStart: f.kind === 'work' && f.earlyStart === true,
     photos: f.photos || [], lang: f.lang, website: f.website || '',
   };
   if (f.token) payload.token = f.token;
@@ -19,7 +19,7 @@ export function validateForm(f, kind) {
   if (digits.length < 8 || digits.length > 15) fields.push('phone');
   if (!/\d/.test(f.address || '')) fields.push('address');
   if (!/^[1-9]\d{3}\s?[a-zA-Z]{2}$/.test(String(f.postcode || '').trim())) fields.push('postcode');
-  if (f.earlyStart !== true) fields.push('earlyStart');
+  if (kind === 'work' && f.earlyStart !== true) fields.push('earlyStart');
   if (kind === 'work' && (f.description || '').trim().length < 3) fields.push('description');
   if (!f.start) fields.push('start');
   return fields;
@@ -53,8 +53,26 @@ export function isRequest(kind, manyThings) {
 export function submitLabelKey(kind, manyThings) {
   return isRequest(kind, manyThings) ? 'booking_submit_work' : 'booking_submit_visit';
 }
-export function earlyKey(kind) {
-  return kind === 'work' ? 'booking_early_work' : 'booking_early_visit';
+// The early-start checkbox exists only for the work day (a visit always sends earlyStart: false).
+export function showsEarlyStart(kind) {
+  return kind === 'work';
+}
+
+// Field names the server and validateForm use, in the order they appear on the page.
+export const FIELD_ORDER = ['postcode', 'start', 'name', 'phone', 'address', 'description', 'earlyStart'];
+const FIELD_LABEL_KEYS = { postcode: 'booking_f_postcode', start: 'booking_f_start', name: 'booking_f_name', phone: 'booking_f_phone',
+  address: 'booking_f_address', description: 'booking_f_description', earlyStart: 'booking_f_early' };
+
+// Known field names from a validation list or a server 400, in page order and without repeats.
+export function knownFields(fields) {
+  const set = new Set(Array.isArray(fields) ? fields : []);
+  return FIELD_ORDER.filter((n) => set.has(n));
+}
+
+// "Falta: nombre, dirección". tr maps a translation key to text. Returns '' when no field is known.
+export function missingMessage(fields, tr) {
+  const names = knownFields(fields).map((n) => tr(FIELD_LABEL_KEYS[n]));
+  return names.length ? `${tr('booking_missing')}: ${names.join(', ')}` : '';
 }
 export function doneKey(kind, manyThings) {
   if (kind === 'work') return 'booking_done_work';

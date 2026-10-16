@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { buildPayload, validateForm, groupDays, waLink, scaledSize, promoActive, submitLabelKey, doneKey, earlyKey } from '../assets/js/booking-logic.js';
+import { buildPayload, validateForm, groupDays, waLink, scaledSize, promoActive, submitLabelKey, doneKey, showsEarlyStart, missingMessage, knownFields } from '../assets/js/booking-logic.js';
 
 const form = { kind: 'visit', start: '2026-10-24T08:00:00.000Z', postcode: '3117 re', name: 'Ana', address: 'Calle 1', phone: '0612345678',
   description: '', manyThings: false, earlyStart: true, photos: [], lang: 'es', website: '', token: '' };
@@ -14,7 +14,8 @@ test('buildPayload keeps server field names and drops an empty token', () => {
 
 test('validateForm mirrors the server rules', () => {
   assert.deepEqual(validateForm(form, 'visit'), []);
-  assert.deepEqual(validateForm({ ...form, earlyStart: false }, 'visit'), ['earlyStart']);
+  assert.deepEqual(validateForm({ ...form, earlyStart: false }, 'visit'), []);
+  assert.deepEqual(validateForm({ ...form, kind: 'work', description: 'Pintar', earlyStart: false }, 'work'), ['earlyStart']);
   assert.ok(validateForm({ ...form, kind: 'work' }, 'work').includes('description'));
   assert.ok(validateForm({ ...form, address: 'sin numero' }, 'visit').includes('address'));
 });
@@ -56,7 +57,17 @@ test('submit label and done text follow kind and manyThings', () => {
   assert.equal(doneKey('work', true), 'booking_done_work');
 });
 
-test('early-start text follows the chosen kind', () => {
-  assert.equal(earlyKey('visit'), 'booking_early_visit');
-  assert.equal(earlyKey('work'), 'booking_early_work');
+test('early-start box is only for the work day and a visit never sends true', () => {
+  assert.equal(showsEarlyStart('visit'), false);
+  assert.equal(showsEarlyStart('work'), true);
+  assert.equal(buildPayload({ ...form, kind: 'visit', earlyStart: true }).earlyStart, false);
+  assert.equal(buildPayload({ ...form, kind: 'work', earlyStart: true }).earlyStart, true);
+});
+
+test('missingMessage names the fields in page order and ignores unknown ones', () => {
+  const tr = (k) => ({ booking_missing: 'Falta', booking_f_name: 'nombre', booking_f_address: 'dirección' }[k] || k);
+  assert.equal(missingMessage(['address', 'name'], tr), 'Falta: nombre, dirección');
+  assert.equal(missingMessage(['bogus'], tr), '');
+  assert.equal(missingMessage(undefined, tr), '');
+  assert.deepEqual(knownFields(['address', 'x', 'name', 'name']), ['name', 'address']);
 });

@@ -3,8 +3,9 @@
 // This file never calls gtag: no personal data goes to analytics.
 import { BOOKING_API } from './config.js';
 import { t } from './i18n.js';
-import { buildPayload, validateForm, groupDays, waLink, scaledSize, submitLabelKey, doneKey, earlyKey } from './booking-logic.js';
+import { buildPayload, validateForm, groupDays, waLink, scaledSize, submitLabelKey, doneKey, showsEarlyStart, missingMessage, knownFields } from './booking-logic.js';
 import { checkPostcode } from './coverage.js';
+import { suggestUrl, shouldSuggest, parseSuggestions, postcodeDiffers, extractPostcode } from './address-suggest.js';
 
 const getLang = () => ((document.documentElement.lang || 'es').startsWith('es') ? 'es' : 'en');
 const $ = (id) => document.getElementById(id);
@@ -26,7 +27,12 @@ function setKind(kind) {
 }
 function updateSubmitLabel() {
   $('submit').textContent = t(getLang(), submitLabelKey(state.kind, false));
-  $('early-text').textContent = t(getLang(), earlyKey(state.kind));
+  // The early-start tick box exists only for the work day.
+  const early = showsEarlyStart(state.kind);
+  $('early-text').closest('label').hidden = !early;
+  if (!early) $('details').elements.earlyStart.checked = false;
+  $('early-text').textContent = early ? t(getLang(), 'booking_early_work') : '';
+  $('submit-note').textContent = state.kind === 'visit' ? t(getLang(), 'booking_submit_note_visit') : '';
   // The price box sits in the form, so it is always visible before the binding button.
   $('price-box').textContent = t(getLang(), state.kind === 'visit' ? 'booking_price_visit' : 'booking_price_work');
 }
@@ -126,6 +132,101 @@ async function readPhoto(file) {
   return { base64: btoa(binary), mimeType: 'image/jpeg' };
 }
 
+// Says in plain words which fields are missing, marks them and moves to the first one.
+// Returns false when none of the names is a field the page knows (then the caller shows the generic error).
+function showMissing(fields, lang) {
+  const known = knownFields(fields);
+  const text = missingMessage(fields, (k) => t(lang, k));
+  if (!text) return false;
+  const el = $('details').elements;
+  known.forEach((name) => el[name]?.setAttribute('aria-invalid', 'true'));
+  $('details-message').textContent = text;
+  const first = known[0];
+  const target = first === 'postcode' ? $('postcode') : first === 'start' ? $('days') : el[first];
+  if (target) {
+    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (typeof target.focus === 'function' && first !== 'start') target.focus({ preventScroll: true });
+  }
+  return true;
+}
+
+// Address suggestions from PDOK. Only the typed text is sent.
+const addr = { items: [], active: -1, timer: null, abort: null };
+function closeSuggestions() {
+  const input = $('address');
+  $('address-list').hidden = true;
+  input.setAttribute('aria-expanded', 'false');
+  input.removeAttribute('aria-activedescendant');
+  addr.active = -1;
+}
+function setActive(i) {
+  const lis = $('address-list').children;
+  addr.active = i;
+  [...lis].forEach((li, n) => li.setAttribute('aria-selected', n === i ? 'true' : 'false'));
+  if (i >= 0) { $('address').setAttribute('aria-activedescendant', lis[i].id); lis[i].scrollIntoView({ block: 'nearest' }); }
+  else $('address').removeAttribute('aria-activedescendant');
+}
+function renderSuggestions(items) {
+  addr.items = items;
+  const list = $('address-list');
+  list.innerHTML = '';
+  list.setAttribute('aria-label', t(getLang(), 'booking_address_suggestions'));
+  items.forEach((item, n) => {
+    const li = document.createElement('li');
+    li.id = `address-opt-${n}`;
+    li.setAttribute('role', 'option');
+    li.setAttribute('aria-selected', 'false');
+    li.textContent = item.label;
+    li.addEventListener('mousedown', (ev) => ev.preventDefault()); // keep the focus in the field
+    li.addEventListener('click', () => chooseSuggestion(n));
+    list.append(li);
+  });
+  list.hidden = items.length === 0;
+  $('address').setAttribute('aria-expanded', items.length ? 'true' : 'false');
+  addr.active = -1;
+}
+function updateAddressWarning() {
+  const differs = postcodeDiffers(extractPostcode($('address').value), $('postcode').value);
+  $('address-warning').textContent = differs ? t(getLang(), 'booking_address_warning') : '';
+}
+function chooseSuggestion(n) {
+  const item = addr.items[n];
+  if (!item) return;
+  $('address').value = item.label;
+  $('address').removeAttribute('aria-invalid');
+  closeSuggestions();
+  $('address-warning').textContent = postcodeDiffers(item.postcode, $('postcode').value) ? t(getLang(), 'booking_address_warning') : '';
+}
+async function fetchSuggestions(text) {
+  if (addr.abort) addr.abort.abort();
+  addr.abort = new AbortController();
+  try {
+    const res = await fetch(suggestUrl(text), { signal: addr.abort.signal });
+    if (!res.ok) throw new Error('PDOK');
+    renderSuggestions(parseSuggestions(await res.json()));
+  } catch (err) {
+    if (err.name !== 'AbortError') closeSuggestions(); // PDOK unreachable: the field still works as plain text
+  }
+}
+$('address').addEventListener('input', () => {
+  clearTimeout(addr.timer);
+  updateAddressWarning();
+  const text = $('address').value;
+  if (!shouldSuggest(text)) { if (addr.abort) addr.abort.abort(); closeSuggestions(); return; }
+  addr.timer = setTimeout(() => fetchSuggestions(text), 250);
+});
+$('address').addEventListener('keydown', (ev) => {
+  const open = !$('address-list').hidden;
+  if (ev.key === 'Escape' && open) { ev.preventDefault(); closeSuggestions(); }
+  else if (ev.key === 'ArrowDown' && addr.items.length) { ev.preventDefault(); if (!open) { $('address-list').hidden = false; $('address').setAttribute('aria-expanded', 'true'); } setActive((addr.active + 1) % addr.items.length); }
+  else if (ev.key === 'ArrowUp' && open) { ev.preventDefault(); setActive(addr.active <= 0 ? addr.items.length - 1 : addr.active - 1); }
+  else if (ev.key === 'Enter' && open && addr.active >= 0) { ev.preventDefault(); chooseSuggestion(addr.active); }
+});
+$('address').addEventListener('blur', () => { clearTimeout(addr.timer); closeSuggestions(); });
+$('postcode').addEventListener('input', updateAddressWarning);
+$('details').addEventListener('input', (ev) => ev.target.removeAttribute?.('aria-invalid'));
+$('postcode-form').addEventListener('submit', updateAddressWarning);
+
 $('details').addEventListener('submit', async (e) => {
   e.preventDefault();
   const f = e.target;
@@ -139,7 +240,7 @@ $('details').addEventListener('submit', async (e) => {
   const invalid = validateForm(form, state.kind);
   f.querySelectorAll('[aria-invalid]').forEach((x) => x.removeAttribute('aria-invalid'));
   invalid.forEach((name) => el[name]?.setAttribute('aria-invalid', 'true'));
-  if (invalid.length) { msg.textContent = t(lang, 'booking_error'); return; }
+  if (invalid.length) { showMissing(invalid, lang); return; }
   $('submit').disabled = true;
   try {
     const files = [...el.photos.files].slice(0, 3);
@@ -150,6 +251,7 @@ $('details').addEventListener('submit', async (e) => {
     let data = null;
     try { data = await res.json(); } catch (err) { data = null; }
     if (res.status === 409) { msg.textContent = t(lang, 'booking_taken'); loadSlots(); return; }
+    if (res.status === 400 && data && Array.isArray(data.fields) && showMissing(data.fields, lang)) return;
     if (!data || !data.ok) { msg.textContent = t(lang, 'booking_error'); return; }
     state.doneManyThings = form.manyThings;
     showDone(data);
