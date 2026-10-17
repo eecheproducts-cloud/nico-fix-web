@@ -224,6 +224,8 @@ function renderPortfolio(lang) {
       ? `${t(lang, item.roomKey)}, ${t(lang, item.stateKey)}`
       : t(lang, item.roomKey);
 
+    const src = lang === 'en' && item.imageEn ? item.imageEn : item.image;
+
     const figure = document.createElement('figure');
     figure.className = 'portfolio-item';
     figure.tabIndex = 0;
@@ -231,7 +233,7 @@ function renderPortfolio(lang) {
     figure.setAttribute('aria-label', label);
 
     const img = document.createElement('img');
-    img.src = item.image;
+    img.src = src;
     img.loading = 'lazy';
     img.alt = label;
     figure.appendChild(img);
@@ -240,7 +242,7 @@ function renderPortfolio(lang) {
     caption.textContent = label;
     figure.appendChild(caption);
 
-    const open = () => openLightbox(item.image, label);
+    const open = () => openLightbox(src, label);
     figure.addEventListener('click', open);
     figure.addEventListener('keydown', (event) => {
       if (event.key === 'Enter' || event.key === ' ') {

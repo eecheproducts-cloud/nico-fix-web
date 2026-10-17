@@ -10,14 +10,13 @@ export const portfolioItems = [
   { image: 'assets/img/portfolio/tap-wall.jpg', roomKey: 'portfolio_room_tap', stateKey: null },
   { image: 'assets/img/portfolio/pergola-1.jpg', roomKey: 'portfolio_room_pergola', stateKey: null },
   { image: 'assets/img/portfolio/pergola-2.jpg', roomKey: 'portfolio_room_pergola', stateKey: null },
-  { image: 'assets/img/portfolio/kitchen-before.webp', roomKey: 'portfolio_room_kitchen', stateKey: 'portfolio_before' },
-  { image: 'assets/img/portfolio/kitchen-after.jpg', roomKey: 'portfolio_room_kitchen', stateKey: 'portfolio_after' },
-  { image: 'assets/img/portfolio/bathroom-before.webp', roomKey: 'portfolio_room_bathroom', stateKey: 'portfolio_before' },
-  { image: 'assets/img/portfolio/bathroom-after.jpg', roomKey: 'portfolio_room_bathroom', stateKey: 'portfolio_after' },
+  { image: 'assets/img/portfolio/kitchen-before-after.jpg', imageEn: 'assets/img/portfolio/kitchen-before-after-en.jpg', roomKey: 'portfolio_room_kitchen', stateKey: null },
+  { image: 'assets/img/portfolio/bathroom-before-after.jpg', imageEn: 'assets/img/portfolio/bathroom-before-after-en.jpg', roomKey: 'portfolio_room_bathroom', stateKey: null },
   { image: 'assets/img/portfolio/boiler-before.webp', roomKey: 'portfolio_room_kitchen', stateKey: 'portfolio_before' },
   { image: 'assets/img/portfolio/living-before.webp', roomKey: 'portfolio_room_living', stateKey: 'portfolio_before' },
 ];
 
+// imageEn (optional): English version of an image with text baked in; used when the page language is English.
 const STATE_ORDER = { portfolio_before: 0, portfolio_after: 1 };
 
 function sortableLabel(text) {
