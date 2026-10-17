@@ -1,13 +1,97 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://nicofix.nl/</loc>
-    <changefreq>monthly</changefreq>
+    <lastmod>2026-10-17</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://nicofix.nl/reservar.html</loc>
-    <changefreq>monthly</changefreq>
+    <lastmod>2026-10-17</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nicofix.nl/furniture-assembly/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicofix.nl/furniture-assembly/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://nicofix.nl/es/montaje-de-muebles/" />
+    <lastmod>2026-10-17</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nicofix.nl/tv-and-shelf-mounting/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicofix.nl/tv-and-shelf-mounting/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://nicofix.nl/es/colgado-de-tv-y-estantes/" />
+    <lastmod>2026-10-17</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nicofix.nl/painting/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicofix.nl/painting/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://nicofix.nl/es/pintura/" />
+    <lastmod>2026-10-17</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nicofix.nl/bathroom-and-tiling/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicofix.nl/bathroom-and-tiling/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://nicofix.nl/es/bano-y-ceramicos/" />
+    <lastmod>2026-10-17</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nicofix.nl/plumbing-repairs/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicofix.nl/plumbing-repairs/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://nicofix.nl/es/plomeria/" />
+    <lastmod>2026-10-17</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nicofix.nl/pergola-and-garden/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicofix.nl/pergola-and-garden/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://nicofix.nl/es/pergolas-y-jardin/" />
+    <lastmod>2026-10-17</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nicofix.nl/es/montaje-de-muebles/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicofix.nl/furniture-assembly/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://nicofix.nl/es/montaje-de-muebles/" />
+    <lastmod>2026-10-17</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nicofix.nl/es/colgado-de-tv-y-estantes/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicofix.nl/tv-and-shelf-mounting/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://nicofix.nl/es/colgado-de-tv-y-estantes/" />
+    <lastmod>2026-10-17</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nicofix.nl/es/pintura/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicofix.nl/painting/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://nicofix.nl/es/pintura/" />
+    <lastmod>2026-10-17</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nicofix.nl/es/bano-y-ceramicos/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicofix.nl/bathroom-and-tiling/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://nicofix.nl/es/bano-y-ceramicos/" />
+    <lastmod>2026-10-17</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nicofix.nl/es/plomeria/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicofix.nl/plumbing-repairs/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://nicofix.nl/es/plomeria/" />
+    <lastmod>2026-10-17</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nicofix.nl/es/pergolas-y-jardin/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nicofix.nl/pergola-and-garden/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://nicofix.nl/es/pergolas-y-jardin/" />
+    <lastmod>2026-10-17</lastmod>
     <priority>0.8</priority>
   </url>
 </urlset>

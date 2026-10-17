@@ -50,12 +50,15 @@ test('the three corner cities and Schiedam are covered', () => {
   }
 });
 
-test('Hilversum is at the edge, Groningen is far away', () => {
-  assert.equal(classifyPoint(...REAL['1211AA Hilversum']), 'maybe');
+test('Utrecht and Hilversum are covered since the Randstad ring, Groningen is far away', () => {
+  assert.equal(classifyPoint(5.1214, 52.0907), 'yes'); // Utrecht centre
+  assert.equal(classifyPoint(...REAL['1211AA Hilversum']), 'yes');
+  assert.equal(classifyPoint(5.5586, 52.0283), 'maybe'); // Veenendaal
+  assert.equal(classifyPoint(4.7760, 51.5719), 'no'); // Breda
   assert.equal(classifyPoint(...REAL['9711AA Groningen']), 'no');
 });
 
-test('a point inside the Rotterdam / The Hague / Amsterdam triangle is 0 km away', () => {
+test('a point inside the Rotterdam / The Hague / Amsterdam / Utrecht area is 0 km away', () => {
   assert.equal(distanceToArea(4.49, 52.16), 0); // Leiden
 });
 
