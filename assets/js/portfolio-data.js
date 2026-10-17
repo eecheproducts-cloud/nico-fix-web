@@ -12,7 +12,6 @@ export const portfolioItems = [
   { image: 'assets/img/portfolio/pergola-2.jpg', roomKey: 'portfolio_room_pergola', stateKey: null },
   { image: 'assets/img/portfolio/kitchen-before-after.jpg', imageEn: 'assets/img/portfolio/kitchen-before-after-en.jpg', roomKey: 'portfolio_room_kitchen', stateKey: null },
   { image: 'assets/img/portfolio/bathroom-before-after.jpg', imageEn: 'assets/img/portfolio/bathroom-before-after-en.jpg', roomKey: 'portfolio_room_bathroom', stateKey: null },
-  { image: 'assets/img/portfolio/boiler-before.webp', roomKey: 'portfolio_room_kitchen', stateKey: 'portfolio_before' },
   { image: 'assets/img/portfolio/living-before.webp', roomKey: 'portfolio_room_living', stateKey: 'portfolio_before' },
 ];
 
