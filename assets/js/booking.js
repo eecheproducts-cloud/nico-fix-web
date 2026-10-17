@@ -4,11 +4,13 @@
 import { BOOKING_API } from './config.js';
 import { t } from './i18n.js';
 import { buildPayload, normalizePhone, validateForm, groupDays, dayChips, groupByPeriod, formatSummary, waLink, scaledSize, submitLabelKey, doneKey, showsEarlyStart, missingMessage, knownFields, BASE_PRICE, anyNearby, slotPrice, fillText, formatEuro, discountPercent, nearbyPct, showsNearbyHint, isStartNearby } from './booking-logic.js';
+import { fetchRetry, fetchOnce, makeCache } from './resilient-fetch.js';
 import { checkPostcode } from './coverage.js';
 import { suggestUrl, shouldSuggest, parseSuggestions, postcodeDiffers, extractPostcode } from './address-suggest.js';
 
 const getLang = () => ((document.documentElement.lang || 'es').startsWith('es') ? 'es' : 'en');
 const $ = (id) => document.getElementById(id);
+const slotsCache = makeCache();
 const state = { kind: 'visit', start: null, token: '', days: [], chips: [], date: null, doneData: null, doneManyThings: false, basePrice: BASE_PRICE, nearbyPrice: null, topPct: null };
 
 // The chat link carries only a random code.
@@ -59,12 +61,12 @@ async function prefillFromLink() {
   if (!state.token) return;
   let data = null;
   try {
-    const res = await fetch(`${BOOKING_API}/link?r=${encodeURIComponent(state.token)}`);
-    if (res.ok) data = await res.json();
+    const res = await fetchRetry(`${BOOKING_API}/link?r=${encodeURIComponent(state.token)}`);
+    if (res.ok) data = await res.json(); else state.token = '';
   } catch (err) {
-    data = null;
+    data = null; // backend unreachable: keep the code, the booking still carries it
   }
-  if (!data) { state.token = ''; return; }
+  if (!data) return;
   setKind(data.kind === 'work' ? 'work' : 'visit');
   const f = $('details');
   f.elements.name.value = data.name || '';
@@ -186,6 +188,9 @@ function updateArrowLabels() {
 function showSlotsState(name) {
   $('slots').hidden = name === 'none';
   $('slots-loading').hidden = name !== 'loading';
+  if (name !== 'loading') $('slots-updating').hidden = true;
+  $('slots-down').hidden = name !== 'down';
+  if (name !== 'pick') $('slots-stale').hidden = true;
   $('slots-empty').hidden = name !== 'empty';
   $('slots-pick').hidden = name !== 'pick';
   $('summary').hidden = true;
@@ -230,13 +235,18 @@ async function loadSlots() {
   showSlotsState('loading');
   // 'error' (PDOK unreachable) is let through: the booking server checks the postcode itself.
   let data = null;
+  let stale = false;
   try {
-    const res = await fetch(`${BOOKING_API}/slots?kind=${state.kind}&postcode=${encodeURIComponent(postcode)}`);
-    if (res.ok) data = await res.json();
+    const res = await fetchRetry(`${BOOKING_API}/slots?kind=${state.kind}&postcode=${encodeURIComponent(postcode)}`, { onRetry: () => { $('slots-updating').hidden = false; } });
+    if (res.ok) { data = await res.json(); if (data && data.status !== 'invalid_postcode') slotsCache.set(state.kind, postcode, data); }
   } catch (err) {
     data = null;
   }
-  if (!data) { showSlotsState('none'); msg.textContent = t(getLang(), 'booking_error'); return; }
+  if (!data) {
+    data = slotsCache.get(state.kind, postcode);
+    stale = !!data;
+  }
+  if (!data) { $('down-wa').href = waLink(''); showSlotsState('down'); return; }
   if (data.status === 'invalid_postcode') { showSlotsState('none'); msg.textContent = t(getLang(), 'booking_postcode_invalid'); return; }
   const days = (data.days || []).filter((d) => d.slots && d.slots.length);
   if (!days.length) { $('empty-wa').href = waLink(''); showSlotsState('empty'); return; }
@@ -246,8 +256,10 @@ async function loadSlots() {
   state.topPct = typeof data.discountPercent === 'number' ? data.discountPercent : null;
   updateSubmitLabel();
   showSlotsState('pick');
+  $('slots-stale').hidden = !stale;
   renderSlots();
 }
+$('slots-retry').addEventListener('click', () => loadSlots());
 $('postcode-form').addEventListener('submit', (e) => { e.preventDefault(); loadSlots(); });
 
 // Photos are redrawn on a canvas: smaller, and without EXIF or GPS data.
@@ -381,17 +393,19 @@ $('details').addEventListener('submit', async (e) => {
     for (const file of files) {
       try { form.photos.push(await readPhoto(file)); } catch (err) { /* unreadable photo: skip it */ }
     }
-    const res = await fetch(`${BOOKING_API}/book`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(buildPayload(form)) });
+    // Never retried automatically: the form stays filled and the person decides.
+    const res = await fetchOnce(`${BOOKING_API}/book`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(buildPayload(form)) });
     let data = null;
     try { data = await res.json(); } catch (err) { data = null; }
     if (res.status === 409) { msg.textContent = t(lang, 'booking_taken'); loadSlots(); return; }
     if (res.status === 400 && data && Array.isArray(data.fields) && showMissing(data.fields, lang)) return;
+    if (res.status === 502 || res.status === 503 || res.status === 504) { msg.textContent = t(lang, 'booking_down'); return; }
     if (!data || !data.ok) { msg.textContent = t(lang, 'booking_error'); return; }
     state.doneManyThings = form.manyThings;
     state.donePrice = form.price;
     showDone(data);
   } catch (err) {
-    msg.textContent = t(lang, 'booking_error');
+    msg.textContent = t(lang, 'booking_down'); // network error or timeout: the form stays filled
   } finally {
     $('submit').disabled = false;
   }

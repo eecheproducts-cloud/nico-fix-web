@@ -1156,6 +1156,9 @@ h2::after {
 .booking-empty { margin-top: 16px; padding: 18px; background: var(--beige); border-radius: var(--radius); }
 .booking-empty p { margin: 0 0 12px; font-weight: 600; }
 .booking-empty .btn { display: inline-block; text-align: center; }
+.booking-updating { margin: 8px 0 0; font-size: .95rem; }
+.booking-updating[hidden] { display: none; }
+.booking-empty .btn + .btn { margin-left: 8px; margin-top: 8px; }
 .skeleton[hidden], .booking-empty[hidden], #slots-pick[hidden], .booking-slots-section[hidden] { display: none; }
 .skeleton i { display: block; background: linear-gradient(90deg, var(--beige-deep) 25%, var(--beige) 50%, var(--beige-deep) 75%); background-size: 200% 100%; animation: sk 1.2s linear infinite; border-radius: 12px; }
 .skeleton-strip { display: flex; gap: 8px; overflow: hidden; margin: 16px 0; }

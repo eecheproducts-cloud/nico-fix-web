@@ -65,14 +65,21 @@
     <section id="slots" class="booking-slots-section" hidden>
       <div id="slots-loading" class="skeleton" role="status" hidden>
         <span class="visually-hidden" data-i18n="booking_loading"></span>
+        <p id="slots-updating" class="booking-updating" data-i18n="booking_updating" hidden></p>
         <div class="skeleton-strip" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
         <div class="skeleton-grid" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      </div>
+      <div id="slots-down" class="booking-empty" role="alert" hidden>
+        <p data-i18n="booking_down"></p>
+        <button id="slots-retry" type="button" class="btn btn-primary" data-i18n="booking_retry"></button>
+        <a id="down-wa" class="btn btn-primary" target="_blank" rel="noopener" data-i18n="booking_empty_button"></a>
       </div>
       <div id="slots-empty" class="booking-empty" hidden>
         <p data-i18n="booking_no_slots"></p>
         <a id="empty-wa" class="btn btn-primary" target="_blank" rel="noopener" data-i18n="booking_empty_button"></a>
       </div>
       <div id="slots-pick" hidden>
+        <p id="slots-stale" class="booking-updating" role="status" data-i18n="booking_stale" hidden></p>
         <h2 class="step-title" id="day-title"><span class="step-num" aria-hidden="true">3</span><span data-i18n="booking_step_day"></span></h2>
         <p class="nearby-hint" id="nearby-hint" role="note" hidden></p>
         <div class="day-picker">
