@@ -299,6 +299,7 @@ h2::after {
   height: auto;
   aspect-ratio: 1;
   object-fit: cover;
+  object-position: center;
   border-radius: 28px;
 }
 
@@ -412,15 +413,16 @@ h2::after {
   display: block;
   width: 100%;
   height: auto;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 1;
   object-fit: cover;
+  object-position: center 30%;
   border-radius: 28px;
   box-shadow: 14px 14px 0 var(--peach);
 }
 
 @media (max-width: 860px) {
   .how-inner { grid-template-columns: 1fr; gap: 30px; }
-  .how-photo img { aspect-ratio: 3 / 2; }
+  .how-photo img { aspect-ratio: 4 / 3; }
 }
 
 /* Services: one card per category (built in main.js) */
@@ -958,7 +960,7 @@ h2::after {
   .how-steps li { grid-template-columns: 38px 1fr; column-gap: 14px; padding: 14px 16px; }
   .how-step-number { width: 36px; height: 36px; font-size: 1rem; }
   .how-photo { margin: 0 8px 8px 0; }
-  .how-photo img { aspect-ratio: 2 / 1; }
+  .how-photo img { aspect-ratio: 1; }
   .how-photo img { box-shadow: 8px 8px 0 var(--peach); }
 
   /* Services: compact rows (number left, text right) so ten cards don't fill four screens */
