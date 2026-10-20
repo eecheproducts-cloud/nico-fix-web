@@ -32,7 +32,7 @@
 
     <h2>2. What data we use and why</h2>
     <ul>
-      <li><strong>WhatsApp chat:</strong> your number, your WhatsApp name, and the messages and photos you send. The first replies come from an automated assistant (AI, provided by Anthropic) that asks about the job so Nico can prepare a quote. WhatsApp/Meta also processes the conversation under their own privacy policy.</li>
+      <li><strong>WhatsApp chat:</strong> your number, your WhatsApp name, and the messages and photos you send. The first replies come from an automated assistant (AI, provided by Anthropic) that asks about the job so Nico can prepare a quote. The AI also helps prepare an internal draft of the quote from your request, notes and photos; Nico reviews it and decides the price. WhatsApp/Meta also processes the conversation under their own privacy policy.</li>
       <li><strong>Bookings on this site:</strong> name, WhatsApp number, address, postcode, type and time of the booking, and optionally a description and photos of the job.</li>
       <li><strong>Abuse protection:</strong> a one-way hash (HMAC) of your IP address, only to limit repeated requests. We never store the IP itself in this record.</li>
       <li><strong>Analytics:</strong> Google Analytics, only if you accept it in the cookie banner.</li>
@@ -54,7 +54,7 @@
       <li>Google Cloud (database and server functions, region europe-west4, Netherlands) and Google Calendar (agenda; the event title has no personal name, and the event location holds the job address, which is needed for navigation, but no name, phone or description). Google Cloud processes the data in the EU; Google may transfer data outside the EU under standard contractual clauses (SCC) or the EU-US Data Privacy Framework.</li>
       <li>Google Routes API: only postcodes, to calculate travel time.</li>
       <li>Notion (USA): our job records. Transfer under the EU-US Data Privacy Framework and standard contractual clauses (SCC).</li>
-      <li>Anthropic (USA): the AI behind the WhatsApp assistant and the photo check. Transfer under SCC.</li>
+      <li>Anthropic (USA): the AI behind the WhatsApp assistant, the photo check and the internal quote drafts. Transfer under SCC.</li>
       <li>Meta (WhatsApp) and Dualhook: delivery of WhatsApp messages. Both may process data outside the EU, under their own terms and standard contractual clauses (SCC).</li>
       <li>ntfy (Binwiese LLC, USA): internal notifications to Nico Fix's phones (for example "new visit booked"). They only carry a job number, date, time and city, never your name, phone, address or messages. Your details stay in our systems, which require a login. The service keeps a notification only briefly, to deliver it.</li>
       <li>GitHub Pages: hosts this site and sees the IP address of visitors when the site loads.</li>
@@ -111,7 +111,7 @@
 
     <h2>2. Qué datos usamos y para qué</h2>
     <ul>
-      <li><strong>Chat de WhatsApp:</strong> tu número, tu nombre de WhatsApp y los mensajes y fotos que mandás. Las primeras respuestas las da un asistente automático (IA, de Anthropic) que te pregunta sobre el trabajo para que Nico pueda armar un presupuesto. WhatsApp/Meta también procesa la conversación bajo su propia política.</li>
+      <li><strong>Chat de WhatsApp:</strong> tu número, tu nombre de WhatsApp y los mensajes y fotos que mandás. Las primeras respuestas las da un asistente automático (IA, de Anthropic) que te pregunta sobre el trabajo para que Nico pueda armar un presupuesto. La IA también ayuda a preparar un borrador interno del presupuesto a partir de tu pedido, las notas y las fotos; Nico lo revisa y decide el precio. WhatsApp/Meta también procesa la conversación bajo su propia política.</li>
       <li><strong>Reservas en este sitio:</strong> nombre, WhatsApp, dirección, código postal, tipo y horario de la reserva y, si querés, descripción y fotos del trabajo.</li>
       <li><strong>Protección contra abusos:</strong> un hash irreversible (HMAC) de tu dirección IP, solo para limitar pedidos repetidos. No guardamos la IP en sí en ese registro.</li>
       <li><strong>Estadísticas:</strong> Google Analytics, solo si lo aceptás en el aviso de cookies.</li>
@@ -133,7 +133,7 @@
       <li>Google Cloud (base de datos y funciones, región europe-west4, Países Bajos) y Google Calendar (agenda; el título del evento no lleva el nombre, y la ubicación del evento tiene la dirección del trabajo, necesaria para navegar, pero ningún nombre, teléfono ni descripción). Google Cloud procesa los datos en la UE; Google puede transferir datos fuera de la UE bajo cláusulas contractuales tipo (SCC) o el EU-US Data Privacy Framework.</li>
       <li>Google Routes API: solo códigos postales, para calcular el tiempo de viaje.</li>
       <li>Notion (EE.UU.): nuestros registros de trabajos. Transferencia bajo el EU-US Data Privacy Framework y cláusulas contractuales tipo (SCC).</li>
-      <li>Anthropic (EE.UU.): la IA del asistente de WhatsApp y del control de fotos. Transferencia bajo SCC.</li>
+      <li>Anthropic (EE.UU.): la IA del asistente de WhatsApp, del control de fotos y de los borradores internos de presupuesto. Transferencia bajo SCC.</li>
       <li>Meta (WhatsApp) y Dualhook: entrega de los mensajes de WhatsApp. Ambos pueden procesar datos fuera de la UE, bajo sus propios términos y cláusulas contractuales tipo (SCC).</li>
       <li>ntfy (Binwiese LLC, EE.UU.): avisos internos a los celulares de Nico Fix (por ejemplo "nueva visita agendada"). Solo llevan un número de trabajo, fecha, hora y ciudad, nunca tu nombre, teléfono, dirección ni mensajes. Tus datos quedan en nuestros sistemas, que piden login. El servicio guarda cada aviso solo por poco tiempo, para entregarlo.</li>
       <li>GitHub Pages: aloja este sitio y ve la IP de quien visita cuando carga la página.</li>
