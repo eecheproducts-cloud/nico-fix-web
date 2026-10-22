@@ -35,6 +35,8 @@
       <li><strong>WhatsApp chat:</strong> your number, your WhatsApp name, and the messages and photos you send. The first replies come from an automated assistant (AI, provided by Anthropic) that asks about the job so Nico can prepare a quote. The AI also helps prepare an internal draft of the quote from your request, notes and photos; Nico reviews it and decides the price. WhatsApp/Meta also processes the conversation under their own privacy policy.</li>
       <li><strong>Bookings on this site:</strong> name, WhatsApp number, address, postcode, type and time of the booking, and optionally a description and photos of the job.</li>
       <li><strong>Abuse protection:</strong> a one-way hash (HMAC) of your IP address, only to limit repeated requests. We never store the IP itself in this record.</li>
+      <li><strong>Managing your job:</strong> our internal app keeps your request, the checklist and photos of the visit, the quote, the agenda and a history of who did what on the job. Only the two people who work at Nico Fix can sign in, with a password.</li>
+      <li><strong>Proof of acceptance:</strong> when you accept a quote on WhatsApp, we keep a screenshot of that message, cropped to what is needed, as proof of the agreement and of your request to start within the 14-day withdrawal period.</li>
       <li><strong>Analytics:</strong> Google Analytics, only if you accept it in the cookie banner.</li>
     </ul>
     <p>We use the data only to manage your request or booking and to write to you on WhatsApp about it. No marketing, no selling.</p>
@@ -43,6 +45,7 @@
     <ul>
       <li>Name, phone, address, booking details, description and photos: steps taken at your request before a contract (art. 6(1)(b) GDPR).</li>
       <li>Hash of the IP address: our legitimate interest in security and preventing abuse (art. 6(1)(f)).</li>
+      <li>Job record and proof of acceptance: performing the contract (art. 6(1)(b)) and our legitimate interest in proving the agreement and handling warranty claims (art. 6(1)(f)).</li>
       <li>Invoice data: legal tax obligation (art. 6(1)(c)).</li>
       <li>Google Analytics: your consent only (art. 6(1)(a)). You can withdraw it at any time with "Cookie settings".</li>
     </ul>
@@ -51,7 +54,7 @@
     <h2>4. Who receives the data</h2>
     <p>Service providers that process data on our behalf:</p>
     <ul>
-      <li>Google Cloud (database and server functions, region europe-west4, Netherlands) and Google Calendar (agenda; the event title has no personal name, and the event location holds the job address, which is needed for navigation, but no name, phone or description). Google Cloud processes the data in the EU; Google may transfer data outside the EU under standard contractual clauses (SCC) or the EU-US Data Privacy Framework.</li>
+      <li>Google Cloud (database and server functions, region europe-west4, Netherlands) and Google Calendar (agenda; the event title has no personal name, and the event location holds the job address, which is needed for navigation, but no name, phone or description). Our internal app also runs on Google (Firebase: login, database and photo storage in the EU). Google Cloud processes the data in the EU; the login service may process the sign-in emails of our two staff accounts in the USA. Google may transfer data outside the EU under standard contractual clauses (SCC) or the EU-US Data Privacy Framework.</li>
       <li>Google Routes API: only postcodes, to calculate travel time.</li>
       <li>Notion (USA): our job records. Transfer under the EU-US Data Privacy Framework and standard contractual clauses (SCC).</li>
       <li>Anthropic (USA): the AI behind the WhatsApp assistant, the photo check and the internal quote drafts. Transfer under SCC.</li>
@@ -81,6 +84,8 @@
         <tr><td>Leads sheet and Notion job records (NF), if no job was done</td><td>6 months after the last contact</td></tr>
         <tr><td>Photos</td><td>3 months after the job, 6 months if the quote was not accepted</td></tr>
         <tr><td>Calendar events</td><td>12 months (the title is already anonymous)</td></tr>
+        <tr><td>Job records with completed work (request, visit checklist, quote, history)</td><td>2 years after the job (warranty), then deleted</td></tr>
+        <tr><td>Proof of acceptance (screenshot)</td><td>Together with the invoice: 7 years</td></tr>
         <tr><td>Invoice data</td><td>7 years (Dutch tax authority)</td></tr>
         <tr><td>Server logs</td><td>30 days</td></tr>
       </tbody>
@@ -114,6 +119,8 @@
       <li><strong>Chat de WhatsApp:</strong> tu número, tu nombre de WhatsApp y los mensajes y fotos que mandás. Las primeras respuestas las da un asistente automático (IA, de Anthropic) que te pregunta sobre el trabajo para que Nico pueda armar un presupuesto. La IA también ayuda a preparar un borrador interno del presupuesto a partir de tu pedido, las notas y las fotos; Nico lo revisa y decide el precio. WhatsApp/Meta también procesa la conversación bajo su propia política.</li>
       <li><strong>Reservas en este sitio:</strong> nombre, WhatsApp, dirección, código postal, tipo y horario de la reserva y, si querés, descripción y fotos del trabajo.</li>
       <li><strong>Protección contra abusos:</strong> un hash irreversible (HMAC) de tu dirección IP, solo para limitar pedidos repetidos. No guardamos la IP en sí en ese registro.</li>
+      <li><strong>Gestión de tu trabajo:</strong> nuestra app interna guarda tu pedido, la checklist y las fotos de la visita, el presupuesto, la agenda y un historial de quién hizo qué en el trabajo. Solo pueden entrar las dos personas que trabajan en Nico Fix, con contraseña.</li>
+      <li><strong>Prueba de aceptación:</strong> cuando aceptás un presupuesto por WhatsApp, guardamos una captura de ese mensaje, recortada a lo necesario, como prueba del acuerdo y de tu pedido de empezar dentro del plazo de 14 días para cancelar.</li>
       <li><strong>Estadísticas:</strong> Google Analytics, solo si lo aceptás en el aviso de cookies.</li>
     </ul>
     <p>Usamos los datos solo para gestionar tu pedido o reserva y escribirte por WhatsApp sobre eso. Sin marketing, sin venderlos.</p>
@@ -122,6 +129,7 @@
     <ul>
       <li>Nombre, teléfono, dirección, datos de la reserva, descripción y fotos: medidas precontractuales a pedido tuyo (art. 6(1)(b) AVG/GDPR).</li>
       <li>Hash de la IP: interés legítimo en seguridad y prevención de abusos (art. 6(1)(f)).</li>
+      <li>Registro del trabajo y prueba de aceptación: cumplir el contrato (art. 6(1)(b)) e interés legítimo en probar el acuerdo y atender reclamos de garantía (art. 6(1)(f)).</li>
       <li>Datos de factura: obligación fiscal (art. 6(1)(c)).</li>
       <li>Google Analytics: solo tu consentimiento (art. 6(1)(a)). Lo podés retirar cuando quieras desde "Configurar cookies".</li>
     </ul>
@@ -130,7 +138,7 @@
     <h2>4. Quién recibe los datos</h2>
     <p>Proveedores que procesan datos en nuestro nombre:</p>
     <ul>
-      <li>Google Cloud (base de datos y funciones, región europe-west4, Países Bajos) y Google Calendar (agenda; el título del evento no lleva el nombre, y la ubicación del evento tiene la dirección del trabajo, necesaria para navegar, pero ningún nombre, teléfono ni descripción). Google Cloud procesa los datos en la UE; Google puede transferir datos fuera de la UE bajo cláusulas contractuales tipo (SCC) o el EU-US Data Privacy Framework.</li>
+      <li>Google Cloud (base de datos y funciones, región europe-west4, Países Bajos) y Google Calendar (agenda; el título del evento no lleva el nombre, y la ubicación del evento tiene la dirección del trabajo, necesaria para navegar, pero ningún nombre, teléfono ni descripción). Nuestra app interna también funciona en Google (Firebase: login, base de datos y fotos en la UE). Google Cloud procesa los datos en la UE; el servicio de login puede procesar en EE.UU. los mails de nuestras dos cuentas de trabajo. Google puede transferir datos fuera de la UE bajo cláusulas contractuales tipo (SCC) o el EU-US Data Privacy Framework.</li>
       <li>Google Routes API: solo códigos postales, para calcular el tiempo de viaje.</li>
       <li>Notion (EE.UU.): nuestros registros de trabajos. Transferencia bajo el EU-US Data Privacy Framework y cláusulas contractuales tipo (SCC).</li>
       <li>Anthropic (EE.UU.): la IA del asistente de WhatsApp, del control de fotos y de los borradores internos de presupuesto. Transferencia bajo SCC.</li>
@@ -160,6 +168,8 @@
         <tr><td>Planilla de leads y registros de trabajo en Notion (NF), si no hubo trabajo</td><td>6 meses desde el último contacto</td></tr>
         <tr><td>Fotos</td><td>3 meses tras el trabajo, 6 meses si no se aceptó el presupuesto</td></tr>
         <tr><td>Eventos del calendario</td><td>12 meses (el título ya es anónimo)</td></tr>
+        <tr><td>Registros de trabajos hechos (pedido, checklist de la visita, presupuesto, historial)</td><td>2 años después del trabajo (garantía), luego se borran</td></tr>
+        <tr><td>Prueba de aceptación (captura)</td><td>Junto con la factura: 7 años</td></tr>
         <tr><td>Datos de factura</td><td>7 años (Belastingdienst)</td></tr>
         <tr><td>Logs del servidor</td><td>30 días</td></tr>
       </tbody>
