@@ -36,6 +36,8 @@
       <li><strong>Bookings on this site:</strong> name, WhatsApp number, address, postcode, type and time of the booking, and optionally a description and photos of the job.</li>
       <li><strong>Abuse protection:</strong> a one-way hash (HMAC) of your IP address, only to limit repeated requests. We never store the IP itself in this record.</li>
       <li><strong>Managing your job:</strong> our internal app keeps your request, the checklist and photos of the visit, the quote, the agenda and a history of who did what on the job. Only the two people who work at Nico Fix can sign in, with a password.</li>
+      <li><strong>Summaries and translations:</strong> the full WhatsApp chat is deleted after 14 days without activity. Before that, we make a short summary of your request and the conversation (what you asked for, photos, agreements and times), which we keep as part of the job record. If you write in English or Dutch, we also keep a Spanish translation of your request and your last message, with the same retention period. A person reviews the result; no automated decisions are made about you.</li>
+      <li><strong>Clients from Zoofy:</strong> if you come through the Zoofy platform, Zoofy gives us your name, contact details and order number so we can do the job. Zoofy processes your data under its own privacy policy.</li>
       <li><strong>Proof of acceptance:</strong> when you accept a quote on WhatsApp, we keep a screenshot of that message, cropped to what is needed, as proof of the agreement and of your request to start within the 14-day withdrawal period.</li>
       <li><strong>Analytics:</strong> Google Analytics, only if you accept it in the cookie banner.</li>
     </ul>
@@ -57,7 +59,7 @@
       <li>Google Cloud (database and server functions, region europe-west4, Netherlands) and Google Calendar (agenda; the event title has no personal name, and the event location holds the job address, which is needed for navigation, but no name, phone or description). Our internal app also runs on Google (Firebase: login, database and photo storage in the EU). Google Cloud processes the data in the EU; the login service may process the sign-in emails of our two staff accounts in the USA. Google may transfer data outside the EU under standard contractual clauses (SCC) or the EU-US Data Privacy Framework.</li>
       <li>Google Routes API: only postcodes, to calculate travel time.</li>
       <li>Notion (USA): our job records. Transfer under the EU-US Data Privacy Framework and standard contractual clauses (SCC).</li>
-      <li>Anthropic (USA): the AI behind the WhatsApp assistant, the photo check and the internal quote drafts. Transfer under SCC.</li>
+      <li>Anthropic (USA): the AI behind the WhatsApp assistant, the photo check, the internal quote drafts, and the summaries and translations of your request and chat (including our internal job page). Transfer under SCC.</li>
       <li>Meta (WhatsApp) and Dualhook: delivery of WhatsApp messages. Both may process data outside the EU, under their own terms and standard contractual clauses (SCC).</li>
       <li>ntfy (Binwiese LLC, USA): internal notifications to Nico Fix's phones (for example "new visit booked"). They only carry a job number, date, time and city, never your name, phone, address or messages. Your details stay in our systems, which require a login. The service keeps a notification only briefly, to deliver it.</li>
       <li>GitHub Pages: hosts this site and sees the IP address of visitors when the site loads.</li>
@@ -85,6 +87,7 @@
         <tr><td>Photos</td><td>3 months after the job, 6 months if the quote was not accepted</td></tr>
         <tr><td>Calendar events</td><td>12 months (the title is already anonymous)</td></tr>
         <tr><td>Job records with completed work (request, visit checklist, quote, history)</td><td>2 years after the job (warranty), then deleted</td></tr>
+        <tr><td>Summary of the request and chat, and Spanish translations</td><td>Same as the job record: 6 months from the last contact without a job, 2 years after a completed job</td></tr>
         <tr><td>Proof of acceptance (screenshot)</td><td>Together with the invoice: 7 years</td></tr>
         <tr><td>Invoice data</td><td>7 years (Dutch tax authority)</td></tr>
         <tr><td>Server logs</td><td>30 days</td></tr>
@@ -120,6 +123,8 @@
       <li><strong>Reservas en este sitio:</strong> nombre, WhatsApp, dirección, código postal, tipo y horario de la reserva y, si querés, descripción y fotos del trabajo.</li>
       <li><strong>Protección contra abusos:</strong> un hash irreversible (HMAC) de tu dirección IP, solo para limitar pedidos repetidos. No guardamos la IP en sí en ese registro.</li>
       <li><strong>Gestión de tu trabajo:</strong> nuestra app interna guarda tu pedido, la checklist y las fotos de la visita, el presupuesto, la agenda y un historial de quién hizo qué en el trabajo. Solo pueden entrar las dos personas que trabajan en Nico Fix, con contraseña.</li>
+      <li><strong>Resúmenes y traducciones:</strong> el chat completo de WhatsApp se borra tras 14 días sin actividad. Antes de eso, generamos un resumen corto del pedido y de la conversación (qué pediste, fotos, acuerdos y horarios), que guardamos como parte del registro del trabajo. Si escribís en inglés o neerlandés, también guardamos una traducción al español de tu pedido y de tu último mensaje, con el mismo plazo. Una persona revisa el resultado y no se toman decisiones automáticas sobre vos.</li>
+      <li><strong>Clientes de Zoofy:</strong> si llegás a través de la plataforma Zoofy, recibimos de Zoofy tu nombre, datos de contacto y el número de orden para poder hacer el trabajo. Zoofy trata tus datos bajo su propia política de privacidad.</li>
       <li><strong>Prueba de aceptación:</strong> cuando aceptás un presupuesto por WhatsApp, guardamos una captura de ese mensaje, recortada a lo necesario, como prueba del acuerdo y de tu pedido de empezar dentro del plazo de 14 días para cancelar.</li>
       <li><strong>Estadísticas:</strong> Google Analytics, solo si lo aceptás en el aviso de cookies.</li>
     </ul>
@@ -141,7 +146,7 @@
       <li>Google Cloud (base de datos y funciones, región europe-west4, Países Bajos) y Google Calendar (agenda; el título del evento no lleva el nombre, y la ubicación del evento tiene la dirección del trabajo, necesaria para navegar, pero ningún nombre, teléfono ni descripción). Nuestra app interna también funciona en Google (Firebase: login, base de datos y fotos en la UE). Google Cloud procesa los datos en la UE; el servicio de login puede procesar en EE.UU. los mails de nuestras dos cuentas de trabajo. Google puede transferir datos fuera de la UE bajo cláusulas contractuales tipo (SCC) o el EU-US Data Privacy Framework.</li>
       <li>Google Routes API: solo códigos postales, para calcular el tiempo de viaje.</li>
       <li>Notion (EE.UU.): nuestros registros de trabajos. Transferencia bajo el EU-US Data Privacy Framework y cláusulas contractuales tipo (SCC).</li>
-      <li>Anthropic (EE.UU.): la IA del asistente de WhatsApp, del control de fotos y de los borradores internos de presupuesto. Transferencia bajo SCC.</li>
+      <li>Anthropic (EE.UU.): la IA del asistente de WhatsApp, del control de fotos, de los borradores internos de presupuesto y de los resúmenes y traducciones de tu pedido y tu chat (incluida nuestra página interna del trabajo). Transferencia bajo SCC.</li>
       <li>Meta (WhatsApp) y Dualhook: entrega de los mensajes de WhatsApp. Ambos pueden procesar datos fuera de la UE, bajo sus propios términos y cláusulas contractuales tipo (SCC).</li>
       <li>ntfy (Binwiese LLC, EE.UU.): avisos internos a los celulares de Nico Fix (por ejemplo "nueva visita agendada"). Solo llevan un número de trabajo, fecha, hora y ciudad, nunca tu nombre, teléfono, dirección ni mensajes. Tus datos quedan en nuestros sistemas, que piden login. El servicio guarda cada aviso solo por poco tiempo, para entregarlo.</li>
       <li>GitHub Pages: aloja este sitio y ve la IP de quien visita cuando carga la página.</li>
@@ -169,6 +174,7 @@
         <tr><td>Fotos</td><td>3 meses tras el trabajo, 6 meses si no se aceptó el presupuesto</td></tr>
         <tr><td>Eventos del calendario</td><td>12 meses (el título ya es anónimo)</td></tr>
         <tr><td>Registros de trabajos hechos (pedido, checklist de la visita, presupuesto, historial)</td><td>2 años después del trabajo (garantía), luego se borran</td></tr>
+        <tr><td>Resumen del pedido y del chat, y traducciones al español</td><td>Igual que el registro del trabajo: 6 meses desde el último contacto sin trabajo, 2 años después de un trabajo hecho</td></tr>
         <tr><td>Prueba de aceptación (captura)</td><td>Junto con la factura: 7 años</td></tr>
         <tr><td>Datos de factura</td><td>7 años (Belastingdienst)</td></tr>
         <tr><td>Logs del servidor</td><td>30 días</td></tr>
