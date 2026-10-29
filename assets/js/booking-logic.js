@@ -8,6 +8,7 @@ export function buildPayload(f) {
     description: (f.description || '').trim(), manyThings: Boolean(f.manyThings), earlyStart: f.kind === 'work' && f.earlyStart === true,
     photos: f.photos || [], lang: f.lang, website: f.website || '',
   };
+  if (f.kind === 'work' && [2, 3, 4].includes(Number(f.hours))) payload.hours = Number(f.hours);
   if (f.token) payload.token = f.token;
   if (typeof f.price === 'number') payload.price = f.price;
   return payload;
