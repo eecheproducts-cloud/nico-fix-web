@@ -1212,7 +1212,7 @@ h2::after {
 .booking-wd-form p { margin: 0 0 10px; overflow-wrap: anywhere; }
 
 @media (max-width: 640px) {
-  .booking-kinds { grid-template-columns: 1fr; }
+  .booking-kinds { grid-template-columns: 1fr 1fr; gap: 10px; }
   .booking-postcode-row { flex-direction: column; }
   .booking-details { padding: 16px; }
   .booking-details .btn { justify-self: stretch; text-align: center; }

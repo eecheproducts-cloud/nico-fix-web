@@ -11,7 +11,7 @@ import { suggestUrl, shouldSuggest, parseSuggestions, postcodeDiffers, extractPo
 const getLang = () => ((document.documentElement.lang || 'es').startsWith('es') ? 'es' : 'en');
 const $ = (id) => document.getElementById(id);
 const slotsCache = makeCache();
-const state = { kind: 'visit', start: null, token: '', days: [], chips: [], date: null, doneData: null, doneManyThings: false, basePrice: BASE_PRICE, nearbyPrice: null, topPct: null };
+const state = { kind: 'visit', hours: 1, start: null, token: '', days: [], chips: [], date: null, doneData: null, doneManyThings: false, basePrice: BASE_PRICE, nearbyPrice: null, topPct: null };
 
 // The chat link carries only a random code.
 // An inline script in reservar.html already moved it to window.__bookingToken and cleaned the URL.
@@ -22,9 +22,14 @@ function readToken() {
 state.token = readToken();
 
 function kindInputs() { return document.querySelectorAll('input[name="kind"]'); }
-function setKind(kind) {
-  state.kind = kind;
-  kindInputs().forEach((i) => { i.checked = i.value === kind; });
+// The client picks the hours (Maria, 2026-10-29): "visit" is 1 hour (the short visit), "work:N"
+// a work visit of N hours (2 to 4). Without hours (an old link): 4 hours.
+function setKind(value) {
+  const [kind, h] = String(value || 'visit').split(':');
+  state.kind = kind === 'work' ? 'work' : 'visit';
+  state.hours = state.kind === 'work' ? (Number(h) || 4) : 1;
+  const current = state.kind === 'work' ? `work:${state.hours}` : 'visit';
+  kindInputs().forEach((i) => { i.checked = i.value === current; });
   updateSubmitLabel();
 }
 // Price of the chosen visit slot (the base price until a time is chosen, or when the server sends none).
@@ -67,7 +72,7 @@ async function prefillFromLink() {
     data = null; // backend unreachable: keep the code, the booking still carries it
   }
   if (!data) return;
-  setKind(data.kind === 'work' ? 'work' : 'visit');
+  setKind(data.kind === 'work' ? 'work:4' : 'visit');
   const f = $('details');
   f.elements.name.value = data.name || '';
   f.elements.address.value = data.address || '';
@@ -144,7 +149,7 @@ function renderTimes() {
 }
 
 function summaryText() {
-  const kind = t(getLang(), state.kind === 'work' ? 'booking_summary_work' : 'booking_summary_visit');
+  const kind = state.kind === 'work' ? fillText(t(getLang(), 'booking_summary_hours'), { hours: state.hours }) : t(getLang(), 'booking_summary_visit');
   return formatSummary(state.start, getLang(), kind);
 }
 
@@ -237,13 +242,13 @@ async function loadSlots() {
   let data = null;
   let stale = false;
   try {
-    const res = await fetchRetry(`${BOOKING_API}/slots?kind=${state.kind}&postcode=${encodeURIComponent(postcode)}`, { onRetry: () => { $('slots-updating').hidden = false; } });
-    if (res.ok) { data = await res.json(); if (data && data.status !== 'invalid_postcode') slotsCache.set(state.kind, postcode, data); }
+    const res = await fetchRetry(`${BOOKING_API}/slots?kind=${state.kind}&hours=${state.hours}&postcode=${encodeURIComponent(postcode)}`, { onRetry: () => { $('slots-updating').hidden = false; } });
+    if (res.ok) { data = await res.json(); if (data && data.status !== 'invalid_postcode') slotsCache.set(`${state.kind}:${state.hours}`, postcode, data); }
   } catch (err) {
     data = null;
   }
   if (!data) {
-    data = slotsCache.get(state.kind, postcode);
+    data = slotsCache.get(`${state.kind}:${state.hours}`, postcode);
     stale = !!data;
   }
   if (!data) { $('down-wa').href = waLink(''); showSlotsState('down'); return; }
@@ -377,7 +382,7 @@ $('details').addEventListener('submit', async (e) => {
   const f = e.target;
   const el = f.elements;
   const lang = getLang();
-  const form = { kind: state.kind, start: state.start, postcode: $('postcode').value, name: el.name.value, address: el.address.value,
+  const form = { kind: state.kind, hours: state.hours, start: state.start, postcode: $('postcode').value, name: el.name.value, address: el.address.value,
     phone: el.phone.value, description: el.description.value, manyThings: false, earlyStart: el.earlyStart.checked,
     photos: [], lang, website: el.website.value, token: state.token };
   if (state.kind === 'visit') form.price = selectedPrice();
