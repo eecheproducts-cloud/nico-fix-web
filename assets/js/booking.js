@@ -22,16 +22,20 @@ function readToken() {
 state.token = readToken();
 
 function kindInputs() { return document.querySelectorAll('input[name="kind"]'); }
+function hoursInputs() { return document.querySelectorAll('input[name="hours"]'); }
 // The client picks the hours (Maria, 2026-10-29): "visit" is 1 hour (the short visit), "work:N"
 // a work visit of N hours (2 to 4). Without hours (an old link): 4 hours.
+// Step 1 shows two cards (look or do the job) and the 2/3/4 hours inside the work card;
+// picking the work card alone takes 2 hours, the shortest.
 function setKind(value) {
   const [kind, h] = String(value || 'visit').split(':');
   state.kind = kind === 'work' ? 'work' : 'visit';
   state.hours = state.kind === 'work' ? (Number(h) || 4) : 1;
-  const current = state.kind === 'work' ? `work:${state.hours}` : 'visit';
-  kindInputs().forEach((i) => { i.checked = i.value === current; });
+  kindInputs().forEach((i) => { i.checked = i.value === state.kind; });
+  hoursInputs().forEach((i) => { i.checked = state.kind === 'work' && Number(i.value) === state.hours; });
   updateSubmitLabel();
 }
+function currentKind() { return state.kind === 'work' ? `work:${state.hours}` : 'visit'; }
 // Price of the chosen visit slot (the base price until a time is chosen, or when the server sends none).
 function selectedPrice() {
   for (const d of state.days) {
@@ -54,12 +58,18 @@ function updateSubmitLabel() {
   // The price box sits in the form, so it is always visible before the binding button.
   $('price-box').textContent = fillText(t(lang, state.kind === 'visit' ? 'booking_price_visit' : 'booking_price_work'), { price: formatEuro(price, lang) });
 }
-kindInputs().forEach((i) => i.addEventListener('change', () => {
-  setKind(i.value);
+// A new kind or new hours: the times change, so the chosen time is dropped and the times reload.
+function changeKind(value) {
+  if (value === currentKind()) return;
+  setKind(value);
   state.start = null;
   $('details').hidden = true;
   if ($('postcode').value) loadSlots(); else { state.days = []; showSlotsState('none'); }
+}
+kindInputs().forEach((i) => i.addEventListener('change', () => {
+  changeKind(i.value === 'work' ? 'work:2' : 'visit');
 }));
+hoursInputs().forEach((i) => i.addEventListener('change', () => changeKind(`work:${i.value}`)));
 setKind('visit');
 
 async function prefillFromLink() {
@@ -453,7 +463,7 @@ function renderDone() {
 
 // Language switch: texts with data-i18n are refreshed by main.js; redo the ones built here.
 document.addEventListener('nicofix-langchange', () => {
-  setKind(state.kind);
+  setKind(currentKind()); // keeps the chosen hours (state.kind alone would turn 2 or 3 hours into 4)
   renderSlots();
   renderDone();
 });

@@ -1065,19 +1065,47 @@ h2::after {
 .booking-kind {
   display: flex;
   flex-direction: column;
-  gap: 6px;
   position: relative;
-  padding: 16px 16px 16px 46px;
   background: var(--beige);
   border: 2px solid var(--border);
   border-radius: var(--radius);
+}
+
+.booking-kind-main {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px 16px 16px 46px;
   cursor: pointer;
 }
 
-.booking-kind input { position: absolute; left: 16px; top: 18px; accent-color: var(--orange); width: 18px; height: 18px; }
-.booking-kind:has(input:checked) { border-color: var(--orange); background: var(--white); box-shadow: var(--shadow-soft); }
+.booking-kind-main input { position: absolute; left: 16px; top: 18px; margin: 0; accent-color: var(--orange); width: 18px; height: 18px; }
+.booking-kind:has(input[name="kind"]:checked) { border-color: var(--orange); background: var(--white); box-shadow: var(--shadow-soft); }
+.booking-kind:has(input[name="kind"]:focus-visible) { outline: 3px solid var(--halo); outline-offset: 2px; }
 .booking-kind-title { font-family: var(--font-heading); font-weight: 700; }
 .booking-kind-body { font-size: 0.92rem; color: var(--muted); }
+
+.booking-hours { margin: 0; padding: 0 16px 16px 46px; border: 0; min-width: 0; }
+.booking-hours legend { padding: 0; margin-bottom: 8px; font-size: 0.92rem; font-weight: 600; }
+.booking-hours-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.booking-hours-options label { position: relative; cursor: pointer; }
+.booking-hours-options input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
+.booking-hours-options span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 6px 8px;
+  border: 2px solid var(--border);
+  border-radius: 999px;
+  background: var(--white);
+  font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
+}
+.booking-hours-options label:hover span { border-color: var(--orange-light); }
+.booking-hours-options input:checked + span { background: var(--orange-deep); border-color: var(--orange-deep); color: var(--white); }
+.booking-hours-options input:focus-visible + span { outline: 3px solid var(--halo); outline-offset: 2px; }
 
 .booking-postcode label { display: block; font-weight: 600; margin-bottom: 6px; }
 .booking-postcode-row { display: flex; gap: 10px; }
@@ -1212,7 +1240,8 @@ h2::after {
 .booking-wd-form p { margin: 0 0 10px; overflow-wrap: anywhere; }
 
 @media (max-width: 640px) {
-  .booking-kinds { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .booking-kinds { grid-template-columns: 1fr; gap: 10px; }
+  .booking-hours { padding-left: 16px; }
   .booking-postcode-row { flex-direction: column; }
   .booking-details { padding: 16px; }
   .booking-details .btn { justify-self: stretch; text-align: center; }

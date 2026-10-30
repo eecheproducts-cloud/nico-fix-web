@@ -45,19 +45,26 @@
     </section>
     <h1 data-i18n="booking_title"></h1>
     <h2 class="step-title"><span class="step-num" aria-hidden="true">1</span><span data-i18n="booking_step_kind"></span></h2>
-    <div class="booking-kinds" role="radiogroup">
-      <label class="booking-kind"><input type="radio" name="kind" value="visit" checked>
-        <span class="booking-kind-title" data-i18n="booking_hours_1"></span>
-        <span class="booking-kind-body" data-i18n="booking_kind_visit_body"></span></label>
-      <label class="booking-kind"><input type="radio" name="kind" value="work:2">
-        <span class="booking-kind-title" data-i18n="booking_hours_2"></span>
-        <span class="booking-kind-body" data-i18n="booking_hours_work_body"></span></label>
-      <label class="booking-kind"><input type="radio" name="kind" value="work:3">
-        <span class="booking-kind-title" data-i18n="booking_hours_3"></span>
-        <span class="booking-kind-body" data-i18n="booking_hours_work_body"></span></label>
-      <label class="booking-kind"><input type="radio" name="kind" value="work:4">
-        <span class="booking-kind-title" data-i18n="booking_hours_4"></span>
-        <span class="booking-kind-body" data-i18n="booking_hours_work_body"></span></label>
+    <!-- Two choices (look or do the job); the hours of the work visit are picked inside its card. -->
+    <div class="booking-kinds">
+      <div class="booking-kind">
+        <label class="booking-kind-main"><input type="radio" name="kind" value="visit" checked>
+          <span class="booking-kind-title" data-i18n="booking_kind_look"></span>
+          <span class="booking-kind-body" data-i18n="booking_kind_visit_body"></span></label>
+      </div>
+      <div class="booking-kind">
+        <label class="booking-kind-main"><input type="radio" name="kind" value="work">
+          <span class="booking-kind-title" data-i18n="booking_kind_do"></span>
+          <span class="booking-kind-body" data-i18n="booking_kind_do_body"></span></label>
+        <fieldset class="booking-hours">
+          <legend data-i18n="booking_hours_legend"></legend>
+          <div class="booking-hours-options">
+            <label><input type="radio" name="hours" value="2"><span data-i18n="booking_hours_opt_2"></span></label>
+            <label><input type="radio" name="hours" value="3"><span data-i18n="booking_hours_opt_3"></span></label>
+            <label><input type="radio" name="hours" value="4"><span data-i18n="booking_hours_opt_4"></span></label>
+          </div>
+        </fieldset>
+      </div>
     </div>
     <form id="postcode-form" class="booking-postcode">
       <h2 class="step-title"><span class="step-num" aria-hidden="true">2</span><span data-i18n="booking_step_postcode"></span></h2>
