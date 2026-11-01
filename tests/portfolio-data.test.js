@@ -40,3 +40,32 @@ test('does not modify the original list', () => {
   sortPortfolio(portfolioItems, (key) => key);
   assert.deepEqual(portfolioItems, copy);
 });
+
+import { appPostItems, captionOf } from '../assets/js/portfolio-data.js';
+
+const doc = (id, photos, captionEn, captionEs) => ({
+  name: `projects/nico-fix-bot/databases/(default)/documents/web_portfolio/${id}`,
+  fields: {
+    photos: { arrayValue: { values: photos.map(([url, state]) => ({ mapValue: { fields: { url: { stringValue: url }, state: { stringValue: state } } } })) } },
+    ...(captionEn ? { captionEn: { stringValue: captionEn }, captionEs: { stringValue: captionEs } } : {}),
+  },
+});
+const S = 'https://firebasestorage.googleapis.com/v0/b/x/o/web%2Fp1-1.jpg?alt=media';
+
+test('app posts become gallery items with their own caption and before/after', () => {
+  const items = appPostItems({ documents: [doc('p1', [[S, 'before'], [S, 'after']], 'New taps', 'Grifería nueva')] });
+  assert.deepEqual(items.map((i) => [i.roomKey, i.stateKey]), [['app_p1', 'portfolio_before'], ['app_p1', 'portfolio_after']]);
+  assert.equal(captionOf(items[0], 'es', () => 'x'), 'Grifería nueva');
+  assert.equal(captionOf(items[0], 'en', () => 'x'), 'New taps');
+});
+
+test('only Firebase Storage links; no caption yet says recent work', () => {
+  const items = appPostItems({ documents: [doc('p2', [['https://evil.example/x.jpg', 'before'], [S, 'after']])] });
+  assert.equal(items.length, 1);
+  assert.equal(captionOf(items[0], 'es', (lang, key) => key), 'portfolio_recent');
+  assert.deepEqual(appPostItems({}), []);
+});
+
+test('fixed items still use the i18n key', () => {
+  assert.equal(captionOf({ roomKey: 'portfolio_room_tap' }, 'en', (lang, key) => `${lang}:${key}`), 'en:portfolio_room_tap');
+});

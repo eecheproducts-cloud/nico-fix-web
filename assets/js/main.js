@@ -1,7 +1,7 @@
 // assets/js/main.js
 import { t, translations } from './i18n.js';
 import { servicesData, groupByCategory, CATEGORY_ORDER } from './services-data.js';
-import { portfolioItems, sortPortfolio } from './portfolio-data.js';
+import { portfolioItems, sortPortfolio, appPostItems, captionOf, APP_POSTS_URL } from './portfolio-data.js';
 import { buildSearchIndex, searchServices } from './services-search.js';
 import { checkPostcode } from './coverage.js';
 import { initConsent } from './consent.js';
@@ -215,14 +215,18 @@ function showCategory(category) {
   document.getElementById('services').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
+// Photos posted from the app, newest first, ahead of the fixed ones (loaded once, see loadAppPosts).
+let appItems = [];
+
 function renderPortfolio(lang) {
   const container = document.getElementById('portfolio-grid');
   if (!container) return;
   container.innerHTML = '';
-  sortPortfolio(portfolioItems, (key) => t(lang, key)).forEach((item) => {
+  const labelOf = (key, item) => captionOf(item || { roomKey: key }, lang, t);
+  [...appItems, ...sortPortfolio(portfolioItems, labelOf)].forEach((item) => {
     const label = item.stateKey
-      ? `${t(lang, item.roomKey)}, ${t(lang, item.stateKey)}`
-      : t(lang, item.roomKey);
+      ? `${labelOf(item.roomKey, item)}, ${t(lang, item.stateKey)}`
+      : labelOf(item.roomKey, item);
 
     const src = lang === 'en' && item.imageEn ? item.imageEn : item.image;
 
@@ -253,6 +257,20 @@ function renderPortfolio(lang) {
 
     container.appendChild(figure);
   });
+}
+
+async function loadAppPosts() {
+  try {
+    const res = await fetch(APP_POSTS_URL);
+    if (!res.ok) return;
+    const json = await res.json();
+    // Newest post first; inside a post, before ahead of after.
+    (json.documents || []).sort((a, b) => Number(b.fields?.at?.integerValue || 0) - Number(a.fields?.at?.integerValue || 0));
+    appItems = appPostItems(json);
+    if (appItems.length) renderPortfolio(getLang());
+  } catch {
+    // Without the app posts the fixed gallery is still there.
+  }
 }
 
 function openLightbox(src, label) {
@@ -385,6 +403,7 @@ function init() {
   applyTranslations(lang);
   renderServices(lang);
   renderPortfolio(lang);
+  loadAppPosts();
   wireWhatsApp();
   wireFooter();
   wirePromo();

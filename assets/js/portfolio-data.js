@@ -26,13 +26,43 @@ function sortableLabel(text) {
   return String(text ?? '').normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase();
 }
 
-// labelFor(roomKey) returns the caption in the current page language.
+// labelFor(roomKey, item) returns the caption in the current page language.
 export function sortPortfolio(items, labelFor) {
   return items
-    .map((item, position) => ({ item, position, label: sortableLabel(labelFor(item.roomKey)) }))
+    .map((item, position) => ({ item, position, label: sortableLabel(labelFor(item.roomKey, item)) }))
     .sort((a, b) =>
       a.label.localeCompare(b.label)
       || (STATE_ORDER[a.item.stateKey] ?? 2) - (STATE_ORDER[b.item.stateKey] ?? 2)
       || a.position - b.position)
     .map(({ item }) => item);
+}
+
+// Photos posted from the Nico Fix app ("📣 Postear"): the public Firestore collection web_portfolio,
+// read with the REST API (no login). Each document is { photos: [{ url, state }], captionEn,
+// captionEs, at }; the caption arrives a minute later, until then the photo says "Recent work".
+// Only https links to Firebase Storage are taken.
+export const APP_POSTS_URL = 'https://firestore.googleapis.com/v1/projects/nico-fix-bot/databases/(default)/documents/web_portfolio?pageSize=100';
+const STORAGE_PREFIX = 'https://firebasestorage.googleapis.com/';
+const STATE_KEYS = { before: 'portfolio_before', after: 'portfolio_after' };
+
+export function appPostItems(json) {
+  const items = [];
+  for (const document of json?.documents || []) {
+    const f = document.fields || {};
+    const caption = { en: f.captionEn?.stringValue || '', es: f.captionEs?.stringValue || '' };
+    const id = String(document.name || '').split('/').pop();
+    for (const value of f.photos?.arrayValue?.values || []) {
+      const p = value.mapValue?.fields || {};
+      const url = p.url?.stringValue || '';
+      if (!url.startsWith(STORAGE_PREFIX)) continue;
+      items.push({ image: url, roomKey: `app_${id}`, caption, stateKey: STATE_KEYS[p.state?.stringValue] || null });
+    }
+  }
+  return items;
+}
+
+// The caption of any item: app posts carry their own, the rest use the i18n key.
+export function captionOf(item, lang, t) {
+  if (!item.caption) return t(lang, item.roomKey);
+  return item.caption[lang] || item.caption.es || item.caption.en || t(lang, 'portfolio_recent');
 }
