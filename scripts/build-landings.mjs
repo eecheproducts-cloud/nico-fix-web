@@ -23,7 +23,7 @@ function waLink(lang, place) {
   return `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(text)}`;
 }
 
-function layout({ lang, slug, title, description, h1, lead, body, schema, image, place, override = {} }) {
+function layout({ lang, slug, title, description, h1, lead, body, schema, image, place, override = {}, noindex = false }) {
   const c = { ...copy[lang], ...override };
   const other = lang === 'en' ? 'es' : 'en';
   const alt = (l) => `<link rel="alternate" hreflang="${l}" href="${url(l, slug)}" />`;
@@ -34,7 +34,7 @@ function layout({ lang, slug, title, description, h1, lead, body, schema, image,
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>${esc(title)}</title>
   <meta name="description" content="${esc(description)}" />
-  <link rel="canonical" href="${url(lang, slug)}" />
+${noindex ? '  <meta name="robots" content="noindex">\n' : ''}  <link rel="canonical" href="${url(lang, slug)}" />
   ${alt('en')}
   ${alt('es')}
   <link rel="alternate" hreflang="x-default" href="${url('en', slug)}" />
@@ -218,31 +218,27 @@ function referralPage(lang) {
   const list = (items) => items.map((i) => `          <li>${esc(i)}</li>`).join('\n');
   const body = `    <section class="landing-section">
       <div class="container landing-text">
-        <h2>${esc(r.how.title[lang])}</h2>
-        <ul class="landing-list">
+        <ul class="referral-summary">
+${list(r.summary[lang])}
+        </ul>
+        <details class="referral-details">
+          <summary>${esc(r.showAll[lang])}</summary>
+          <h2>${esc(r.how.title[lang])}</h2>
+          <ul class="landing-list">
 ${list(r.how.items[lang])}
-        </ul>
-      </div>
-    </section>
-
-    <section class="landing-section landing-alt">
-      <div class="container landing-text">
-        <h2>${esc(r.conditions.title[lang])}</h2>
-        <ul class="landing-list">
+          </ul>
+          <h2>${esc(r.conditions.title[lang])}</h2>
+          <ul class="landing-list">
 ${list(r.conditions.items[lang])}
-        </ul>
-      </div>
-    </section>
-
-    <section class="landing-section">
-      <div class="container landing-text">
-        <h2>${esc(r.share.title[lang])}</h2>
-        <p>${esc(r.share.body[lang])}</p>
-        <h2>${esc(r.changes.title[lang])}</h2>
-        <p>${esc(r.changes.body[lang])}</p>
-        <h2>${esc(r.privacyBlock.title[lang])}</h2>
-        <p>${esc(r.privacyBlock.body[lang])} <a href="/privacy.html#${lang === 'es' ? 'referidos-es' : 'referrals'}">${esc(r.privacyBlock.link[lang])}</a>.</p>
-        <p class="landing-note">${esc(r.closing[lang])}</p>
+          </ul>
+          <h2>${esc(r.share.title[lang])}</h2>
+          <p>${esc(r.share.body[lang])}</p>
+          <h2>${esc(r.changes.title[lang])}</h2>
+          <p>${esc(r.changes.body[lang])}</p>
+          <h2>${esc(r.privacyBlock.title[lang])}</h2>
+          <p>${esc(r.privacyBlock.body[lang])} <a href="/privacy.html#${lang === 'es' ? 'referidos-es' : 'referrals'}">${esc(r.privacyBlock.link[lang])}</a>.</p>
+          <p class="landing-note">${esc(r.closing[lang])}</p>
+        </details>
       </div>
     </section>`;
   return layout({
@@ -256,6 +252,7 @@ ${list(r.conditions.items[lang])}
     place: copy[lang].generic_place,
     image: r.image,
     override: r.override[lang],
+    noindex: true,
     schema: {
       '@context': 'https://schema.org',
       '@graph': [business(lang), breadcrumb(lang, r.h1[lang], r.slug)],
@@ -270,6 +267,7 @@ function write(rel, content) {
 }
 
 const pages = [];
+const unlisted = []; // pages that exist but stay out of the sitemap (noindex)
 for (const lang of ['en', 'es']) {
   for (const svc of services) {
     write(`${path(lang, svc.slug)}index.html`, servicePage(lang, svc));
@@ -279,7 +277,7 @@ for (const lang of ['en', 'es']) {
 
 for (const lang of ['en', 'es']) {
   write(`${path(lang, referral.slug)}index.html`, referralPage(lang));
-  pages.push({ lang, slug: referral.slug });
+  unlisted.push({ lang, slug: referral.slug });
 }
 
 const today = new Date().toISOString().slice(0, 10);
@@ -293,4 +291,4 @@ ${pages.map((p) => entry(url(p.lang, p.slug), '0.8', alternates(p.slug))).join('
 </urlset>
 `;
 write('sitemap.xml', sitemap);
-console.log(`Generated ${pages.length} pages and sitemap.xml`);
+console.log(`Generated ${pages.length + unlisted.length} pages and sitemap.xml`);

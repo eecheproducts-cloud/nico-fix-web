@@ -250,9 +250,22 @@ export const referral = {
   },
   h1: { en: 'Refer a friend, you both save €15', es: 'Recomiende a un amigo, los dos ahorran 15 €' },
   lead: {
-    en: 'Know someone who needs a hand at home? Pass on our number. Here are the conditions in full. Conditions apply.',
-    es: '¿Conoce a alguien que necesite un arreglo en casa? Pásele nuestro número. Aquí están las condiciones completas. Se aplican condiciones.',
+    en: 'Know someone who needs a hand at home? Pass on our number. Here are the conditions in full.',
+    es: '¿Conoce a alguien que necesite un arreglo en casa? Pásele nuestro número. Aquí están las condiciones completas.',
   },
+  summary: {
+    en: [
+      'Your friend gets €15 off their first job.',
+      'You get €15 credit for your next job.',
+      'The credit is added once your friend has paid for their first job in full and 14 days have passed. Full conditions below.',
+    ],
+    es: [
+      'Su amigo tiene 15 € de descuento en su primer trabajo.',
+      'Usted recibe 15 € de crédito para su próximo trabajo.',
+      'El crédito se suma cuando su amigo pagó por completo su primer trabajo y pasaron 14 días. Todas las condiciones abajo.',
+    ],
+  },
+  showAll: { en: 'See all conditions', es: 'Ver todas las condiciones' },
   how: {
     title: { en: 'How it works', es: 'Cómo funciona' },
     items: {

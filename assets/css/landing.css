@@ -34,3 +34,11 @@
   .landing-hero-inner { grid-template-columns: 1fr; gap: 24px; }
   .landing-hero-photo { order: -1; max-width: 360px; }
 }
+
+/* Referral conditions: 3-line summary, full text folded */
+.referral-summary { list-style: none; margin: 0 0 24px; padding: 0; font-size: 1.15rem; line-height: 1.7; font-weight: 600; }
+.referral-summary li:last-child { font-weight: 400; color: var(--muted); }
+.referral-details > summary { display: inline-block; cursor: pointer; padding: 12px 20px; min-height: 44px; border: 1.5px solid var(--border); border-radius: 999px; font-weight: 700; background: var(--white); }
+.referral-details > summary:hover { border-color: var(--green); }
+.referral-details > summary:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
+.referral-details[open] > summary { margin-bottom: 20px; }

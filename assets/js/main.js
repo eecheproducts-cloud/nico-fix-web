@@ -78,6 +78,10 @@ function applyTranslations(lang) {
   document.querySelectorAll('[data-i18n]').forEach((el) => {
     el.textContent = t(lang, el.getAttribute('data-i18n'));
   });
+  const share = document.getElementById('referral-share');
+  if (share) share.href = `https://wa.me/?text=${encodeURIComponent(t(lang, 'referral_share_text'))}`;
+  const terms = document.getElementById('referral-terms');
+  if (terms) terms.href = t(lang, 'referral_terms_href');
   document.querySelectorAll('[data-i18n-alt]').forEach((el) => {
     el.setAttribute('alt', t(lang, el.getAttribute('data-i18n-alt')));
   });

@@ -41,10 +41,28 @@ test('the privacy links of the referral pages point to anchors that exist', () =
   assert.match(privacy, /id="referidos-es"/);
 });
 
-test('both pages are in the sitemap', () => {
+test('the conditions pages are noindex, out of the sitemap and out of the menu', () => {
   const sitemap = read('sitemap.xml');
-  assert.match(sitemap, /<loc>https:\/\/nicofix\.nl\/referidos\/<\/loc>/);
-  assert.match(sitemap, /<loc>https:\/\/nicofix\.nl\/es\/referidos\/<\/loc>/);
+  assert.ok(!sitemap.includes('referidos'));
+  for (const html of Object.values(pages)) {
+    assert.match(html, /<meta name="robots" content="noindex">/);
+    assert.match(html, /<details class="referral-details">/);
+    const nav = html.match(/<nav class="main-nav">[\s\S]*?<\/nav>/)[0];
+    assert.ok(!nav.includes('referidos'));
+  }
+});
+
+test('the home page has the recommend-a-friend block in both languages', async () => {
+  const { translations } = await import('../assets/js/i18n.js');
+  const home = read('index.html');
+  assert.match(home, /id="referral-share"[^>]*href="https:\/\/wa\.me\/\?text=/);
+  for (const lang of ['en', 'es']) {
+    for (const k of ['referral_title', 'referral_body', 'referral_button', 'referral_terms', 'referral_share_text']) {
+      assert.ok(translations[lang][k], `${lang}.${k}`);
+      assert.ok(!/[—–]/.test(translations[lang][k]));
+    }
+  }
+  assert.equal(translations.es.referral_terms_href, '/es/referidos/');
 });
 
 test('the booking page has the optional "who recommended us" field, 80 characters at most', () => {
