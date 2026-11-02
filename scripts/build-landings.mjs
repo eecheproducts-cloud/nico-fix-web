@@ -6,7 +6,7 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { cities, services, SITE, WHATSAPP, copy } from './landings-data.mjs';
+import { cities, services, SITE, WHATSAPP, copy, referral } from './landings-data.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -23,8 +23,8 @@ function waLink(lang, place) {
   return `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(text)}`;
 }
 
-function layout({ lang, slug, title, description, h1, lead, body, schema, image, place }) {
-  const c = copy[lang];
+function layout({ lang, slug, title, description, h1, lead, body, schema, image, place, override = {} }) {
+  const c = { ...copy[lang], ...override };
   const other = lang === 'en' ? 'es' : 'en';
   const alt = (l) => `<link rel="alternate" hreflang="${l}" href="${url(l, slug)}" />`;
   return `<!doctype html>
@@ -213,6 +213,55 @@ ${faq.html}
   });
 }
 
+function referralPage(lang) {
+  const r = referral;
+  const list = (items) => items.map((i) => `          <li>${esc(i)}</li>`).join('\n');
+  const body = `    <section class="landing-section">
+      <div class="container landing-text">
+        <h2>${esc(r.how.title[lang])}</h2>
+        <ul class="landing-list">
+${list(r.how.items[lang])}
+        </ul>
+      </div>
+    </section>
+
+    <section class="landing-section landing-alt">
+      <div class="container landing-text">
+        <h2>${esc(r.conditions.title[lang])}</h2>
+        <ul class="landing-list">
+${list(r.conditions.items[lang])}
+        </ul>
+      </div>
+    </section>
+
+    <section class="landing-section">
+      <div class="container landing-text">
+        <h2>${esc(r.share.title[lang])}</h2>
+        <p>${esc(r.share.body[lang])}</p>
+        <h2>${esc(r.changes.title[lang])}</h2>
+        <p>${esc(r.changes.body[lang])}</p>
+        <h2>${esc(r.privacyBlock.title[lang])}</h2>
+        <p>${esc(r.privacyBlock.body[lang])} <a href="/privacy.html#${lang === 'es' ? 'referidos-es' : 'referrals'}">${esc(r.privacyBlock.link[lang])}</a>.</p>
+      </div>
+    </section>`;
+  return layout({
+    lang,
+    slug: r.slug,
+    title: r.seoTitle[lang],
+    description: r.seoDesc[lang],
+    h1: r.h1[lang],
+    lead: r.lead[lang],
+    body,
+    place: copy[lang].generic_place,
+    image: r.image,
+    override: r.override[lang],
+    schema: {
+      '@context': 'https://schema.org',
+      '@graph': [business(lang), breadcrumb(lang, r.h1[lang], r.slug)],
+    },
+  });
+}
+
 function write(rel, content) {
   const file = join(root, rel);
   mkdirSync(dirname(file), { recursive: true });
@@ -225,6 +274,11 @@ for (const lang of ['en', 'es']) {
     write(`${path(lang, svc.slug)}index.html`, servicePage(lang, svc));
     pages.push({ lang, slug: svc.slug });
   }
+}
+
+for (const lang of ['en', 'es']) {
+  write(`${path(lang, referral.slug)}index.html`, referralPage(lang));
+  pages.push({ lang, slug: referral.slug });
 }
 
 const today = new Date().toISOString().slice(0, 10);

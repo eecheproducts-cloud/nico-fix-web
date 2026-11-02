@@ -9,6 +9,8 @@ export function buildPayload(f) {
     photos: f.photos || [], lang: f.lang, website: f.website || '',
   };
   if (f.kind === 'work' && [2, 3, 4].includes(Number(f.hours))) payload.hours = Number(f.hours);
+  const referredBy = String(f.referredBy || '').replace(/\s+/g, ' ').trim().slice(0, 80);
+  if (referredBy) payload.referredBy = referredBy;
   if (f.token) payload.token = f.token;
   if (typeof f.price === 'number') payload.price = f.price;
   return payload;

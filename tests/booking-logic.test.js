@@ -161,3 +161,10 @@ test('work nearby: percentage comes from the top-level discountPercent, price nu
   assert.equal(isStartNearby(days, 'b'), false);
   assert.equal(isStartNearby(days, null), false);
 });
+
+test('buildPayload sends "who recommended us" only when filled, trimmed and at most 80 characters', () => {
+  assert.equal('referredBy' in buildPayload(form), false);
+  assert.equal('referredBy' in buildPayload({ ...form, referredBy: '   ' }), false);
+  assert.equal(buildPayload({ ...form, referredBy: '  Sanne   de Vries ' }).referredBy, 'Sanne de Vries');
+  assert.equal(buildPayload({ ...form, referredBy: 'a'.repeat(120) }).referredBy.length, 80);
+});

@@ -228,3 +228,91 @@ export const copy = {
     generic_place: 'Países Bajos',
   },
 };
+
+// Referral programme page (/referidos/ and /es/referidos/). Conditions as agreed on 2026-11-01.
+// Amounts include VAT. Spanish is neutral "usted". Never mentions Google reviews.
+export const referral = {
+  slug: { en: 'referidos', es: 'referidos' },
+  image: photo('kitchen-after.jpg', 'Kitchen after renovation', 'Cocina después de la renovación'),
+  override: {
+    en: {},
+    es: {
+      eyebrow: 'Nico Fix Handyman',
+      cta: 'Escríbanos por WhatsApp',
+      contact_title: '¿Dudas sobre el programa?',
+      contact_body: 'Escríbanos por WhatsApp y le respondemos.',
+    },
+  },
+  seoTitle: { en: 'Refer a friend: €15 off for both | Nico Fix', es: 'Recomiende a un amigo: 15 € para los dos | Nico Fix' },
+  seoDesc: {
+    en: 'Nico Fix referral programme: your friend gets €15 off their first job and you get €15 credit for your next one. Full conditions.',
+    es: 'Programa de referidos de Nico Fix: su amigo tiene 15 € de descuento en su primer trabajo y usted 15 € de crédito para el próximo. Condiciones completas.',
+  },
+  h1: { en: 'Refer a friend, you both save €15', es: 'Recomiende a un amigo, los dos ahorran 15 €' },
+  lead: {
+    en: 'Know someone who needs a hand at home? Pass on our number. Here are the conditions in full.',
+    es: '¿Conoce a alguien que necesite un arreglo en casa? Pásele nuestro número. Aquí están las condiciones completas.',
+  },
+  how: {
+    title: { en: 'How it works', es: 'Cómo funciona' },
+    items: {
+      en: [
+        'Your friend gets €15 off their first job with Nico Fix, if they tell us who recommended them before they accept the quote.',
+        'You get €15 credit for your next job, once your friend has paid for their job and 14 days have passed.',
+      ],
+      es: [
+        'Su amigo tiene 15 € de descuento en su primer trabajo con Nico Fix, si nos dice quién lo recomendó antes de aceptar el presupuesto.',
+        'Usted recibe 15 € de crédito para su próximo trabajo, cuando su amigo haya pagado su trabajo y hayan pasado 14 días.',
+      ],
+    },
+  },
+  conditions: {
+    title: { en: 'Conditions', es: 'Condiciones' },
+    items: {
+      en: [
+        'Your friend must be a new client of Nico Fix and must not live at the same address as the person who recommended us.',
+        'Your friend must tell us who recommended them before accepting the quote: in the booking form, on WhatsApp or in person.',
+        'The credit is given when your friend has paid for their job and 14 days have passed.',
+        'The credit is lost if your friend\'s job is cancelled or your friend withdraws from it.',
+        'Credits add up (two friends, €30), but the discount or credit on one job is at most 50% of that job\'s price.',
+        'A credit lasts 12 months from the day it is given. It is personal, cannot be transferred and cannot be exchanged for cash.',
+        'It does not apply to a job that is only the visit (the short visit is not discounted).',
+        'It does not apply to jobs that come through Zoofy, because Zoofy sets the price. Zoofy clients can still recommend us and earn credit, and use it on a direct job with Nico Fix.',
+        'All amounts include VAT (BTW).',
+      ],
+      es: [
+        'Su amigo debe ser cliente nuevo de Nico Fix y no vivir en el mismo domicilio que la persona que nos recomendó.',
+        'Su amigo debe decirnos quién lo recomendó antes de aceptar el presupuesto: en el formulario de reserva, por WhatsApp o en persona.',
+        'El crédito se da cuando su amigo haya pagado su trabajo y hayan pasado 14 días.',
+        'El crédito se pierde si el trabajo de su amigo se cancela o su amigo desiste del trabajo.',
+        'Los créditos se acumulan (dos amigos, 30 €), pero el descuento o crédito en un trabajo es como máximo el 50 % del precio de ese trabajo.',
+        'Un crédito dura 12 meses desde el día en que se da. Es personal, no se puede transferir y no se cambia por dinero.',
+        'No vale para un trabajo que es solo la visita (la visita corta no se descuenta).',
+        'No vale en trabajos que llegan por Zoofy, porque el precio lo pone Zoofy. Los clientes de Zoofy sí pueden recomendarnos y ganar crédito, y usarlo en un trabajo directo con Nico Fix.',
+        'Todos los montos incluyen BTW (IVA).',
+      ],
+    },
+  },
+  share: {
+    title: { en: 'If you share it online', es: 'Si lo comparte en redes' },
+    body: {
+      en: 'If you recommend Nico Fix on social media or in a public group, please say that you receive a benefit for it (for example: "I get a discount from Nico Fix if you hire them").',
+      es: 'Si recomienda a Nico Fix en redes sociales o en un grupo público, indique que recibe un beneficio por hacerlo (por ejemplo: "Recibo un descuento de Nico Fix si lo contratan").',
+    },
+  },
+  changes: {
+    title: { en: 'Changes to the programme', es: 'Cambios en el programa' },
+    body: {
+      en: 'Nico Fix can change or end the programme at any time, with notice on this page. Credits already earned are kept.',
+      es: 'Nico Fix puede cambiar o terminar el programa en cualquier momento, avisando en esta página. Los créditos ya ganados se mantienen.',
+    },
+  },
+  privacyBlock: {
+    title: { en: 'Your data', es: 'Sus datos' },
+    body: {
+      en: 'We keep the name of the person who recommended us only to apply the discount and the credit. More in our',
+      es: 'Guardamos el nombre de quien nos recomendó solo para aplicar el descuento y el crédito. Más información en nuestra',
+    },
+    link: { en: 'privacy policy', es: 'política de privacidad' },
+  },
+};

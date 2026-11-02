@@ -393,7 +393,7 @@ $('details').addEventListener('submit', async (e) => {
   const el = f.elements;
   const lang = getLang();
   const form = { kind: state.kind, hours: state.hours, start: state.start, postcode: $('postcode').value, name: el.name.value, address: el.address.value,
-    phone: el.phone.value, description: el.description.value, manyThings: false, earlyStart: el.earlyStart.checked,
+    phone: el.phone.value, description: el.description.value, referredBy: el.referredBy.value, manyThings: false, earlyStart: el.earlyStart.checked,
     photos: [], lang, website: el.website.value, token: state.token };
   if (state.kind === 'visit') form.price = selectedPrice();
   const msg = $('details-message');
