@@ -242,6 +242,7 @@ ${list(r.conditions.items[lang])}
         <p>${esc(r.changes.body[lang])}</p>
         <h2>${esc(r.privacyBlock.title[lang])}</h2>
         <p>${esc(r.privacyBlock.body[lang])} <a href="/privacy.html#${lang === 'es' ? 'referidos-es' : 'referrals'}">${esc(r.privacyBlock.link[lang])}</a>.</p>
+        <p class="landing-note">${esc(r.closing[lang])}</p>
       </div>
     </section>`;
   return layout({

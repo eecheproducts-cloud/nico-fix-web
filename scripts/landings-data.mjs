@@ -250,19 +250,19 @@ export const referral = {
   },
   h1: { en: 'Refer a friend, you both save €15', es: 'Recomiende a un amigo, los dos ahorran 15 €' },
   lead: {
-    en: 'Know someone who needs a hand at home? Pass on our number. Here are the conditions in full.',
-    es: '¿Conoce a alguien que necesite un arreglo en casa? Pásele nuestro número. Aquí están las condiciones completas.',
+    en: 'Know someone who needs a hand at home? Pass on our number. Here are the conditions in full. Conditions apply.',
+    es: '¿Conoce a alguien que necesite un arreglo en casa? Pásele nuestro número. Aquí están las condiciones completas. Se aplican condiciones.',
   },
   how: {
     title: { en: 'How it works', es: 'Cómo funciona' },
     items: {
       en: [
         'Your friend gets €15 off their first job with Nico Fix, if they tell us who recommended them before they accept the quote.',
-        'You get €15 credit for your next job, once your friend has paid for their job and 14 days have passed.',
+        'You get €15 credit for your next job, once your friend has paid for their job in full and 14 days have passed.',
       ],
       es: [
         'Su amigo tiene 15 € de descuento en su primer trabajo con Nico Fix, si nos dice quién lo recomendó antes de aceptar el presupuesto.',
-        'Usted recibe 15 € de crédito para su próximo trabajo, cuando su amigo haya pagado su trabajo y hayan pasado 14 días.',
+        'Usted recibe 15 € de crédito para su próximo trabajo, cuando su amigo haya pagado su trabajo por completo y hayan pasado 14 días.',
       ],
     },
   },
@@ -272,24 +272,28 @@ export const referral = {
       en: [
         'Your friend must be a new client of Nico Fix and must not live at the same address as the person who recommended us.',
         'Your friend must tell us who recommended them before accepting the quote: in the booking form, on WhatsApp or in person.',
-        'The credit is given when your friend has paid for their job and 14 days have passed.',
+        'The credit is given when your friend has paid for their job in full and 14 days have passed.',
         'The credit is lost if your friend\'s job is cancelled or your friend withdraws from it.',
         'Credits add up (two friends, €30), but the discount or credit on one job is at most 50% of that job\'s price.',
         'A credit lasts 12 months from the day it is given. It is personal, cannot be transferred and cannot be exchanged for cash.',
         'It does not apply to a job that is only the visit (the short visit is not discounted).',
         'It does not apply to jobs that come through Zoofy, because Zoofy sets the price. Zoofy clients can still recommend us and earn credit, and use it on a direct job with Nico Fix.',
         'All amounts include VAT (BTW).',
+        'We will tell the person who recommended us, on WhatsApp, that they have earned a credit. We never give them your name or any detail of your job.',
+        'If you are a client of Nico Fix, we may message you about this programme. Reply STOP to any message and we will not send you more like it.',
       ],
       es: [
         'Su amigo debe ser cliente nuevo de Nico Fix y no vivir en el mismo domicilio que la persona que nos recomendó.',
         'Su amigo debe decirnos quién lo recomendó antes de aceptar el presupuesto: en el formulario de reserva, por WhatsApp o en persona.',
-        'El crédito se da cuando su amigo haya pagado su trabajo y hayan pasado 14 días.',
+        'El crédito se da cuando su amigo haya pagado su trabajo por completo y hayan pasado 14 días.',
         'El crédito se pierde si el trabajo de su amigo se cancela o su amigo desiste del trabajo.',
         'Los créditos se acumulan (dos amigos, 30 €), pero el descuento o crédito en un trabajo es como máximo el 50 % del precio de ese trabajo.',
         'Un crédito dura 12 meses desde el día en que se da. Es personal, no se puede transferir y no se cambia por dinero.',
         'No vale para un trabajo que es solo la visita (la visita corta no se descuenta).',
         'No vale en trabajos que llegan por Zoofy, porque el precio lo pone Zoofy. Los clientes de Zoofy sí pueden recomendarnos y ganar crédito, y usarlo en un trabajo directo con Nico Fix.',
         'Todos los montos incluyen BTW (IVA).',
+        'Le avisaremos por WhatsApp a quien nos recomendó que ganó un crédito. Nunca le damos su nombre ni ningún dato de su trabajo.',
+        'Si es cliente de Nico Fix, podemos escribirle sobre este programa. Responda STOP a cualquier mensaje y no le enviaremos más como ese.',
       ],
     },
   },
@@ -310,9 +314,13 @@ export const referral = {
   privacyBlock: {
     title: { en: 'Your data', es: 'Sus datos' },
     body: {
-      en: 'We keep the name of the person who recommended us only to apply the discount and the credit. More in our',
-      es: 'Guardamos el nombre de quien nos recomendó solo para aplicar el descuento y el crédito. Más información en nuestra',
+      en: 'We keep the name of the person who recommended us only to apply the discount and the credit, for up to 24 months. We tell that person only that they earned a credit, never your name or job details. More in our',
+      es: 'Guardamos el nombre de quien nos recomendó solo para aplicar el descuento y el crédito, hasta 24 meses. A esa persona solo le avisamos que ganó un crédito, nunca su nombre ni los datos de su trabajo. Más información en nuestra',
     },
     link: { en: 'privacy policy', es: 'política de privacidad' },
+  },
+  closing: {
+    en: 'Programme offered by Nico Fix (Nicolás Echechurre), KVK 95562028.',
+    es: 'Programa ofrecido por Nico Fix (Nicolás Echechurre), KVK 95562028.',
   },
 };
