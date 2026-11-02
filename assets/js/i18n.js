@@ -306,7 +306,7 @@ export const translations = {
     booking_address: 'Dirección (calle y número, ciudad)',
     booking_description: '¿Qué hay que hacer?',
     booking_description_hint: 'Si ya nos contaste por WhatsApp, poné: ya hablamos por WhatsApp.',
-    booking_referred_by: '¿Quién le recomendó? (opcional)',
+    booking_referred_by: '¿Quién nos recomendó? (opcional)',
     booking_referred_by_hint: 'Solo lo usamos para aplicar el descuento.',
     booking_photos: 'Fotos del lugar (opcional, hasta 3)',
     booking_early_work: "Quiero que el trabajo empiece antes de que pasen 14 días. Si cancelo con el trabajo empezado, pago la parte que ya se hizo.",
