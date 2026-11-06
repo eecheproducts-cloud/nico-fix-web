@@ -16,6 +16,7 @@ export const portfolioItems = [
   { image: 'assets/img/portfolio/ikea-wardrobe.jpg', roomKey: 'portfolio_room_ikea', stateKey: null },
   { image: 'assets/img/portfolio/ceiling-light-moved.jpg', roomKey: 'portfolio_room_light_move', stateKey: null },
   { image: 'assets/img/portfolio/shower-thermostat.jpg', roomKey: 'portfolio_room_shower_mixer', stateKey: null },
+  { image: 'assets/img/portfolio/tiles-kitchen-before-after.jpg', roomKey: 'portfolio_room_tiles_kitchen', stateKey: null },
   { image: 'assets/img/portfolio/living-before.webp', roomKey: 'portfolio_room_living', stateKey: 'portfolio_before' },
 ];
 
