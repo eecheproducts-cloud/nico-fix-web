@@ -2,6 +2,7 @@
 import { t, translations } from './i18n.js';
 import { servicesData, groupByCategory, CATEGORY_ORDER } from './services-data.js';
 import { portfolioItems, sortPortfolio, appPostItems, captionOf, APP_POSTS_URL } from './portfolio-data.js';
+import { reviewItems, REVIEWS_URL } from './reviews-data.js';
 import { buildSearchIndex, searchServices } from './services-search.js';
 import { checkPostcode } from './coverage.js';
 import { initConsent } from './consent.js';
@@ -263,6 +264,42 @@ function renderPortfolio(lang) {
   });
 }
 
+function renderReviews(items) {
+  const section = document.getElementById('reviews');
+  const list = document.getElementById('reviews-list');
+  if (!section || !list) return;
+  list.textContent = '';
+  items.forEach((item) => {
+    const li = document.createElement('li');
+    li.className = 'review-card';
+    const stars = document.createElement('p');
+    stars.className = 'review-stars';
+    stars.setAttribute('role', 'img');
+    stars.setAttribute('aria-label', `${item.stars} / 5`);
+    stars.textContent = '\u2605'.repeat(item.stars) + '\u2606'.repeat(5 - item.stars);
+    const text = document.createElement('p');
+    text.className = 'review-text';
+    text.textContent = item.text;
+    if (item.lang) text.lang = item.lang;
+    const name = document.createElement('p');
+    name.className = 'review-name';
+    name.textContent = item.name;
+    li.append(stars, text, name);
+    list.appendChild(li);
+  });
+  section.hidden = items.length === 0;
+}
+
+async function loadReviews() {
+  try {
+    const res = await fetch(REVIEWS_URL);
+    if (!res.ok) return;
+    renderReviews(reviewItems(await res.json()));
+  } catch {
+    // Without reviews the section simply stays hidden.
+  }
+}
+
 async function loadAppPosts() {
   try {
     const res = await fetch(APP_POSTS_URL);
@@ -408,6 +445,7 @@ function init() {
   renderServices(lang);
   renderPortfolio(lang);
   loadAppPosts();
+  loadReviews();
   wireWhatsApp();
   wireFooter();
   wirePromo();
