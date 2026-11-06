@@ -281,10 +281,13 @@ function renderReviews(items) {
     text.className = 'review-text';
     text.textContent = item.text;
     if (item.lang) text.lang = item.lang;
-    const name = document.createElement('p');
-    name.className = 'review-name';
-    name.textContent = item.name;
-    li.append(stars, text, name);
+    li.append(stars, text);
+    if (item.name) {
+      const name = document.createElement('p');
+      name.className = 'review-name';
+      name.textContent = item.name;
+      li.append(name);
+    }
     list.appendChild(li);
   });
   section.hidden = items.length === 0;

@@ -20,7 +20,8 @@ function parseReview(document) {
   const text = String(f.text?.stringValue ?? '').trim().slice(0, MAX_TEXT);
   const stars = number(f.stars);
   const at = number(f.at);
-  if (!name || !text) return null;
+  // name may be '' (the app publishes an empty name when only an initial was left); still shown.
+  if (!text) return null;
   if (!Number.isInteger(stars) || stars < 1 || stars > 5) return null;
   if (!Number.isFinite(at)) return null;
   return { name, stars, text, lang: String(f.lang?.stringValue ?? ''), at };

@@ -37,7 +37,6 @@ test('caps at 6', () => {
 
 test('drops invalid documents', () => {
   const documents = [
-    doc('no-name', { stars: 5, text: 'x', at: 1 }),
     doc('no-text', { name: 'Ana', stars: 5, at: 1 }),
     doc('empty-text', { name: 'Ana', stars: 5, text: '   ', at: 1 }),
     doc('stars0', { name: 'Ana', stars: 0, text: 'x', at: 1 }),
@@ -51,6 +50,18 @@ test('drops invalid documents', () => {
   assert.deepEqual(reviewItems({ documents }).map((i) => i.at), [5]);
   assert.deepEqual(reviewItems({}), []);
   assert.deepEqual(reviewItems(null), []);
+});
+
+test('a review without a name (empty or missing) is still kept, with an empty name', () => {
+  const items = reviewItems({ documents: [
+    ok('empty', 2, { name: '' }),
+    doc('missing', { stars: 4, text: 'Bien', at: 1 }),
+    ok('blank', 3, { name: '   ' }),
+  ] });
+  assert.equal(items.length, 3);
+  assert.ok(items.every((i) => i.name === ''));
+  const main = readFileSync(new URL('../assets/js/main.js', import.meta.url), 'utf8');
+  assert.match(main, /if \(item\.name\)/);
 });
 
 test('keeps only the first name', () => {
