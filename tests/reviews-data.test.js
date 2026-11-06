@@ -99,5 +99,5 @@ test('home has the section hidden by default, the i18n keys and no review markup
     assert.doesNotMatch(all, /verified|verificad/i);
     assert.doesNotMatch(all, /[—–]/);
   }
-  assert.match(html, /https:\/\/www\.google\.com\/search\?q=NICOFIX#lrd/);
+  assert.match(html, /https:\/\/www\.google\.com\/maps\?cid=13805226269467129554/);
 });
