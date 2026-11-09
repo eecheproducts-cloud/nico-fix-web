@@ -26,6 +26,8 @@ Then open http://localhost:8000
 
 The services list (`assets/js/services-data.js`) was sourced from the Notion "Checklist de Servicios" database on 2026-09-22, plus 8 services Maria added directly on 2026-10-03 (not yet in Notion). If the offering changes later, update that Notion database first, then mirror the change here (add/remove the `{key, category}` entry and its `svc_*` translation pair in `i18n.js`).
 
+Home page reviews (`#reviews`) come from `assets/data/reviews.json`, updated by a weekly Claude routine after the owner approves each review. The format is documented at the top of `assets/js/reviews-data.js`. An empty `reviews` list hides the section.
+
 Writing style: no em dash anywhere on this site or in its docs. Use a comma, a period, or a colon instead.
 
 ## Service pages (SEO)

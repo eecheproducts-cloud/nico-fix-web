@@ -295,7 +295,7 @@ function renderReviews(items) {
 
 async function loadReviews() {
   try {
-    const res = await fetch(REVIEWS_URL);
+    const res = await fetch(REVIEWS_URL, { cache: 'no-cache' });
     if (!res.ok) return;
     renderReviews(reviewItems(await res.json()));
   } catch {

@@ -4,59 +4,62 @@ import { readFileSync } from 'node:fs';
 import { reviewItems, MAX_REVIEWS, REVIEWS_URL } from '../assets/js/reviews-data.js';
 import { t } from '../assets/js/i18n.js';
 
-const doc = (id, f) => ({
-  name: `projects/nico-fix-bot/databases/(default)/documents/web_reviews/${id}`,
-  fields: {
-    ...(f.name !== undefined ? { name: { stringValue: f.name } } : {}),
-    ...(f.stars !== undefined ? { stars: { integerValue: String(f.stars) } } : {}),
-    ...(f.text !== undefined ? { text: { stringValue: f.text } } : {}),
-    ...(f.lang !== undefined ? { lang: { stringValue: f.lang } } : {}),
-    ...(f.at !== undefined ? { at: { integerValue: String(f.at) } } : {}),
-    ...(f.extra ? { secret: { stringValue: 'x' } } : {}),
-  },
-});
-const ok = (id, at, extra = {}) => doc(id, { name: 'Ana', stars: 5, text: 'Muy bien', lang: 'es', at, ...extra });
+const r = (id, f = {}) => ({ id, name: 'Ana', stars: 5, text: 'Muy bien', lang: 'es', at: '2026-01-01', publishedAt: '2026-01-02', ...f });
+const day = (n) => `2026-03-${String(n).padStart(2, '0')}`;
 
-test('parses a document into the allowed fields only', () => {
-  const [r] = reviewItems({ documents: [ok('a', 100, { extra: true })] });
-  assert.deepEqual(r, { name: 'Ana', stars: 5, text: 'Muy bien', lang: 'es', at: 100 });
+test('parses an entry into the allowed fields only', () => {
+  const [item] = reviewItems({ reviews: [r('a', { secret: 'x' })], skipped: ['zzz'] });
+  assert.deepEqual(item, { name: 'Ana', stars: 5, text: 'Muy bien', lang: 'es', at: '2026-01-01' });
 });
 
 test('newest first by at', () => {
-  const items = reviewItems({ documents: [ok('a', 1), ok('b', 3), ok('c', 2)] });
-  assert.deepEqual(items.map((i) => i.at), [3, 2, 1]);
+  const items = reviewItems({ reviews: [r('a', { at: day(1) }), r('b', { at: day(3) }), r('c', { at: day(2) })] });
+  assert.deepEqual(items.map((i) => i.at), [day(3), day(2), day(1)]);
 });
 
 test('caps at 6', () => {
-  const documents = Array.from({ length: 10 }, (_, i) => ok(`d${i}`, i));
-  const items = reviewItems({ documents });
+  const reviews = Array.from({ length: 10 }, (_, i) => r(`d${i}`, { at: day(i + 1) }));
+  const items = reviewItems({ reviews });
   assert.equal(MAX_REVIEWS, 6);
   assert.equal(items.length, 6);
-  assert.equal(items[0].at, 9);
+  assert.equal(items[0].at, day(10));
 });
 
-test('drops invalid documents', () => {
-  const documents = [
-    doc('no-text', { name: 'Ana', stars: 5, at: 1 }),
-    doc('empty-text', { name: 'Ana', stars: 5, text: '   ', at: 1 }),
-    doc('stars0', { name: 'Ana', stars: 0, text: 'x', at: 1 }),
-    doc('stars6', { name: 'Ana', stars: 6, text: 'x', at: 1 }),
-    doc('no-stars', { name: 'Ana', text: 'x', at: 1 }),
-    doc('no-at', { name: 'Ana', stars: 5, text: 'x' }),
-    ok('good', 5),
+test('drops invalid entries', () => {
+  const reviews = [
+    r('no-text', { text: undefined }),
+    r('empty-text', { text: '   ' }),
+    r('stars0', { stars: 0 }),
+    r('stars6', { stars: 6 }),
+    r('stars-string', { stars: '5' }),
+    r('stars-half', { stars: 4.5 }),
+    r('no-stars', { stars: undefined }),
+    r('no-at', { at: undefined }),
+    r('ms-at', { at: 1793954821000 }),
+    r('bad-at', { at: '2026-02-31' }),
+    r('garbage-at', { at: 'yesterday' }),
+    r('good', { at: day(5) }),
     null,
+    'x',
     {},
   ];
-  assert.deepEqual(reviewItems({ documents }).map((i) => i.at), [5]);
+  assert.deepEqual(reviewItems({ reviews }).map((i) => i.at), [day(5)]);
   assert.deepEqual(reviewItems({}), []);
+  assert.deepEqual(reviewItems({ reviews: 'x' }), []);
+  assert.deepEqual(reviewItems({ reviews: [], skipped: ['a'] }), []);
   assert.deepEqual(reviewItems(null), []);
 });
 
+test('unknown lang becomes empty', () => {
+  assert.equal(reviewItems({ reviews: [r('a', { lang: 'fr' })] })[0].lang, '');
+  assert.equal(reviewItems({ reviews: [r('a', { lang: 'nl' })] })[0].lang, 'nl');
+});
+
 test('a review without a name (empty or missing) is still kept, with an empty name', () => {
-  const items = reviewItems({ documents: [
-    ok('empty', 2, { name: '' }),
-    doc('missing', { stars: 4, text: 'Bien', at: 1 }),
-    ok('blank', 3, { name: '   ' }),
+  const items = reviewItems({ reviews: [
+    r('empty', { name: '', at: day(2) }),
+    r('missing', { name: undefined, at: day(1) }),
+    r('blank', { name: '   ', at: day(3) }),
   ] });
   assert.equal(items.length, 3);
   assert.ok(items.every((i) => i.name === ''));
@@ -65,14 +68,14 @@ test('a review without a name (empty or missing) is still kept, with an empty na
 });
 
 test('keeps only the first name', () => {
-  const [r] = reviewItems({ documents: [ok('a', 1, { name: 'Ana García' })] });
-  assert.equal(r.name, 'Ana');
+  const [item] = reviewItems({ reviews: [r('a', { name: 'Ana García' })] });
+  assert.equal(item.name, 'Ana');
 });
 
 test('text is kept as plain text, never interpreted; reviews-data.js has no HTML sinks', () => {
   const evil = '<img src=x onerror=alert(1)> <b>hi</b>';
-  const [r] = reviewItems({ documents: [ok('a', 1, { text: evil })] });
-  assert.equal(r.text, evil);
+  const [item] = reviewItems({ reviews: [r('a', { text: evil })] });
+  assert.equal(item.text, evil);
   const src = readFileSync(new URL('../assets/js/reviews-data.js', import.meta.url), 'utf8');
   assert.doesNotMatch(src, /innerHTML|insertAdjacentHTML|outerHTML|document\.write/);
   const main = readFileSync(new URL('../assets/js/main.js', import.meta.url), 'utf8');
@@ -82,8 +85,24 @@ test('text is kept as plain text, never interpreted; reviews-data.js has no HTML
   assert.match(block, /textContent/);
 });
 
-test('reads the public web_reviews collection', () => {
-  assert.match(REVIEWS_URL, /nico-fix-bot\/databases\/\(default\)\/documents\/web_reviews/);
+test('reads the static file with a relative URL, no Firestore', () => {
+  assert.equal(REVIEWS_URL, 'assets/data/reviews.json');
+  const src = readFileSync(new URL('../assets/js/reviews-data.js', import.meta.url), 'utf8');
+  assert.doesNotMatch(src, /firestore\.googleapis/);
+});
+
+test('the shipped reviews.json parses to exactly Carolien and has an empty skipped list', () => {
+  const json = JSON.parse(readFileSync(new URL('../assets/data/reviews.json', import.meta.url), 'utf8'));
+  assert.deepEqual(json.skipped, []);
+  assert.equal(json.reviews[0].id, 'c6a3553e0704a96d44fb');
+  assert.equal(json.reviews[0].publishedAt, '2026-11-06');
+  assert.deepEqual(reviewItems(json), [{
+    name: 'Carolien',
+    stars: 5,
+    text: 'Nico is professional and works hard. Flexibel and had a spot quickly. Very happy with the result!',
+    lang: 'en',
+    at: '2026-11-06',
+  }]);
 });
 
 test('home has the section hidden by default, the i18n keys and no review markup or rating', () => {

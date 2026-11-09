@@ -1,38 +1,47 @@
 // assets/js/reviews-data.js
-// Google reviews chosen by Nico Fix and published from the app: the public Firestore collection
-// web_reviews, read with the REST API (no login), same as the gallery. Each document is
-// { name (first name), stars (1-5), text, lang, at (ms) }. The page text is always set with
-// textContent, so a review can never inject HTML.
-export const REVIEWS_URL = 'https://firestore.googleapis.com/v1/projects/nico-fix-bot/databases/(default)/documents/web_reviews?pageSize=100';
+// Google reviews shown on the home page (#reviews). They live in a static file committed in this
+// repo, assets/data/reviews.json, maintained by a weekly Claude routine after the owner approves
+// each review. Format:
+//   { "reviews": [ { "id": "<stable id>", "name": "<first name or empty>", "stars": 1-5,
+//                    "text": "...", "lang": "en|es|nl|", "at": "YYYY-MM-DD",
+//                    "publishedAt": "YYYY-MM-DD" } ],
+//     "skipped": [ "<id>", ... ] }
+// skipped = ids of reviews the owner rejected, so the routine never asks again; the site ignores
+// it. at = date of the review. Entries without text, with stars outside 1-5 or with an invalid date
+// are dropped. Only the first name is shown; an empty name is allowed (card without a name line).
+// Newest first by at, at most MAX_REVIEWS. The page text is always set with textContent, so a
+// review can never inject HTML. If the file is missing, empty or fails, the section stays hidden.
+export const REVIEWS_URL = 'assets/data/reviews.json';
 export const MAX_REVIEWS = 6;
 const MAX_TEXT = 1500;
+const LANGS = new Set(['en', 'es', 'nl']);
 
-function number(value) {
-  if (value == null) return NaN;
-  const raw = value.integerValue ?? value.doubleValue;
-  return raw == null ? NaN : Number(raw);
+// A real calendar date written as YYYY-MM-DD (2026-02-31 is rejected).
+function isoDate(value) {
+  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return '';
+  const date = new Date(`${value}T00:00:00Z`);
+  return !Number.isNaN(date.getTime()) && date.toISOString().slice(0, 10) === value ? value : '';
 }
 
-function parseReview(document) {
-  const f = document?.fields;
-  if (!f) return null;
-  const name = String(f.name?.stringValue ?? '').trim().split(/\s+/)[0] || '';
-  const text = String(f.text?.stringValue ?? '').trim().slice(0, MAX_TEXT);
-  const stars = number(f.stars);
-  const at = number(f.at);
-  // name may be '' (the app publishes an empty name when only an initial was left); still shown.
+function parseReview(entry) {
+  if (!entry || typeof entry !== 'object') return null;
+  const name = String(entry.name ?? '').trim().split(/\s+/)[0] || '';
+  const text = String(entry.text ?? '').trim().slice(0, MAX_TEXT);
+  const stars = entry.stars;
+  const at = isoDate(entry.at);
   if (!text) return null;
   if (!Number.isInteger(stars) || stars < 1 || stars > 5) return null;
-  if (!Number.isFinite(at)) return null;
-  return { name, stars, text, lang: String(f.lang?.stringValue ?? ''), at };
+  if (!at) return null;
+  const lang = LANGS.has(entry.lang) ? entry.lang : '';
+  return { name, stars, text, lang, at };
 }
 
 // Valid reviews only, newest first, at most MAX_REVIEWS, with the allowed fields only.
 export function reviewItems(json) {
   const items = [];
-  for (const document of Array.isArray(json?.documents) ? json.documents : []) {
-    const review = parseReview(document);
+  for (const entry of Array.isArray(json?.reviews) ? json.reviews : []) {
+    const review = parseReview(entry);
     if (review) items.push(review);
   }
-  return items.sort((a, b) => b.at - a.at).slice(0, MAX_REVIEWS);
+  return items.sort((a, b) => (a.at < b.at ? 1 : a.at > b.at ? -1 : 0)).slice(0, MAX_REVIEWS);
 }
