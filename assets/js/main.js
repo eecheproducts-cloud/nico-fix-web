@@ -72,6 +72,7 @@ function setLang(lang) {
   renderServices(lang);
   renderPortfolio(lang);
   renderCoverage(lang);
+  renderReviews(reviewsCache, lang);
   document.dispatchEvent(new CustomEvent('nicofix-langchange', { detail: { lang } }));
 }
 
@@ -282,8 +283,8 @@ function renderReviews(items = reviewsCache, lang = getLang()) {
     stars.textContent = '\u2605'.repeat(item.stars) + '\u2606'.repeat(5 - item.stars);
     const text = document.createElement('p');
     text.className = 'review-text';
-    text.textContent = item.text;
-    if (item.lang) text.lang = item.lang;
+    text.textContent = reviewText(item, lang);
+    text.lang = lang === 'es' ? 'es' : 'en';
     li.append(stars, text);
     if (item.name) {
       const name = document.createElement('p');
