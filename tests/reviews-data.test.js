@@ -91,18 +91,20 @@ test('reads the static file with a relative URL, no Firestore', () => {
   assert.doesNotMatch(src, /firestore\.googleapis/);
 });
 
-test('the shipped reviews.json parses to exactly Carolien and has an empty skipped list', () => {
+test('the shipped reviews.json is valid: every review shows, unique ids, none also skipped', () => {
   const json = JSON.parse(readFileSync(new URL('../assets/data/reviews.json', import.meta.url), 'utf8'));
-  assert.deepEqual(json.skipped, []);
-  assert.equal(json.reviews[0].id, 'c6a3553e0704a96d44fb');
-  assert.equal(json.reviews[0].publishedAt, '2026-11-06');
-  assert.deepEqual(reviewItems(json), [{
-    name: 'Carolien',
-    stars: 5,
-    text: 'Nico is professional and works hard. Flexibel and had a spot quickly. Very happy with the result!',
-    lang: 'en',
-    at: '2026-11-06',
-  }]);
+  assert.ok(Array.isArray(json.reviews) && json.reviews.length > 0);
+  assert.ok(Array.isArray(json.skipped));
+  const ids = json.reviews.map((r) => r.id);
+  assert.equal(new Set(ids).size, ids.length);
+  for (const r of json.reviews) {
+    assert.ok(typeof r.id === 'string' && r.id.length > 0);
+    assert.match(r.publishedAt, /^\d{4}-\d{2}-\d{2}$/);
+    assert.ok(!json.skipped.includes(r.id));
+    assert.doesNotMatch(r.name, /\s/);
+  }
+  assert.equal(reviewItems(json).length, Math.min(json.reviews.length, MAX_REVIEWS));
+  assert.ok(json.reviews.some((r) => r.id === 'c6a3553e0704a96d44fb' && r.name === 'Carolien'));
 });
 
 test('home has the section hidden by default, the i18n keys and no review markup or rating', () => {
