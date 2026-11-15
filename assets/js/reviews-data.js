@@ -3,9 +3,11 @@
 // repo, assets/data/reviews.json, maintained by a weekly Claude routine after the owner approves
 // each review. Format:
 //   { "reviews": [ { "id": "<stable id>", "name": "<first name or empty>", "stars": 1-5,
-//                    "text": "...", "lang": "en|es|nl|", "at": "YYYY-MM-DD",
+//                    "text": "<English>", "textEs": "<Spanish>", "lang": "en|es|nl|", "at": "YYYY-MM-DD",
 //                    "publishedAt": "YYYY-MM-DD" } ],
 //     "skipped": [ "<id>", ... ] }
+// text is shown on the English page and textEs on the Spanish one (falls back to text when missing).
+// lang = language the client originally wrote in (informational).
 // skipped = ids of reviews the owner rejected, so the routine never asks again; the site ignores
 // it. at = date of the review. Entries without text, with stars outside 1-5 or with an invalid date
 // are dropped. Only the first name is shown; an empty name is allowed (card without a name line).
@@ -27,13 +29,19 @@ function parseReview(entry) {
   if (!entry || typeof entry !== 'object') return null;
   const name = String(entry.name ?? '').trim().split(/\s+/)[0] || '';
   const text = String(entry.text ?? '').trim().slice(0, MAX_TEXT);
+  const textEs = String(entry.textEs ?? '').trim().slice(0, MAX_TEXT) || text;
   const stars = entry.stars;
   const at = isoDate(entry.at);
   if (!text) return null;
   if (!Number.isInteger(stars) || stars < 1 || stars > 5) return null;
   if (!at) return null;
   const lang = LANGS.has(entry.lang) ? entry.lang : '';
-  return { name, stars, text, lang, at };
+  return { name, stars, text, textEs, lang, at };
+}
+
+// Text for the page language: Spanish page shows textEs, any other shows text.
+export function reviewText(item, pageLang) {
+  return pageLang === 'es' ? item.textEs : item.text;
 }
 
 // Valid reviews only, newest first, at most MAX_REVIEWS, with the allowed fields only.

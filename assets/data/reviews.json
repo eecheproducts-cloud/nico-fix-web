@@ -5,6 +5,7 @@
       "name": "Carolien",
       "stars": 5,
       "text": "Nico is professional and works hard. Flexibel and had a spot quickly. Very happy with the result!",
+      "textEs": "Nico es profesional y trabaja duro. Flexible y consiguió un turno rápido. ¡Muy feliz con el resultado!",
       "lang": "en",
       "at": "2026-11-06",
       "publishedAt": "2026-11-06"
@@ -14,6 +15,7 @@
       "name": "Tania",
       "stars": 5,
       "text": "Nico assembled my bike quickly and professionally. Highly recommended!",
+      "textEs": "Nico armó mi bici rápido y de forma profesional. ¡Muy recomendable!",
       "lang": "en",
       "at": "2026-10-25",
       "publishedAt": "2026-11-15"
@@ -23,7 +25,8 @@
       "name": "Irvan",
       "stars": 4,
       "text": "The handyman arrived right on time and was neat and polite.\nHe assembled our cabinet well, including the door we had trouble with, and also moved the lamp neatly like a true professional.\nWe were actually unable to manage these tasks ourselves. It is a pity that we had to pay more for moving the lamp, but fair is fair. It did indeed involve extra work. All in all, I was quite satisfied, and I will definitely keep him in mind for any future jobs.",
-      "lang": "en",
+      "textEs": "El handyman llegó puntual y fue prolijo y amable.\nArmó bien nuestro armario, incluida la puerta con la que teníamos problemas, y también movió la lámpara con mucho cuidado, como un verdadero profesional.\nNosotros no podíamos hacer estos trabajos. Lástima que tuvimos que pagar más por mover la lámpara, pero hay que ser justos: de verdad fue trabajo extra. En general quedé bastante conforme y para un próximo trabajo seguro que lo tengo en cuenta.",
+      "lang": "nl",
       "at": "2026-11-01",
       "publishedAt": "2026-11-15"
     },
@@ -32,6 +35,7 @@
       "name": "Ivan",
       "stars": 5,
       "text": "Great price",
+      "textEs": "Precio increíble",
       "lang": "en",
       "at": "2026-11-08",
       "publishedAt": "2026-11-15"

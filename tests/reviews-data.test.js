@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { reviewItems, MAX_REVIEWS, REVIEWS_URL } from '../assets/js/reviews-data.js';
+import { reviewItems, reviewText, MAX_REVIEWS, REVIEWS_URL } from '../assets/js/reviews-data.js';
 import { t } from '../assets/js/i18n.js';
 
 const r = (id, f = {}) => ({ id, name: 'Ana', stars: 5, text: 'Muy bien', lang: 'es', at: '2026-01-01', publishedAt: '2026-01-02', ...f });
@@ -9,7 +9,13 @@ const day = (n) => `2026-03-${String(n).padStart(2, '0')}`;
 
 test('parses an entry into the allowed fields only', () => {
   const [item] = reviewItems({ reviews: [r('a', { secret: 'x' })], skipped: ['zzz'] });
-  assert.deepEqual(item, { name: 'Ana', stars: 5, text: 'Muy bien', lang: 'es', at: '2026-01-01' });
+  assert.deepEqual(item, { name: 'Ana', stars: 5, text: 'Muy bien', textEs: 'Muy bien', lang: 'es', at: '2026-01-01' });
+});
+
+test('Spanish page shows textEs, English page shows text', () => {
+  const [item] = reviewItems({ reviews: [r('a', { text: 'Great', textEs: 'Genial' })] });
+  assert.equal(reviewText(item, 'es'), 'Genial');
+  assert.equal(reviewText(item, 'en'), 'Great');
 });
 
 test('newest first by at', () => {

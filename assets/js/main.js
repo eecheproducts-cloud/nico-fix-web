@@ -2,7 +2,7 @@
 import { t, translations } from './i18n.js';
 import { servicesData, groupByCategory, CATEGORY_ORDER } from './services-data.js';
 import { portfolioItems, sortPortfolio, appPostItems, captionOf, APP_POSTS_URL } from './portfolio-data.js';
-import { reviewItems, REVIEWS_URL } from './reviews-data.js';
+import { reviewItems, reviewText, REVIEWS_URL } from './reviews-data.js';
 import { buildSearchIndex, searchServices } from './services-search.js';
 import { checkPostcode } from './coverage.js';
 import { initConsent } from './consent.js';
@@ -264,7 +264,10 @@ function renderPortfolio(lang) {
   });
 }
 
-function renderReviews(items) {
+let reviewsCache = [];
+
+function renderReviews(items = reviewsCache, lang = getLang()) {
+  reviewsCache = items;
   const section = document.getElementById('reviews');
   const list = document.getElementById('reviews-list');
   if (!section || !list) return;

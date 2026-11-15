@@ -1270,8 +1270,8 @@ h2::after {
 .reviews { padding: 48px 0 40px; }
 .reviews[hidden] { display: none; }
 .reviews h2 { margin: 0 0 20px; }
-.reviews-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; align-items: start; }
-.review-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; display: flex; flex-direction: column; gap: 8px; }
+.reviews-list { list-style: none; margin: 0; padding: 0; columns: 3 260px; column-gap: 16px; }
+.review-card { break-inside: avoid; margin: 0 0 16px; background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; display: flex; flex-direction: column; gap: 8px; }
 .review-card p { margin: 0; }
 .review-stars { color: var(--orange); letter-spacing: 2px; font-size: 1.05rem; }
 .review-text { color: var(--ink); line-height: 1.5; overflow-wrap: anywhere; }
@@ -1281,5 +1281,5 @@ h2::after {
 .reviews-note a:hover { color: var(--orange-deep); }
 @media (max-width: 640px) {
   .reviews { padding: 36px 0 28px; }
-  .reviews-list { grid-template-columns: 1fr; }
+  .reviews-list { columns: 1; }
 }
