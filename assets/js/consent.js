@@ -4,7 +4,7 @@
 // and the choice can be changed later from the footer link.
 
 // GA4 measurement id ("G-..."). While it is empty there is no banner and nothing is loaded.
-export const GA_ID = '';
+export const GA_ID = 'G-RF1VXC1P0D';
 
 const STORAGE_KEY = 'nicofix-consent';
 
