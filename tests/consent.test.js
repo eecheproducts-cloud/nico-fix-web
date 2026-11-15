@@ -1,10 +1,10 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readConsent, saveConsent, shouldShowBanner, analyticsCookieNames } from '../assets/js/consent.js';
+import { readConsent, saveConsent, shouldShowBanner, analyticsCookieNames, isTeamDevice } from '../assets/js/consent.js';
 
 function memoryStorage(initial = {}) {
   const data = { ...initial };
-  return { getItem: (k) => (k in data ? data[k] : null), setItem: (k, v) => { data[k] = String(v); }, data };
+  return { getItem: (k) => (k in data ? data[k] : null), setItem: (k, v) => { data[k] = String(v); }, removeItem: (k) => { delete data[k]; }, data };
 }
 
 test('readConsent only accepts granted or denied', () => {
@@ -36,4 +36,20 @@ test('the banner shows only when analytics is configured and nothing was chosen 
 test('analyticsCookieNames finds only the Google Analytics cookies', () => {
   assert.deepEqual(analyticsCookieNames('_ga=GA1.1.1; theme=dark; _ga_ABC123=GS1.1; _gat=1'), ['_ga', '_ga_ABC123']);
   assert.deepEqual(analyticsCookieNames(''), []);
+});
+
+test('team devices: ?equipo=1 marks the device, ?equipo=0 unmarks it, otherwise the mark is kept', () => {
+  const storage = memoryStorage();
+  assert.equal(isTeamDevice('', storage), false);
+  assert.equal(isTeamDevice('?utm_source=flyer&equipo=1', storage), true);
+  assert.equal(storage.data['nicofix-equipo'], '1');
+  assert.equal(isTeamDevice('', storage), true);
+  assert.equal(isTeamDevice('?equipo=0', storage), false);
+  assert.equal(isTeamDevice('', storage), false);
+});
+
+test('team devices: blocked storage still honours the link on that page', () => {
+  const blocked = { getItem: () => { throw new Error('blocked'); }, setItem: () => { throw new Error('blocked'); }, removeItem: () => { throw new Error('blocked'); } };
+  assert.equal(isTeamDevice('?equipo=1', blocked), true);
+  assert.equal(isTeamDevice('', blocked), false);
 });

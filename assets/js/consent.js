@@ -25,6 +25,27 @@ export function saveConsent(storage, value) {
   }
 }
 
+// Maria's and Nico's own phones and laptops: opening any page once with ?equipo=1 marks the
+// device so it never loads analytics (their visits don't inflate the numbers); ?equipo=0 undoes it.
+const TEAM_KEY = 'nicofix-equipo';
+
+export function isTeamDevice(search, storage) {
+  const flag = new URLSearchParams(search || '').get('equipo');
+  try {
+    if (flag === '1') storage?.setItem(TEAM_KEY, '1');
+    if (flag === '0') storage?.removeItem(TEAM_KEY);
+  } catch {
+    // Storage blocked: the link still applies to this page load.
+  }
+  if (flag === '1') return true;
+  if (flag === '0') return false;
+  try {
+    return storage?.getItem(TEAM_KEY) === '1';
+  } catch {
+    return false;
+  }
+}
+
 export function shouldShowBanner(gaId, consent) {
   return Boolean(gaId) && consent === null;
 }
@@ -72,6 +93,7 @@ export function initConsent() {
   const banner = document.getElementById('cookie-banner');
   const settings = document.getElementById('cookie-settings');
   if (!GA_ID || !banner) return;
+  if (isTeamDevice(location.search, window.localStorage)) return;
 
   const consent = readConsent(window.localStorage);
   if (consent === 'granted') loadAnalytics();
